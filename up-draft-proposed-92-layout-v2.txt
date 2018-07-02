@@ -1,0 +1,90 @@
+CAPTION
+--ly-- = text removed
+++ly++ = text added
+
+--- Skipping until Table2 ----
+
+This registry serves two purposes. First, it ensures uniqueness of
+identifiers referring to ALTO entity domains. Second, it states the
+requirements for allocated domain names.
+
+This registry is considered as an extension of the "ALTO Address Type
+Registry" defined in Section 14.4 of [RFC7285]. --In particular--ly-),--
+++ It must be noted that: ++
+
+o An entity MAY or MAY NOT be an endpoint. For example, "pid" is
+registered as an entity domain in Table 2, but it is not an
+endpoint address type.
+o An endpoint MUST be an entity. For example, "ipv4" and "ipv6" are
+already registered in "ALTO Address Type Registry" in [RFC7285],
+so they MUST ++ have the same identifier ++ --be-- ++ when ++ registered as entity domains.
+
+++ Because users of the base protocol have no reason to be cognizant of the present extension, there is therefore a risk of saparately registering endpoints and entities in the AAT and AED registries that point to the same thing. This section specifies how to ensure consistency among AAT (ALTO Address Type, section 14.4) and AED registries. ++
+
++++ 9.2.1 Consistency procedure among AAT and AED registries +++
+
+++ The chosen option to ensure consistency among the AAT and AED registries is manual. That is, before registering an new entity domain it is mandatory to check:
+o whether the AAT registry contains an address type that can be used as an entity address for the candidate domain identifyer. This has been done for the "ipv4" and "ipv6" identifyers in Table 2. 
+o whether the candidate entity domain address is a can be an endpoint address, as defined in sections 2.1 and 2.2 of RFC 7285 ++ 
+
+(paragraph with text moved from 9.2.2)
+++ As a consequence ++, when a++n++ --new-- address type is ++ already or can be ++ registered in the ALTO Address Type Registry [RFC7285], the same identifier MUST be --also registered-- ++used++ ++ when a corresponding domain is registered ++ in the ALTO Entity Domain Registry. 
+
+When a new ALTO entity domain is registered, manual consistency with the AAT registry MUST be ensured as follows:  
+1 test: do corresponding entity addresses match with a known "network" address type?  
+1.1 if yes: (e.g., cell, MAC, other types?)
+1.1.1 test: is such an address type present in the AAT registry?
+1.1.1.1 if yes: set the new AED identifier to be the found AAT identifier 
+1.1.1.2 if no: define a new AED identifier and use it to register a new address type in the AAT registry following RFC7285 section 14.4 
+1.1.2 use the new AED identifier to register a new entity domain in the AED registry following section 9.2.2 of this document.
+1.2 if no (e.g. entity address = pid name, ane name, country code...): then proceed as described in section 9.2.2
+
+Users of other extensions that introduce new ALTO address types domains and that are also cognizant of the present extensions can directly proceed as follows:
+o When a new address type is registered in the ALTO Address Type
+Registry [RFC7285], the same identifier MUST be also registered in
+the ALTO Entity Domain Registry.
+o proceed as described in section 9.2.2
+
++++ 9.2.2 ALTO Entity Domain registration process +++ 
+
+New ALTO entity domains are assigned after IETF Review [RFC5226] to
+ensure that proper documentation regarding the new ALTO entity
+domains and their security considerations has been provided. RFCs
+defining new entity domains SHOULD indicate how an entity in a
+registered domain is encoded as an EntityName, and, if applicable,
+the rules defining the entity hierarchy and property inheritance.
+Updates and deletions of ALTO entity domains follow the same
+procedure.
+
+Registered ALTO entity domain identifiers MUST conform to the
+syntactical requirements specified in Section 2.3. Identifiers are
+to be recorded and displayed as strings.
+
+--And-- ++ When a new entity domain is registered ++ in the ALTO Entity Domain Registry, 
+the Entity Address Encoding of
+this entity domain identifier MUST include both Address Encoding and
+Prefix Encoding of the same identifier registered in the ALTO Address
+Type Registry [RFC7285]. For the purpose of defining properties, an
+individual entity address and the corresponding full-length prefix
+MUST be considered aliases for the same entity.
+
+Requests to add a new value to the registry MUST include the
+following information:
+
+o Identifier: The name of the desired ALTO entity domain.
+o Entity Address Encoding: The procedure for encoding the address of
+an entity of the registered type as an EntityAddr (see
+Section 2.4).
+o Hierarchy: If the entities form a hierarchy, the procedure for
+determining that hierarchy.
+o Inheritance: If entities can inherit property values from other
+entities, the procedure for determining that inheritance.
+o Security Considerations: In some usage scenarios, entity addresses
+carried in ALTO Protocol messages MAY reveal information about an
+ALTO client or an ALTO service provider. Applications and ALTO
+service providers using addresses of the registered type SHOULD be
+made aware of how (or if) the addressing scheme relates to private
+information and network proximity.
+
+This specification requests registration of the identifiers "ipv4",
+"ipv6" and "pid", as shown in Table 2.
