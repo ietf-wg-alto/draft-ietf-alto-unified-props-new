@@ -374,7 +374,7 @@ YRY: say refer to the same consistency of uses in Section 4.5.
 
 ## Response {#FilteredPropMapResponse}
 
-The response MUST indicate error, using ALTO protocol error handling, as defined in Section 8.5 of [](#RFC7285), if the request is invalid.
+The response MUST indicate an error, using ALTO protocol error handling, as defined in Section 8.5 of [](#RFC7285), if the request is invalid.
 
 Specifically, a Filtered Property Map request can be invalid as follows:
 
@@ -404,7 +404,7 @@ Specifically, a Filtered Property Map request can be invalid as follows:
     If a property name in `properties` in the request is invalid, the ALTO
     server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section 
     8.5.2 of [](#RFC7285). The `value` field of the error message SHOULD 
-    indicate the this property name.
+    indicate the property name.
 
 
 The response to a valid request is the same as for the property map 
@@ -414,7 +414,7 @@ and properties requested by the client.
 It is important that the Filtered Property Map response MUST include all 
 inherited property values for the specified entities. A Full 
 Property Map may skip a property P for an entity A if P can be derived 
-using inheritance from another entitiy B. A Filtered Property Map request 
+using inheritance from another entity B. A Filtered Property Map request 
 may include only A but not B. In such a case, the property B MUST be 
 included in the response for A.
 
