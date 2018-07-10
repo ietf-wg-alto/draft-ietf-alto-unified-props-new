@@ -234,12 +234,33 @@ If the server declares multiple domain-types and multiple prop-types in the capa
 
 ## Uses
 
+YRY: revise below to make coherent; remove restriction on MUST NOT include two dependent resources with
+the same media type.
 An array with the resource ID(s) of resource(s) with which the entity domains in this
 map are associated. In most cases, this array will have at most one ID, for
 example, for a network map resource. However, the `uses` field MUST NOT contain
 two resources of the same resource type. For example, if a property map depends
 on network map resource, the `uses` field MUST include exactly one network map
 resource.
+
+<!--The `uses` field of an entity domain as a property map resource in an IRD 
+entry MUST NOT include two dependent resources with
+the same media type.-->
+The `uses` field of an entity domain as a property map resource in an IRD 
+entry MUST NOT have ambiguity in specifying dependency. This is similar to how [](#RFC7285) handles dependencies
+between cost maps and network maps. Recall that cost maps present the costs
+between PIDs, and PID names depend on a network map. If an ALTO server provides
+the `routingcost` metric for the network maps `net1` and `net2`, then the
+server defines two separate cost maps, one for `net1` and the other for `net2`.
+YRY: A potential future issue: resource A depends on B and C, but B and C 
+have the same media type.
+
+According to [](#RFC7285), a legacy ALTO server with two network maps, with
+resource IDs `net1` and `net2`, could offer a single Endpoint Property Service
+for the two properties `net1.pid` and `net2.pid`. An ALTO server which supports
+the extensions defined in this document, would, instead, offer two different
+property maps for the `pid` property, one depending on `net1`, and the other on
+`net2`.
 
 ## Response {#FullPropMapResponse}
 
@@ -349,56 +370,60 @@ defined in [](#FullPropMapCapabilities).
 An array with the resource ID(s) of resource(s) with which the entity domains in this
 map are associated. In most cases, this array will have at most one ID, and it
 will be for a network map resource.
+YRY: say refer to the same consistency of uses in Section 4.5.
 
 ## Response {#FilteredPropMapResponse}
 
-The response is the same as for the property map (see [](#FullPropMapResponse)),
-except that it only includes the entities and properties requested by the
-client.
+The response MUST indicate error, using ALTO protocol error handling, as defined in Section 8.5 of [](#RFC7285), if the request is invalid.
 
-Also, the Filtered Property Map response MUST include all inherited
-property values for the specified entities (unlike the Full Property
-Map, the Filtered Property Map response does not include enough
-information for the client to calculate the inherited values).
+Specifically, a Filtered Property Map request can be invalid as follows:
 
-The request for a Filtered Property Map resource might be invalid. For errors
-about the syntax, missing required JSON field and the invalid type of the value
-of a JSON field, the ALTO server handles them as the same process as defined in
-[](#RFC7285). The ALTO server regards the value of a JSON field in a Filtered
-Property Map request as invalid and handles such an error as follows:
-
-<!-- (YRY: value of error message indicate XXX; as below). -->
-- An entity address in `entities` in the request might be invalid in the
-  following cases:
+- An entity address in `entities` in the request is invalid if:
 
     - The domain of this entity is not defined in the `entity-domain-types`
-      capability of this resource in the IRD.
+      capability of this resource in the IRD;
     - The entity address is an invalid address in the entity domain.
 
     A valid entity address is never an error, even if this Filtered Property
     Map resource does not define any properties for it.
 
-- If an entity address in `entities` in the request is invalid, the ALTO server MUST
-  return an `E_INVALID_FIELD_VALUE` error defined in Section 8.5.2 of
-  [](#RFC7285), and the `value` field of the error message SHOULD indicate this
-  entity address.
+    If an entity address in `entities` in the request is invalid, the ALTO 
+    server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section 
+    8.5.2 of [](#RFC7285), and the `value` field of the error message SHOULD 
+    indicate this entity address.
 
-- A property name in `properties` in the request is invalid only if this
+- A property name in `properties` in the request is invalid if this
   property name is not defined in the `property-types` capability of this
-  resource in the IRD. It is not an error that the Filtered Property Map
-  resource does not define a requested property's value for a particular
-  entity. In this case, the ALTO server MUST omit that property from the
-  response for that endpoint.
+  resource in the IRD. 
 
-- If a property name in `properties` in the request is in valid, the ALTO
-  server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section 8.5.2
-  of [](#RFC7285). The `value` field of the error message SHOULD indicate the
-  this property name.
+    It is not an error that the Filtered Property Map
+    resource does not define a requested property's value for a particular
+    entity. In this case, the ALTO server MUST omit that property from the
+    response for that endpoint.
 
-<!-- (YRY: omit case defined the second time; see para above above) -->
+    If a property name in `properties` in the request is invalid, the ALTO
+    server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section 
+    8.5.2 of [](#RFC7285). The `value` field of the error message SHOULD 
+    indicate the this property name.
 
-YRY: handle the case of need to split entities if a block (Jensen: I cannot
-understand it. Can you explain it more?)
+
+The response to a valid request is the same as for the property map 
+(see [](#FullPropMapResponse)), except that it only includes the entities 
+and properties requested by the client.
+
+It is important that the Filtered Property Map response MUST include all 
+inherited property values for the specified entities. A Full 
+Property Map may skip a property P for an entity A if P can be derived 
+using inheritance from another entitiy B. A Filtered Property Map request 
+may include only A but not B. In such a case, the property B MUST be 
+included in the response for A.
+
+YRY: Need to make a decision. It is possible that the entities in the 
+response are different from the entities in the request. Consider
+a request for property P of entity A (e.g., ipv4:192.0.2.0/31). Assume 
+that P has value v1 for A1=ipv4:192.0.2.0/32 and v2 for A2=ipv4:192.0.2.1/32.
+Then, the response will include entities A1 and A2, instead of the request
+entity A.
 
 <!-- Errors must follow RFC7285 Section 8.5.2... -->
 <!-- Check Section 11.4.1.6 of RFC7285. We need to make the behavior of UP

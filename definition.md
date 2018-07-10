@@ -4,14 +4,15 @@
 
 The entity is an extended concept of the endpoint defined in Section 2.1 of
 [](#RFC7285). An entity is an object with a (possibly empty) set of properties.
-Every entity is in one [YRY only one?] [Jensen: every single entity can only be in one domain.] domain, such as the IPv4 domain or the
-IPv6 domain, and has a unique address [YRY: locator or identifier] [Jensen: "address" is consistent with the "Entity Address" section].
+Every entity is in one and only one domain, such as the IPv4 domain or the
+IPv6 domain, and has a unique address.
 
 ## Entity Domain
 
-An entity domain is a family of entities. Examples are the Internet address
-domains (see [](#inet-addr-domain) and the PID domain (see [](#pid-domain)) that
-this document will define.
+An entity domain is a set of entities. Examples of domains are the 
+Internet address domains (see [](#inet-addr-domain) and the PID 
+domain (see [](#pid-domain)). This document will define the domains
+precisely below.
 <!-- An additional example is the proposed domain of Abstract Network Elements
 associated with topology and routing, as suggested by
 [](#I-D.ietf-alto-path-vector). -->
@@ -86,9 +87,10 @@ Entities in a given domain MAY form a hierarchy based on entity addresses, and
 introducing hierarchy allows the introduction of inheritance. Each
 entity domain MUST define its own hierarchy and inheritance rules when
 registered. The hierarchy and inheritance rule makes it possible for an entity
-to inherit a property value from another entity in the same domain. If and only
+to inherit a property value from another entity in the same domain. 
+<!--If and only
 if the property of an entity is undefined, the hierarchy and inheritance rules
-are applied. [YRY: Do we need this?] [Jensen: I think this feature is for reducing the response size.]
+are applied. [YRY: Do we need this?] [Jensen: I think this feature is for reducing the response size.] -->
 
 ## Relationship with Other ALTO Resources {#def-relationship-to-other-resources}
 
@@ -103,25 +105,12 @@ in the associated network map.
 This document takes a different approach. Instead of defining the dependency by
 qualifying the property name, this document attaches the dependency to the
 entity domains. Thus all properties of a specific entity domain depend on the
-same resource; the properties of another entity domain may depend on another
+same resources (see below); the properties of another entity domain may depend on another
 resource. For example, entities in the PID domain depend on a network map.
 <!-- , entities in the ANE domain depend on a cost map or a endpoint cost map. -->
 
-The `uses` field in an IRD entry defines the dependencies of a property map
-resource, and the `dependent-vtags` field in a property map response defines
-the dependencies of that map. These fields are defined in Sections 9.1.5 and
-11.1 of [](#RFC7285), respectively.
-
-The `uses` field in an IRD entry MUST NOT include two dependent resources with
-the same media type. This is similar to how [](#RFC7285) handles dependencies
-between cost maps and network maps. Recall that cost maps present the costs
-between PIDs, and PID names depend on a network map. If an ALTO server provides
-the `routingcost` metric for the network maps `net1` and `net2`, then the
-server defines two separate cost maps, one for `net1` and the other for `net2`.
-
-According to [](#RFC7285), a legacy ALTO server with two network maps, with
-resource IDs `net1` and `net2`, could offer a single Endpoint Property Service
-for the two properties `net1.pid` and `net2.pid`. An ALTO server which supports
-the extensions defined in this document, would, instead, offer two different
-Property Maps for the `pid` property, one depending on `net1`, and the other on
-`net2`.
+Specifically, this document uses the `uses` and `dependent-vtags` fields 
+defined in Sections 9.1.5 and 11.1 of [](#RFC7285), 
+respectively, to specify the preceding dependency: the `uses` field of an 
+IRD entry providing entity domain related resources (see Property Map and Filtered Property Map resources below) specifies the dependent resources, 
+and the `dependent-vtags` field specifies dependency in message responses.

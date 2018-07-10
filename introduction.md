@@ -42,7 +42,7 @@ Additionally, this document introduces ALTO Entity Domains, where entities
 extend the concept of endpoints to objects that may be endpoints as defined in
 [](#RFC7285) but also, for example, PIDs, Abstract Network Elements as defined
 in [](#I-D.ietf-alto-path-vector) or cells. As a consequence, ALTO Entity
-Domains are a super-set of ALTO Address Types and their relation is specified in
+Domains defined in this document are a super-set of ALTO Address Types defined in [](#RFC7285); their exact relationship is specified in
 [](#consistency-procedure).
 
 <!-- FIXME: Although it is understandable to clarify the property map can
