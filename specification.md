@@ -1,13 +1,15 @@
 # Entity Domains
 
-This document defines the following entity domains. For the definition of each
-entity domain, it includes the following template: domain name, domain-specific
-addresses, and hierarchy and inheritance semantics.
+This document defines three entity domains. The definition of each
+entity domain below includes the following: (1) domain name, (2) domain-specific
+addresses, and (3) hierarchy and inheritance semantics.
 
 ## Internet Address Domains {#inet-addr-domain}
 
 The document defines two entity domains (IPv4 and IPv6) for Internet addresses. Both
-entity domains include individual addresses and blocks of addresses.
+entity domains include individual addresses and blocks of addresses. Since the two 
+domains use the same hierarchy and inheritance semantics, we define the semantics together,
+instead of repeating for each.
 
 ### IPv4 Domain {#ipv4-domain}
 
@@ -18,7 +20,7 @@ ipv4
 #### Domain-Specific Entity Addresses
 
 Individual addresses are strings as specified by the IPv4Addresses rule of
-Section 3.2.2 of [](#RFC3986). Blocks of addresses are prefix-match strings as
+Section 3.2.2 of [](#RFC3986); blocks of addresses are prefix-match strings as
 specified in Section 3.1 of  [](#RFC4632). For the purpose of defining
 properties, an individual Internet address and the corresponding full-length
 prefix are considered aliases for the same entity. Thus `ipv4:192.0.2.0` and
@@ -32,8 +34,8 @@ ipv6
 
 #### Domain-Specific Entity Addresses
 
-Individual addresses are strings as specified by Section 4 of [](#RFC5952).
-Blocks of addresses are prefix-match strings as specified in Section 7 of
+Individual addresses are strings as specified by Section 4 of [](#RFC5952);
+blocks of addresses are prefix-match strings as specified in Section 7 of
 [](#RFC5952). For the purpose of defining properties, an individual Internet
 address and the corresponding 128-bit prefix are considered aliases for the
 same entity. That is, `ipv6:2001:db8::1` and `ipv6:2001:db8::1/128` are
@@ -41,20 +43,21 @@ equivalent, and have the same set of properties.
 
 ### Hierarchy and Inheritance of ipv4/ipv6 Domains {#inet-inheritance}
 
-Both entity domains allow property values to be inherited. Specifically, if a property
-P is not defined for a specific Internet address I, but P is defined for some
+Both Internet address domains allow property values to be inherited. Specifically, 
+if a property P is not defined for a specific Internet address I, but P is defined for some
 block C which prefix-matches I, then the address I inherits the value of
 P defined for block C. If more than one such block defines a value for P, I
 inherits the value of P in the block with the longest prefix. It is important
 to notice that this longest prefix rule will ensure no multiple inheritance,
 and hence no ambiguity.
 
-Address blocks can also inherit properties: if property P is not defined for
-a block C, but is defined for some block C' which prefix-matches C, and C' has
+Address blocks can also inherit properties: if a property P is not defined for
+a block C, but is defined for some block C' which prefix-matches C (YRY: revise to
+make explicit what prefix-matches mean here), and C' has
 a shorter mask than C, then block C inherits the property from C'. If there are
 several such blocks C', C inherits from the block with the longest prefix.
 
-As an example, suppose that a server defines the property P for the following entities:
+As an example, suppose that a server defines a property P for the following entities:
 
 ``` text
        ipv4:192.0.2.0/26: P=v1
@@ -84,7 +87,7 @@ Then the following entities have the indicated values:
 <!-- Improve words of this paragraph. (Done, waiting for review) -->
 
 An ALTO Server MAY explicitly indicate a property as not having a value for
-a particular entity. That is, a server MAY say that property A of entity X is
+a particular entity. That is, a server MAY say that property P of entity X is
 "defined to have no value", instead of "undefined". To indicate "no value",
 a server MAY perform different behaviours:
 
@@ -95,14 +98,23 @@ a server MAY perform different behaviours:
 - If the entity would not inherit a value, then the ALTO server MAY return
   `null` or just omit the property. In this case, the ALTO client cannot infer
   the value for this property of this entity from the Inheritance rules. So the
-  client MUST interpret this property has no value.
+  client MUST interpret that this property has no value.
 
 If the ALTO Server does not define any properties for an entity, then the
 server MAY omit that entity from the response.
 
 ### Relationship to Network Maps
 
-An Internet address domain MAY be associated with an ALTO network map resource. Logically, there is a map of Internet address entities to property values for each network map defined by the ALTO server, plus an additional property map for Internet address entities which are not associated with a network map. So, if there are n network maps, the server can provide n+1 maps of Internet address entities to property values. These maps are separate from each other. The prefixes in the property map do not have to correspond to the prefixes defining the network map's PIDs. For example, the property map for a network map MAY assign properties to `ipv4:192.0.2.0/24` even if that prefix is not associated with any PID in the network map.
+(YRY: not fully clear) An Internet address domain MAY be associated with an ALTO network map resource. 
+Logically, there is a map of Internet address entities to property values for 
+each network map defined by the ALTO server, plus an additional property map 
+for Internet address entities which are not associated with a network map. 
+So, if there are n network maps, the server can provide n+1 maps of Internet 
+address entities to property values. These maps are separate from each other. 
+The prefixes in the property map do not have to correspond to the prefixes 
+defining the network map's PIDs. For example, the property map for a network 
+map MAY assign properties to `ipv4:192.0.2.0/24` even if that prefix is not 
+associated with any PID in the network map.
 
 ## PID Domain {#pid-domain}
 
@@ -137,7 +149,7 @@ for the property `P`, and if they do, it is not necessarily `v1`.
 
 Because the Internet address and PID domains are completely separate, the
 question may arise as to which entity domain is the best for a property. In general, the
-Internet address domain is RECOMMENDED for properties that are closely related
+Internet address domains are RECOMMENDED for properties that are closely related
 to the Internet address, or are associated with, and inherited through, blocks
 of addresses.
 
@@ -177,7 +189,7 @@ There is no hierarchy or inheritance for properties associated with ANEs.
 # Property Map Resource {#prop-map}
 
 A Property Map returns the properties defined for all entities in one or more
-domains.
+domains. (YRY: clarify why more domains?)
 
 <!-- Note that Property Map Resource is not applicable to ANE domain. -->
 <!-- It is not RECOMMENDED. But it depends on the implementation. -->
@@ -349,27 +361,32 @@ information for the client to calculate the inherited values).
 
 If an entity in `entities` in the request is invalid, the ALTO server MUST
 return an `E_INVALID_FIELD_VALUE` error defined in Section 8.5.2 of
-[](#RFC7285). An entity can be invalid if the domain of the entity is not
+[](#RFC7285). (YRY: value of error message indicate XXX; as below). 
+An entity can be invalid if the domain of the entity is not
 defined in the IRD for this service or the entity address is an invalid address
 of the entity domain. On the other hand, a valid entity address is not an error, even
 if the server does not define a value for a requested property. In this case,
-the server MUST omit that property from the response for only that entity. If
-a request contains a property in `properties` and the property is not specified
+the server MUST omit that property from the response for only that entity. 
+
+If the ALTO server does not support a requested entity's domain, then it MUST
+return an E_INVALID_FIELD_VALUE error defined in Section 8.5.2 of
+[](#RFC7285). (YRY: merge w/ above)
+
+If a property in `properties` is not specified
 in the IRD for the service, the ALTO server MUST return an
 `E_INVALID_FIELD_VALUE` error defined in Section 8.5.2 of [](#RFC7285). The
 `value` of the error message SHOULD indicate the wrong property.
 
 If the ALTO server does not define a requested property's value for
 a particular entity, then it MUST omit that property from the response for only
-that endpoint.
+that endpoint. (YRY: omit case defined the second time; see para above above)
+
+YRY: handle the case of need to split entities if a block
 
 <!-- TODO: Errors must follow RFC7285 Section 8.5.2... -->
 <!-- Check Section 11.4.1.6 of RFC7285. We need to make the behavior of UP
 consistent with EPS. -->
 
-If the ALTO server does not support a requested entity's domain, then it MUST
-return an E_INVALID_FIELD_VALUE error defined in Section 8.5.2 of
-[](#RFC7285).
 
 <!--Discussion Needed: sometimes the client can compute some inherited property values.
 In this case, can the Filter Property Map response only contain the uncomputable
