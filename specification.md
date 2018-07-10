@@ -86,7 +86,7 @@ Then the following entities have the indicated values:
 
 <!-- Improve words of this paragraph. (Done, waiting for review) -->
 
-An ALTO Server MAY explicitly indicate a property as not having a value for
+An ALTO server MAY explicitly indicate a property as not having a value for
 a particular entity. That is, a server MAY say that property P of entity X is
 "defined to have no value", instead of "undefined". To indicate "no value",
 a server MAY perform different behaviours:
@@ -100,7 +100,7 @@ a server MAY perform different behaviours:
   the value for this property of this entity from the Inheritance rules. So the
   client MUST interpret that this property has no value.
 
-If the ALTO Server does not define any properties for an entity, then the
+If the ALTO server does not define any properties for an entity, then the
 server MAY omit that entity from the response.
 
 ### Relationship to Network Maps
@@ -283,9 +283,9 @@ a "null" value means "do not apply the inheritance rules for this property."
 If the entity would not inherit a value, the ALTO server MAY return "null" or
 MAY just omit the property.-->
 
-For each entity in the Property Map, the ALTO Server returns the value defined
+For each entity in the Property Map, the ALTO server returns the value defined
 for each of the properties specified in this resource's `capabilities` list.
-For efficiency, the ALTO Server SHOULD omit property values that are inherited
+For efficiency, the ALTO server SHOULD omit property values that are inherited
 rather than explicitly defined; if a client needs inherited values, the client
 SHOULD use the entity domain's inheritance rules to deduce those values.
 

@@ -1,18 +1,31 @@
 # Security Considerations
 
-As discussed in Section 15 of [](#RFC7285), properties MAY have sensitive
-customer-specific information. If this is the case, an ALTO Server MAY limit
-access to those properties by providing several different Property Maps. For
-non-sensitive properties, the ALTO Server would provide a URI which accepts
-requests from any client. Sensitive properties, on the other hand, would only
-be available via a secure URI which would require client authentication.
+<!-- How the SC of the base protocol fits the new service. -->
 
+Both Property Map and Filtered Property Map resources defined in this document
+fit into the architecture of the base protocol, and hence the Security
+Considerations of the base protocol (Section 15 of [](#RFC7285)) fully apply
+when these resources are provided by an ALTO server.
+
+<!-- How about the additional considerations. -->
+
+For confidentiality of ALTO information, similar to the discussion in Section
+15.3 of [](#RFC7285), properties in a Property Map resource may expose sensitive
+customer-specific information. If in this case, an ALTO server may limit access
+to those properties by providing several different Property Maps: For
+non-sensitive properties, the ALTO server would provide a URI which accepts
+requests from any ALTO client; Sensitive properties, on the other hand, would
+only be available via a private URI which would require the authentication to
+the ALTO client.
+
+<!--
 Also, while technically this document does not introduce any security risks not
-inherent in the Endpoint Property Service defined by [](#RFC7285), the GET-mode
-property map resource defined in this document does make it easier for a client
-to download large numbers of property values. Accordingly, an ALTO Server
-SHOULD limit GET-mode Property Maps to properties which do not contain
-sensitive data.
+inherent in the Endpoint Property Service defined by [](#RFC7285),
+the GET-mode Property Map resource defined in this document does make it easier
+for an ALTO client to download large numbers of property values. Accordingly, an
+ALTO server SHOULD limit GET-mode Property Maps to properties which do not
+contain sensitive data.
+-->
 
 # IANA Considerations
 
@@ -264,9 +277,9 @@ that hierarchy.
 procedure for determining that inheritance.
 
 - Security Considerations: In some usage scenarios, entity addresses carried in
-ALTO Protocol messages MAY reveal information about an ALTO client or an ALTO
+ALTO Protocol messages may reveal information about an ALTO client or an ALTO
 service provider. Applications and ALTO service providers using addresses of
-the registered type SHOULD be made aware of how (or if) the addressing scheme
+the registered type should be made aware of how (or if) the addressing scheme
 relates to private information and network proximity.
 
 This specification requests registration of the identifiers `ipv4`, `ipv6` and
