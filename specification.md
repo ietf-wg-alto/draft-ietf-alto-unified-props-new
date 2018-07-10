@@ -52,10 +52,10 @@ to notice that this longest prefix rule will ensure no multiple inheritance,
 and hence no ambiguity.
 
 Address blocks can also inherit properties: if a property P is not defined for
-a block C, but is defined for some block C' which prefix-matches C (YRY: revise to
-make explicit what prefix-matches mean here), and C' has
-a shorter mask than C, then block C inherits the property from C'. If there are
-several such blocks C', C inherits from the block with the longest prefix.
+a block C, but is defined for some block C' which covers all IP addresses in C,
+and C' has a shorter mask than C, then block C inherits the property from C'.
+If there are several such blocks C', C inherits from the block with the longest
+prefix.
 
 As an example, suppose that a server defines a property P for the following entities:
 
@@ -105,7 +105,8 @@ server MAY omit that entity from the response.
 
 ### Relationship to Network Maps
 
-(YRY: not fully clear) An Internet address domain MAY be associated with an ALTO network map resource. 
+<!-- FIXME: (YRY: not fully clear) -->
+An Internet address domain MAY be associated with an ALTO network map resource. 
 Logically, there is a map of Internet address entities to property values for 
 each network map defined by the ALTO server, plus an additional property map 
 for Internet address entities which are not associated with a network map. 
@@ -189,7 +190,8 @@ There is no hierarchy or inheritance for properties associated with ANEs.
 # Property Map Resource {#prop-map}
 
 A Property Map returns the properties defined for all entities in one or more
-domains. (YRY: clarify why more domains?)
+domains, e.g., the `location` property of entities in `pid` domain, and the
+`ASN` property of entities in `ipv4` and `ipv6` domains.
 
 <!-- Note that Property Map Resource is not applicable to ANE domain. -->
 <!-- It is not RECOMMENDED. But it depends on the implementation. -->
@@ -359,34 +361,48 @@ property values for the specified entities (unlike the Full Property
 Map, the Filtered Property Map response does not include enough
 information for the client to calculate the inherited values).
 
-If an entity in `entities` in the request is invalid, the ALTO server MUST
-return an `E_INVALID_FIELD_VALUE` error defined in Section 8.5.2 of
-[](#RFC7285). (YRY: value of error message indicate XXX; as below). 
-An entity can be invalid if the domain of the entity is not
-defined in the IRD for this service or the entity address is an invalid address
-of the entity domain. On the other hand, a valid entity address is not an error, even
-if the server does not define a value for a requested property. In this case,
-the server MUST omit that property from the response for only that entity. 
+The request for a Filtered Property Map resource might be invalid. For errors
+about the syntax, missing required JSON field and the invalid type of the value
+of a JSON field, the ALTO server handles them as the same process as defined in
+[](#RFC7285). The ALTO server regards the value of a JSON field in a Filtered
+Property Map request as invalid and handles such an error as follows:
 
-If the ALTO server does not support a requested entity's domain, then it MUST
-return an E_INVALID_FIELD_VALUE error defined in Section 8.5.2 of
-[](#RFC7285). (YRY: merge w/ above)
+<!-- (YRY: value of error message indicate XXX; as below). -->
+- An entity address in `entities` in the request might be invalid in the
+  following cases:
 
-If a property in `properties` is not specified
-in the IRD for the service, the ALTO server MUST return an
-`E_INVALID_FIELD_VALUE` error defined in Section 8.5.2 of [](#RFC7285). The
-`value` of the error message SHOULD indicate the wrong property.
+    - The domain of this entity is not defined in the `entity-domain-types`
+      capability of this resource in the IRD.
+    - The entity address is an invalid address in the entity domain.
 
-If the ALTO server does not define a requested property's value for
-a particular entity, then it MUST omit that property from the response for only
-that endpoint. (YRY: omit case defined the second time; see para above above)
+    A valid entity address is never an error, even if this Filtered Property
+    Map resource does not define any properties for it.
 
-YRY: handle the case of need to split entities if a block
+- If an entity address in `entities` in the request is invalid, the ALTO server MUST
+  return an `E_INVALID_FIELD_VALUE` error defined in Section 8.5.2 of
+  [](#RFC7285), and the `value` field of the error message SHOULD indicate this
+  entity address.
 
-<!-- TODO: Errors must follow RFC7285 Section 8.5.2... -->
+- A property name in `properties` in the request is invalid only if this
+  property name is not defined in the `property-types` capability of this
+  resource in the IRD. It is not an error that the Filtered Property Map
+  resource does not define a requested property's value for a particular
+  entity. In this case, the ALTO server MUST omit that property from the
+  response for that endpoint.
+
+- If a property name in `properties` in the request is in valid, the ALTO
+  server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section 8.5.2
+  of [](#RFC7285). The `value` field of the error message SHOULD indicate the
+  this property name.
+
+<!-- (YRY: omit case defined the second time; see para above above) -->
+
+YRY: handle the case of need to split entities if a block (Jensen: I cannot
+understand it. Can you explain it more?)
+
+<!-- Errors must follow RFC7285 Section 8.5.2... -->
 <!-- Check Section 11.4.1.6 of RFC7285. We need to make the behavior of UP
 consistent with EPS. -->
-
 
 <!--Discussion Needed: sometimes the client can compute some inherited property values.
 In this case, can the Filter Property Map response only contain the uncomputable

@@ -4,8 +4,8 @@
 
 The entity is an extended concept of the endpoint defined in Section 2.1 of
 [](#RFC7285). An entity is an object with a (possibly empty) set of properties.
-Every entity is in one (YRY only one?) domain, such as the IPv4 domain or the 
-IPv6 domain, and has a unique address [YRY: locator or identifier]. 
+Every entity is in one [YRY only one?] [Jensen: every single entity can only be in one domain.] domain, such as the IPv4 domain or the
+IPv6 domain, and has a unique address [YRY: locator or identifier] [Jensen: "address" is consistent with the "Entity Address" section].
 
 ## Entity Domain
 
@@ -88,14 +88,13 @@ entity domain MUST define its own hierarchy and inheritance rules when
 registered. The hierarchy and inheritance rule makes it possible for an entity
 to inherit a property value from another entity in the same domain. If and only
 if the property of an entity is undefined, the hierarchy and inheritance rules
-are applied. [YRY: Do we need this?]
-
+are applied. [YRY: Do we need this?] [Jensen: I think this feature is for reducing the response size.]
 
 ## Relationship with Other ALTO Resources {#def-relationship-to-other-resources}
 
 [](#RFC7285) recognizes that some properties MAY be specific to an ALTO
-resource, such as a network map. Accordingly [](#RFC7285) defines the concept
-of `resource-specific endpoint properties` (see Section 10.8.1 [YRY: which doc]), and indicates
+resource, such as a network map. Accordingly Section 10.8.1 of [](#RFC7285) defines the concept
+of `resource-specific endpoint properties`, and indicates
 that dependency by prefixing the property name with the ID of the resource on
 which it depends. That document defines one resource-specific property, namely
 the `pid` property, whose value is the name of the PID containing that endpoint
