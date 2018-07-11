@@ -218,70 +218,70 @@ The capabilities are defined by an object of type PropertyMapCapabilities:
 
 ``` text
     object {
-      DomainName entity-domain-types<1..*>;
-      PropertyName prop-types<1..*>;
+      DomainName entity-domains<1..*>;
+      PropertyName properties<1..*>;
     } PropertyMapCapabilities;
 ```
 
-where `entity-domain-types` is an array with the domains of the entities in this
-property map, and `prop-types` is an array with the names of the properties
-returned for entities in those domains.
+where `entity-domains` is an array specifying the entity domains, and 
+`properties` is an array specifying the names of the properties
+returned for entities in those domains. The semantics is that each domain
+in `entity-domains` provides all properties defined in `properties`. 
+If a property in `properties` is NOT supported by a domain in `entity-domains`, 
+the server can declare different property maps to conform to the semantics.
+
 
 <!-- TODO: Maybe add some recommendation. Low priority -->
-<!--
-If the server declares multiple domain-types and multiple prop-types in the capability, each prop-type MUST be supported in each domain in the "capabilities" field. In other words, if a prop-type is NOT supported in a particular domain, the property map MUST be divided into several maps.
--->
 
 ## Uses {#FullPropMapUses}
 
-<!-- YRY: revise below to make coherent; remove restriction on MUST NOT include
-two dependent resources with the same media type. -->
-
-Jensen: What's the semantics of the resource dependency? We can have two kinds
-of dependencies:
-1) The entities depend on other resources. e.g., entities in PID domain.
-2) The properties depend on other resources. e.g., the `pid` property of
-entities in IP domain.
-
-An array with the resource ID(s) of resource(s) with which the entities or
-properties in this map are associated.
 
 <!--
-In most cases, this array will have at most one ID, for
-example, for a network map resource.
-However, the `uses` field MUST NOT contain
-two resources of the same resource type. For example, if a property map depends
-on network map resource, the `uses` field MUST include exactly one network map
-resource.
--->
-
-<!--The `uses` field of an entity domain as a property map resource in an IRD
-entry MUST NOT include two dependent resources with
-the same media type.-->
-
-The `uses` field of a property map resource in an IRD entry MUST NOT have
-ambiguity in specifying dependencies. This is similar to how [](#RFC7285)
+This is similar to how [](#RFC7285)
 handles dependencies between cost maps and network maps. Recall that cost maps
 present the costs between PIDs, and PID names depend on a network map. If an
 ALTO server provides the `routingcost` metric for the network maps `net1` and
 `net2`, then the server defines two separate cost maps, one for `net1` and the
-other for `net2`.
+other for `net2`.-->
 
-According to [](#RFC7285), a legacy ALTO server with two network maps, with
-resource IDs `net1` and `net2`, could offer a single Endpoint Property Service
+YRY: fix make issue
+
+The `uses` field of a property map resource in an IRD entry specifies  
+dependencies as discussed in Section 2.7. It is an array of the resource ID(s) 
+of the resource(s) that each domain in `entity-domains` depends on, in order to 
+provide the properties specified in `properties`.  
+
+For example, the `pid` property  for an ipv4 entity is a resource-specific property 
+depending on a specific network map. Assume that the `entity-domains` of a property 
+map resource is `ipv4`, and the `properties` is `pid` . Then, the `uses` field MUST 
+include the resource ID of the specific network map resource.
+
+In the general case, the `uses` field should not have ambiguity in specifying 
+dependencies. To achieve this goal, the server MUST ensure that the following
+`uses` rule: 
+
+
+``` text
+  consider each domain in `entity-domains`
+  go over each property in `properties` in array order
+    if the property is a resource-specific property 
+                       and needs a sequence of S resources, 
+      the S resource ID(s) at the begining of `uses` are used to 
+          interpret the property
+      the S resource ID(s) at the begining are removed from `uses` 
+```
+
+
+To simplify client verifying the `uses` rule, it is RECOMMENDED that 
+a single resource-specific property is declared in each property map resource.
+
+Note that according to [](#RFC7285), a legacy ALTO server with two network maps, 
+with resource IDs `net1` and `net2`, could offer a single Endpoint Property Service
 for the two properties `net1.pid` and `net2.pid`. An ALTO server which supports
 the property map resource defined in this document, would, instead, offer two different
 property maps for the `pid` property, one depending on `net1`, and the other on
 `net2`.
 
-YRY: A potential future issue: resource A depends on B and C, but B and C have
-the same media type.
-
-Jensen: I think the issue does not come from the multiple dependency with the
-same media type. Even if they have different media types, the issue still
-remains. Because we don't have a general approach to indicate which entity or
-property depends on which resource. The issue is that the client does not know
-how to use the dependent resources from this document.
 
 ## Response {#FullPropMapResponse}
 
