@@ -15,8 +15,8 @@ pid2:        ipv4:192.0.2.0/28  ipv4:192.0.2.16/28
 
 ## Property Definitions {#inet-prop-example}
 
-The examples in this section use four additional properties, `ISP`, `ASN`,
-`country` and `state`, with the following values:
+The examples in this section use four additional properties beyond `pid`, 
+`ISP`, `ASN`, `country` and `state`, with the following values:
 
 ```
                         ISP    ASN   country   state
@@ -32,9 +32,9 @@ ipv4:192.0.2.0:          -      -      -        PA
 ## Information Resource Directory (IRD) {#ird-example}
 
 The following IRD defines the relevant resources of the ALTO server. It
-provides two Property Map resources, one for the `ISP` and `ASN` properties,
+provides two Property Maps, one for the `ISP` and `ASN` properties,
 and another for the `country` and `state` properties. The server could have
-provided a Property Map resource for all four properties, but did not,
+provided a single Property Map for all four properties, but did not,
 presumably because the organization that runs the ALTO server believes any
 given client is not interested in all four properties.
 
