@@ -187,7 +187,7 @@ There is no hierarchy or inheritance for properties associated with ANEs.
 -->
 <!-- End of removing -->
 
-# Property Map Resource {#prop-map}
+# Property Map Service {#prop-map}
 
 A Property Map returns the properties defined for all entities in one or more
 domains, e.g., the `location` property of entities in `pid` domain, and the
@@ -201,12 +201,12 @@ response.
 
 ## Media Type {#FullPropMapMediaType}
 
-The media type of an ALTO Property Map resource is
+The media type of an ALTO Property Map is
 `application/alto-propmap+json`.
 
 ## HTTP Method
 
-An ALTO Property Map resource is requested using the HTTP GET method.
+An ALTO Property Map is requested using the HTTP GET method.
 
 ## Accept Input Parameters
 
@@ -331,7 +331,7 @@ For efficiency, the ALTO server SHOULD omit property values that are inherited
 rather than explicitly defined; if a client needs inherited values, the client
 SHOULD use the entity domain's inheritance rules to deduce those values.
 
-# Filtered Property Map Resource {#filter-prop-map}
+# Filtered Property Map Service {#filter-prop-map}
 
 A Filtered Property Map returns the values of a set of properties for a set of
 entities selected by the client.
@@ -347,7 +347,7 @@ The media type of an ALTO Property Map resource is
 
 ## HTTP Method
 
-An ALTO Filtered Property Map resource is requested using the HTTP POST method.
+An ALTO Filtered Property Map is requested using the HTTP POST method.
 
 ## Accept Input Parameters {#filter-prop-map-params}
 
@@ -419,7 +419,7 @@ Specifically, a Filtered Property Map request can be invalid as follows:
   property name is not defined in the `property-types` capability of this
   resource in the IRD.
 
-    It is not an error that the Filtered Property Map
+    It is not an error that a Filtered Property Map
     resource does not define a requested property's value for a particular
     entity. In this case, the ALTO server MUST omit that property from the
     response for that endpoint.
@@ -464,41 +464,41 @@ inherited property values instead of all of them?-->
 
 ## Impact on Endpoint Property Service
 
-The Property Maps defined in this document provide the same functionality as
-the Endpoint Property Service (EPS) defined in Section 11.4 of [](#RFC7285).
-Accordingly, it is RECOMMENDED that the EPS be deprecated in favor of Property
-Maps. However, ALTO servers MAY provide an EPS for the benefit of legacy
-clients.
+Since Property Map and Filtered Property Map defined in this document provide the 
+functionality of the Endpoint Property Service (EPS) defined in Section 11.4 
+of [](#RFC7285), it is RECOMMENDED that the EPS be deprecated in favor of Property
+Map and Filtered Property Map. However, ALTO servers MAY provide an EPS for 
+the benefit of legacy clients.
 
 ## Impact on Resource-Specific Properties
 
 Section 10.8 of [](#RFC7285) defines two categories of endpoint properties:
 `resource-specific` and `global`. Resource-specific property names are prefixed
 with the ID of the resource they depend upon, while global property names
-have no such prefix. The property map resources defined in this document do not
-distinguish between those two types of properties. Instead, if there is
-a dependency, it is indicated by the `uses` capability of a property map, and
-is shared by all properties and entity domains in that map. Accordingly, it is
-RECOMMENDED that resource-specific endpoint properties be deprecated, and no
-new resource-specific endpoint properties be defined.
+have no such prefix. Property Map and Filtered Property Map defined in this 
+document do not distinguish between those two types of properties. Instead, 
+if there is a dependency, it is indicated by the `uses` capability of a 
+property map, and is shared by all properties and entity domains in that map. 
+Accordingly, it is RECOMMENDED that resource-specific endpoint properties be 
+deprecated, and no new resource-specific endpoint properties be defined.
 
 ## Impact on the `pid` Property
 
 Section 7.1.1 of [](#RFC7285) defines the resource-specific endpoint property
 name `pid`, whose value is the name of the PID containing that endpoint. For
 compatibility with legacy clients, an ALTO server which provides the `pid`
-property via the Endpoint Property Service MUST use that definition, and that
-syntax, in the EPS resource.
+property via the EPS MUST use that definition, and that
+syntax.
 
-However, when used with Property Maps, this document amends the definition of
+However, when used with Property Map, this document amends the definition of
 the `pid` property as follows.
 
 First, the name of the property is simply `pid`; the name is not prefixed with
-the resource ID of a network map. The `uses` capability of the property map
-resource indicates the associated network map. This implies that a property map
+the resource ID of a network map. The `uses` capability of the Property Map
+indicates the associated network map. This implies that a property map
 can only return the `pid` property for one network map; if an ALTO server
-provides several network maps, it MUST provide a property map resource for each
-one.
+provides several network maps, it MUST provide a property map for each
+of the network maps.
 
 Second, a client MAY request the `pid` property for a block of
 addresses. An ALTO server determines the value of `pid` for an
@@ -507,11 +507,12 @@ in the network map. If C is in CS, then the value of `pid` is the
 name of the PID associated with C. Otherwise, find the longest block
 C' in CS such that C' prefix-matches C, but is shorter than C. If
 there is such a block C', the value of `pid` is the name of the PID
-associated with C'. If not, then `pid` has no value for block C.
+associated with C'. YRY: Handle the issue of decomposition. 
+If not, then `pid` has no value for block C.
 
-Note that although an ALTO server MAY provide a GET-mode property map resource
-which returns the entire map for the `pid` property, there is no need to do so,
-because that map is simply the inverse of the network map.
+Note that although an ALTO server MAY provide a GET-mode Property Map
+which returns the entire map for the `pid` property, there is no need 
+to do so, because that map is simply the inverse of the network map.
 
 ## Impact on Other Properties
 

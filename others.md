@@ -2,21 +2,37 @@
 
 <!-- How the SC of the base protocol fits the new service. -->
 
-Both Property Map and Filtered Property Map resources defined in this document
-fit into the architecture of the base protocol, and hence the Security
-Considerations of the base protocol (Section 15 of [](#RFC7285)) fully apply
-when these resources are provided by an ALTO server.
+Both Property Map and Filtered Property Map defined in this document
+fit into the architecture of the ALTO base protocol, and hence the Security
+Considerations (Section 15 of [](#RFC7285)) of the base protocol fully apply:
+authenticity and integrity of ALTO information (i.e., authenticity and integrity
+of property maps), potential undesirable guidance from authenticated ALTO 
+information (e.g., potentially imprecise or even wrong value of a property 
+such as geo-location), confidentiality of ALTO information (e.g., exposure of
+a potentially sensitive entity property such as geo-location), privacy for 
+ALTO users, and availability of ALTO services should all be considered.
+
+A particular fundamental security consideration when an ALTO server provides
+a property map is to define precisely the policies on who can access what 
+properties for which entities. Security mechanisms such as authentication and
+confidentiality mechanisms then should be applied to enforce the policy. For 
+example, a policy can be that a property P can be accessed only by its owner
+(e.g., the customer who is allocated a given IP address).
+Then, the ALTO server will need to deploy corresponding mechanisms to 
+realize the policy. The policy may allow non-owners to access a coarse-grained
+value of the property P. In such a case, the ALTO server may provide a different
+URI to provide the information.
 
 <!-- How about the additional considerations. -->
 
-For confidentiality of ALTO information, similar to the discussion in Section
+<!-- For confidentiality of ALTO information, similar to the discussion in Section
 15.3 of [](#RFC7285), properties in a Property Map resource may expose sensitive
 customer-specific information. If in this case, an ALTO server may limit access
 to those properties by providing several different Property Maps: For
 non-sensitive properties, the ALTO server would provide a URI which accepts
 requests from any ALTO client; Sensitive properties, on the other hand, would
 only be available via a private URI which would require the authentication to
-the ALTO client.
+the ALTO client. -->
 
 <!--
 Also, while technically this document does not introduce any security risks not
