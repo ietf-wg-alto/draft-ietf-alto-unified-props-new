@@ -7,7 +7,7 @@ addresses, and (3) hierarchy and inheritance semantics.
 ## Internet Address Domains {#inet-addr-domain}
 
 The document defines two entity domains (IPv4 and IPv6) for Internet addresses. Both
-entity domains include individual addresses and blocks of addresses. Since the two 
+entity domains include individual addresses and blocks of addresses. Since the two
 domains use the same hierarchy and inheritance semantics, we define the semantics together,
 instead of repeating for each.
 
@@ -43,7 +43,7 @@ equivalent, and have the same set of properties.
 
 ### Hierarchy and Inheritance of ipv4/ipv6 Domains {#inet-inheritance}
 
-Both Internet address domains allow property values to be inherited. Specifically, 
+Both Internet address domains allow property values to be inherited. Specifically,
 if a property P is not defined for a specific Internet address I, but P is defined for some
 block C which prefix-matches I, then the address I inherits the value of
 P defined for block C. If more than one such block defines a value for P, I
@@ -106,15 +106,15 @@ server MAY omit that entity from the response.
 ### Relationship to Network Maps
 
 <!-- FIXME: (YRY: not fully clear) -->
-An Internet address domain MAY be associated with an ALTO network map resource. 
-Logically, there is a map of Internet address entities to property values for 
-each network map defined by the ALTO server, plus an additional property map 
-for Internet address entities which are not associated with a network map. 
-So, if there are n network maps, the server can provide n+1 maps of Internet 
-address entities to property values. These maps are separate from each other. 
-The prefixes in the property map do not have to correspond to the prefixes 
-defining the network map's PIDs. For example, the property map for a network 
-map MAY assign properties to `ipv4:192.0.2.0/24` even if that prefix is not 
+An Internet address domain MAY be associated with an ALTO network map resource.
+Logically, there is a map of Internet address entities to property values for
+each network map defined by the ALTO server, plus an additional property map
+for Internet address entities which are not associated with a network map.
+So, if there are n network maps, the server can provide n+1 maps of Internet
+address entities to property values. These maps are separate from each other.
+The prefixes in the property map do not have to correspond to the prefixes
+defining the network map's PIDs. For example, the property map for a network
+map MAY assign properties to `ipv4:192.0.2.0/24` even if that prefix is not
 associated with any PID in the network map.
 
 ## PID Domain {#pid-domain}
@@ -232,35 +232,56 @@ returned for entities in those domains.
 If the server declares multiple domain-types and multiple prop-types in the capability, each prop-type MUST be supported in each domain in the "capabilities" field. In other words, if a prop-type is NOT supported in a particular domain, the property map MUST be divided into several maps.
 -->
 
-## Uses
+## Uses {#FullPropMapUses}
 
-YRY: revise below to make coherent; remove restriction on MUST NOT include two dependent resources with
-the same media type.
-An array with the resource ID(s) of resource(s) with which the entity domains in this
-map are associated. In most cases, this array will have at most one ID, for
-example, for a network map resource. However, the `uses` field MUST NOT contain
+<!-- YRY: revise below to make coherent; remove restriction on MUST NOT include
+two dependent resources with the same media type. -->
+
+Jensen: What's the semantics of the resource dependency? We can have two kinds
+of dependencies:
+1) The entities depend on other resources. e.g., entities in PID domain.
+2) The properties depend on other resources. e.g., the `pid` property of
+entities in IP domain.
+
+An array with the resource ID(s) of resource(s) with which the entities or
+properties in this map are associated.
+
+<!--
+In most cases, this array will have at most one ID, for
+example, for a network map resource.
+However, the `uses` field MUST NOT contain
 two resources of the same resource type. For example, if a property map depends
 on network map resource, the `uses` field MUST include exactly one network map
 resource.
+-->
 
-<!--The `uses` field of an entity domain as a property map resource in an IRD 
+<!--The `uses` field of an entity domain as a property map resource in an IRD
 entry MUST NOT include two dependent resources with
 the same media type.-->
-The `uses` field of an entity domain as a property map resource in an IRD 
-entry MUST NOT have ambiguity in specifying dependency. This is similar to how [](#RFC7285) handles dependencies
-between cost maps and network maps. Recall that cost maps present the costs
-between PIDs, and PID names depend on a network map. If an ALTO server provides
-the `routingcost` metric for the network maps `net1` and `net2`, then the
-server defines two separate cost maps, one for `net1` and the other for `net2`.
-YRY: A potential future issue: resource A depends on B and C, but B and C 
-have the same media type.
+
+The `uses` field of a property map resource in an IRD entry MUST NOT have
+ambiguity in specifying dependencies. This is similar to how [](#RFC7285)
+handles dependencies between cost maps and network maps. Recall that cost maps
+present the costs between PIDs, and PID names depend on a network map. If an
+ALTO server provides the `routingcost` metric for the network maps `net1` and
+`net2`, then the server defines two separate cost maps, one for `net1` and the
+other for `net2`.
 
 According to [](#RFC7285), a legacy ALTO server with two network maps, with
 resource IDs `net1` and `net2`, could offer a single Endpoint Property Service
 for the two properties `net1.pid` and `net2.pid`. An ALTO server which supports
-the extensions defined in this document, would, instead, offer two different
+the property map resource defined in this document, would, instead, offer two different
 property maps for the `pid` property, one depending on `net1`, and the other on
 `net2`.
+
+YRY: A potential future issue: resource A depends on B and C, but B and C have
+the same media type.
+
+Jensen: I think the issue does not come from the multiple dependency with the
+same media type. Even if they have different media types, the issue still
+remains. Because we don't have a general approach to indicate which entity or
+property depends on which resource. The issue is that the client does not know
+how to use the dependent resources from this document.
 
 ## Response {#FullPropMapResponse}
 
@@ -367,10 +388,12 @@ defined in [](#FullPropMapCapabilities).
 
 ## Uses
 
-An array with the resource ID(s) of resource(s) with which the entity domains in this
-map are associated. In most cases, this array will have at most one ID, and it
-will be for a network map resource.
-YRY: say refer to the same consistency of uses in Section 4.5.
+An array with the resource ID(s) of resource(s) with which the entities or
+properties in this map are associated. In most cases, this array will have at
+most one ID, and it will be for a network map resource. The detailed usage
+refers to the specification of `uses` attribute of the Property Map resource
+(see [](#FullPropMapUses)).
+<!-- YRY: say refer to the same consistency of uses in Section 4.5. -->
 
 ## Response {#FilteredPropMapResponse}
 
@@ -387,14 +410,14 @@ Specifically, a Filtered Property Map request can be invalid as follows:
     A valid entity address is never an error, even if this Filtered Property
     Map resource does not define any properties for it.
 
-    If an entity address in `entities` in the request is invalid, the ALTO 
-    server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section 
-    8.5.2 of [](#RFC7285), and the `value` field of the error message SHOULD 
+    If an entity address in `entities` in the request is invalid, the ALTO
+    server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section
+    8.5.2 of [](#RFC7285), and the `value` field of the error message SHOULD
     indicate this entity address.
 
 - A property name in `properties` in the request is invalid if this
   property name is not defined in the `property-types` capability of this
-  resource in the IRD. 
+  resource in the IRD.
 
     It is not an error that the Filtered Property Map
     resource does not define a requested property's value for a particular
@@ -402,28 +425,32 @@ Specifically, a Filtered Property Map request can be invalid as follows:
     response for that endpoint.
 
     If a property name in `properties` in the request is invalid, the ALTO
-    server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section 
-    8.5.2 of [](#RFC7285). The `value` field of the error message SHOULD 
+    server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section
+    8.5.2 of [](#RFC7285). The `value` field of the error message SHOULD
     indicate the property name.
 
 
-The response to a valid request is the same as for the property map 
-(see [](#FullPropMapResponse)), except that it only includes the entities 
+The response to a valid request is the same as for the property map
+(see [](#FullPropMapResponse)), except that it only includes the entities
 and properties requested by the client.
 
-It is important that the Filtered Property Map response MUST include all 
-inherited property values for the specified entities. A Full 
-Property Map may skip a property P for an entity A if P can be derived 
-using inheritance from another entity B. A Filtered Property Map request 
-may include only A but not B. In such a case, the property B MUST be 
+It is important that the Filtered Property Map response MUST include all
+inherited property values for the specified entities. A Full
+Property Map may skip a property P for an entity A if P can be derived
+using inheritance from another entity B. A Filtered Property Map request
+may include only A but not B. In such a case, the property B MUST be
 included in the response for A.
 
-YRY: Need to make a decision. It is possible that the entities in the 
+YRY: Need to make a decision. It is possible that the entities in the
 response are different from the entities in the request. Consider
-a request for property P of entity A (e.g., ipv4:192.0.2.0/31). Assume 
+a request for property P of entity A (e.g., ipv4:192.0.2.0/31). Assume
 that P has value v1 for A1=ipv4:192.0.2.0/32 and v2 for A2=ipv4:192.0.2.1/32.
 Then, the response will include entities A1 and A2, instead of the request
 entity A.
+
+Jensen: This process looks better. But if accept it, we need to add more
+security considerations, e.g., if a client request a full wildcard 0.0.0.0/0,
+the server has to actually return the full map.
 
 <!-- Errors must follow RFC7285 Section 8.5.2... -->
 <!-- Check Section 11.4.1.6 of RFC7285. We need to make the behavior of UP
