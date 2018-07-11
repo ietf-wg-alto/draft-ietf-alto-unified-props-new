@@ -23,7 +23,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 <rfc category="std"
-     docName="draft-ietf-alto-unified-props-new-04"
+     docName="draft-ietf-alto-unified-props-new-05"
      ipr="trust200902">
 <front>
   <title abbrev="Unified Properties">Unified Properties for the ALTO Protocol</title>
