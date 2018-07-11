@@ -6,19 +6,19 @@ Both Property Map and Filtered Property Map defined in this document
 fit into the architecture of the ALTO base protocol, and hence the Security
 Considerations (Section 15 of [](#RFC7285)) of the base protocol fully apply:
 authenticity and integrity of ALTO information (i.e., authenticity and integrity
-of property maps), potential undesirable guidance from authenticated ALTO 
-information (e.g., potentially imprecise or even wrong value of a property 
+of Property Maps), potential undesirable guidance from authenticated ALTO
+information (e.g., potentially imprecise or even wrong value of a property
 such as geo-location), confidentiality of ALTO information (e.g., exposure of
-a potentially sensitive entity property such as geo-location), privacy for 
+a potentially sensitive entity property such as geo-location), privacy for
 ALTO users, and availability of ALTO services should all be considered.
 
 A particular fundamental security consideration when an ALTO server provides
-a property map is to define precisely the policies on who can access what 
+a Property Map is to define precisely the policies on who can access what
 properties for which entities. Security mechanisms such as authentication and
-confidentiality mechanisms then should be applied to enforce the policy. For 
+confidentiality mechanisms then should be applied to enforce the policy. For
 example, a policy can be that a property P can be accessed only by its owner
 (e.g., the customer who is allocated a given IP address).
-Then, the ALTO server will need to deploy corresponding mechanisms to 
+Then, the ALTO server will need to deploy corresponding mechanisms to
 realize the policy. The policy may allow non-owners to access a coarse-grained
 value of the property P. In such a case, the ALTO server may provide a different
 URI to provide the information.

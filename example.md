@@ -15,7 +15,7 @@ pid2:        ipv4:192.0.2.0/28  ipv4:192.0.2.16/28
 
 ## Property Definitions {#inet-prop-example}
 
-The examples in this section use four additional properties beyond `pid`, 
+The examples in this section use four additional properties beyond `pid`,
 `ISP`, `ASN`, `country` and `state`, with the following values:
 
 ```
@@ -124,12 +124,12 @@ Service for the `pid` property for the default network map.
 ## Property Map Example {#prop-map-example}
 
 The following example uses the properties and IRD defined above to retrieve
-a property map for entities with the `ISP` and `ASN` properties. Note that the
+a Property Map for entities with the `ISP` and `ASN` properties. Note that the
 response does not include the entity `ipv4:192.0.2.0`, because it does not have
 a value for either of those properties. Also note that the entities
 `ipv4:192.0.2.0/28` and `ipv4:192.0.2.16/28` are refinements of
 `ipv4:192.0.2.0/24`, and hence inherit its value for `ISP` property. But
-because that value is inherited, it is not explicitly listed in the property map.
+because that value is inherited, it is not explicitly listed in the Property Map.
 
 ```
 GET /propmap/full/inet-ia HTTP/1.1

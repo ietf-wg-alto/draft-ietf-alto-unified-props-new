@@ -108,12 +108,12 @@ server MAY omit that entity from the response.
 <!-- FIXME: (YRY: not fully clear) -->
 An Internet address domain MAY be associated with an ALTO network map resource.
 Logically, there is a map of Internet address entities to property values for
-each network map defined by the ALTO server, plus an additional property map
+each network map defined by the ALTO server, plus an additional Property Map
 for Internet address entities which are not associated with a network map.
 So, if there are n network maps, the server can provide n+1 maps of Internet
 address entities to property values. These maps are separate from each other.
-The prefixes in the property map do not have to correspond to the prefixes
-defining the network map's PIDs. For example, the property map for a network
+The prefixes in the Property Map do not have to correspond to the prefixes
+defining the network map's PIDs. For example, the Property Map for a network
 map MAY assign properties to `ipv4:192.0.2.0/24` even if that prefix is not
 associated with any PID in the network map.
 
@@ -196,7 +196,7 @@ domains, e.g., the `location` property of entities in `pid` domain, and the
 <!-- Note that Property Map Resource is not applicable to ANE domain. -->
 <!-- It is not RECOMMENDED. But it depends on the implementation. -->
 
-[](#prop-map-example) gives an example of a property map request and its
+[](#prop-map-example) gives an example of a Property Map request and its
 response.
 
 ## Media Type {#FullPropMapMediaType}
@@ -223,12 +223,12 @@ The capabilities are defined by an object of type PropertyMapCapabilities:
     } PropertyMapCapabilities;
 ```
 
-where `entity-domains` is an array specifying the entity domains, and 
+where `entity-domains` is an array specifying the entity domains, and
 `properties` is an array specifying the names of the properties
 returned for entities in those domains. The semantics is that each domain
-in `entity-domains` provides all properties defined in `properties`. 
-If a property in `properties` is NOT supported by a domain in `entity-domains`, 
-the server can declare different property maps to conform to the semantics.
+in `entity-domains` provides all properties defined in `properties`.
+If a property in `properties` is NOT supported by a domain in `entity-domains`,
+the server can declare different Property Maps to conform to the semantics.
 
 
 <!-- TODO: Maybe add some recommendation. Low priority -->
@@ -246,46 +246,46 @@ other for `net2`.-->
 
 YRY: fix make issue
 
-The `uses` field of a property map resource in an IRD entry specifies  
-dependencies as discussed in Section 2.7. It is an array of the resource ID(s) 
-of the resource(s) that each domain in `entity-domains` depends on, in order to 
-provide the properties specified in `properties`.  
+The `uses` field of a Property Map resource in an IRD entry specifies
+dependencies as discussed in Section 2.7. It is an array of the resource ID(s)
+of the resource(s) that each domain in `entity-domains` depends on, in order to
+provide the properties specified in `properties`.
 
-For example, the `pid` property  for an ipv4 entity is a resource-specific property 
-depending on a specific network map. Assume that the `entity-domains` of a property 
-map resource is `ipv4`, and the `properties` is `pid` . Then, the `uses` field MUST 
+For example, the `pid` property  for an ipv4 entity is a resource-specific property
+depending on a specific network map. Assume that the `entity-domains` of a property
+map resource is `ipv4`, and the `properties` is `pid` . Then, the `uses` field MUST
 include the resource ID of the specific network map resource.
 
-In the general case, the `uses` field should not have ambiguity in specifying 
+In the general case, the `uses` field should not have ambiguity in specifying
 dependencies. To achieve this goal, the server MUST ensure the following
-`uses` rule for each domain in `entity-domains`: 
+`uses` rule for each domain in `entity-domains`:
 
 
 ``` text
   go over each property in `properties` in array order
-    if the property is a resource-specific property 
-                       and needs a sequence of S resources, 
-      the S resource ID(s) at the beginning of `uses` are used to 
+    if the property is a resource-specific property
+                       and needs a sequence of S resources,
+      the S resource ID(s) at the beginning of `uses` are used to
           interpret the property
-      the S resource ID(s) are removed from `uses` 
+      the S resource ID(s) are removed from `uses`
 ```
 
 
-To simplify client verifying the `uses` rule, it is RECOMMENDED that 
-a single resource-specific property is specified in `properties` in each property 
+To simplify client verifying the `uses` rule, it is RECOMMENDED that
+a single resource-specific property is specified in `properties` in each property
 map resource.
 
-Note that according to [](#RFC7285), a legacy ALTO server with two network maps, 
+Note that according to [](#RFC7285), a legacy ALTO server with two network maps,
 with resource IDs `net1` and `net2`, could offer a single Endpoint Property Service
 for the two properties `net1.pid` and `net2.pid`. An ALTO server which supports
-the property map resource defined in this document, would, instead, offer two different
-property maps for the `pid` property, one depending on `net1`, and the other on
+the Property Map resource defined in this document, would, instead, offer two different
+Property Maps for the `pid` property, one depending on `net1`, and the other on
 `net2`.
 
 
 ## Response {#FullPropMapResponse}
 
-If the entity domains in this property map depend on other resources, the
+If the entity domains in this Property Map depend on other resources, the
 `dependent-vtags` field in the `meta` field of the response MUST be an array
 that includes the version tags of those resources, and the order MUST be consistent with the IRD
 `uses` field. The data component of
@@ -338,7 +338,7 @@ A Filtered Property Map returns the values of a set of properties for a set of
 entities selected by the client.
 
 [](#filt-prop-map-example-1), [](#filt-prop-map-example-2) and
-[](#filt-prop-map-example-3) give examples of filtered property map requests
+[](#filt-prop-map-example-3) give examples of Filtered Property Map requests
 and responses.
 
 ## Media Type {#FilterPropMapMediaType}
@@ -390,7 +390,7 @@ defined in [](#FullPropMapCapabilities).
 ## Uses
 
 An array with the resource ID(s) of resource(s) with which the entities or
-properties in this map are associated. See the specification of `uses` attribute 
+properties in this map are associated. See the specification of `uses` attribute
 of the Property Map resource
 (see [](#FullPropMapUses)). The same `uses` rule applies.
 <!-- YRY: say refer to the same consistency of uses in Section 4.5. -->
@@ -430,7 +430,7 @@ Specifically, a Filtered Property Map request can be invalid as follows:
     indicate the property name.
 
 
-The response to a valid request is the same as for the property map
+The response to a valid request is the same as for the Property Map
 (see [](#FullPropMapResponse)), except that it only includes the entities
 and properties requested by the client.
 
@@ -464,10 +464,10 @@ inherited property values instead of all of them?-->
 
 ## Impact on Endpoint Property Service
 
-Since Property Map and Filtered Property Map defined in this document provide the 
-functionality of the Endpoint Property Service (EPS) defined in Section 11.4 
+Since Property Map and Filtered Property Map defined in this document provide the
+functionality of the Endpoint Property Service (EPS) defined in Section 11.4
 of [](#RFC7285), it is RECOMMENDED that the EPS be deprecated in favor of Property
-Map and Filtered Property Map. However, ALTO servers MAY provide an EPS for 
+Map and Filtered Property Map. However, ALTO servers MAY provide an EPS for
 the benefit of legacy clients.
 
 ## Impact on Resource-Specific Properties
@@ -475,11 +475,11 @@ the benefit of legacy clients.
 Section 10.8 of [](#RFC7285) defines two categories of endpoint properties:
 `resource-specific` and `global`. Resource-specific property names are prefixed
 with the ID of the resource they depend upon, while global property names
-have no such prefix. Property Map and Filtered Property Map defined in this 
-document do not distinguish between those two types of properties. Instead, 
-if there is a dependency, it is indicated by the `uses` capability of a 
-property map, and is shared by all properties and entity domains in that map. 
-Accordingly, it is RECOMMENDED that resource-specific endpoint properties be 
+have no such prefix. Property Map and Filtered Property Map defined in this
+document do not distinguish between those two types of properties. Instead,
+if there is a dependency, it is indicated by the `uses` capability of a
+Property Map, and is shared by all properties and entity domains in that map.
+Accordingly, it is RECOMMENDED that resource-specific endpoint properties be
 deprecated, and no new resource-specific endpoint properties be defined.
 
 ## Impact on the `pid` Property
@@ -495,9 +495,9 @@ the `pid` property as follows.
 
 First, the name of the property is simply `pid`; the name is not prefixed with
 the resource ID of a network map. The `uses` capability of the Property Map
-indicates the associated network map. This implies that a property map
+indicates the associated network map. This implies that a Property Map
 can only return the `pid` property for one network map; if an ALTO server
-provides several network maps, it MUST provide a property map for each
+provides several network maps, it MUST provide a Property Map for each
 of the network maps.
 
 Second, a client MAY request the `pid` property for a block of
@@ -507,11 +507,11 @@ in the network map. If C is in CS, then the value of `pid` is the
 name of the PID associated with C. Otherwise, find the longest block
 C' in CS such that C' prefix-matches C, but is shorter than C. If
 there is such a block C', the value of `pid` is the name of the PID
-associated with C'. YRY: Handle the issue of decomposition. 
+associated with C'. YRY: Handle the issue of decomposition.
 If not, then `pid` has no value for block C.
 
 Note that although an ALTO server MAY provide a GET-mode Property Map
-which returns the entire map for the `pid` property, there is no need 
+which returns the entire map for the `pid` property, there is no need
 to do so, because that map is simply the inverse of the network map.
 
 ## Impact on Other Properties
