@@ -104,9 +104,15 @@ in the associated network map.
 
 This document takes a different approach. Instead of defining the dependency by
 qualifying the property name, this document attaches the dependency to the
-entity domains. Thus all properties of a specific entity domain depend on the
-same resources (see below); the properties of another entity domain may depend on another
-resource. For example, entities in the PID domain depend on a network map.
+entity domains. Thus each resource-specific property of all entities in a
+specific domain depends on the same resources; the properties of entities in
+another domain may depend on another resource. For example, in a single property
+map, the `pid` property of all entities in an Internet address domain MUST
+depend on a unique network map.
+
+Meanwhile, some entity domains may be resource-specific, which means an entity
+address in such domains MUST depend on another resource. For example, entities
+in the PID domain depend on a network map.
 <!-- , entities in the ANE domain depend on a cost map or a endpoint cost map. -->
 
 Specifically, this document uses the `uses` and `dependent-vtags` fields 

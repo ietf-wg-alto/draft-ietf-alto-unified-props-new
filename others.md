@@ -1,4 +1,4 @@
-# Security Considerations
+# Security Considerations {#SecSC}
 
 <!-- How the SC of the base protocol fits the new service. -->
 
