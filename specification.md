@@ -265,14 +265,15 @@ dependencies. To achieve this goal, the server MUST ensure the following
   go over each property in `properties` in array order
     if the property is a resource-specific property 
                        and needs a sequence of S resources, 
-      the S resource ID(s) at the begining of `uses` are used to 
+      the S resource ID(s) at the beginning of `uses` are used to 
           interpret the property
-      the S resource ID(s) at the begining are removed from `uses` 
+      the S resource ID(s) are removed from `uses` 
 ```
 
 
 To simplify client verifying the `uses` rule, it is RECOMMENDED that 
-a single resource-specific property is declared in each property map resource.
+a single resource-specific property is specified in `properties` in each property 
+map resource.
 
 Note that according to [](#RFC7285), a legacy ALTO server with two network maps, 
 with resource IDs `net1` and `net2`, could offer a single Endpoint Property Service
