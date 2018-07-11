@@ -287,7 +287,8 @@ property maps for the `pid` property, one depending on `net1`, and the other on
 
 If the entity domains in this property map depend on other resources, the
 `dependent-vtags` field in the `meta` field of the response MUST be an array
-that includes the version tags of those resources. The data component of
+that includes the version tags of those resources, and the order MUST be consistent with the IRD
+`uses` field. The data component of
 a Property Map response is named `property-map`, which is a JSON object of type
 PropertyMapData, where:
 
@@ -389,10 +390,9 @@ defined in [](#FullPropMapCapabilities).
 ## Uses
 
 An array with the resource ID(s) of resource(s) with which the entities or
-properties in this map are associated. In most cases, this array will have at
-most one ID, and it will be for a network map resource. The detailed usage
-refers to the specification of `uses` attribute of the Property Map resource
-(see [](#FullPropMapUses)).
+properties in this map are associated. See the specification of `uses` attribute 
+of the Property Map resource
+(see [](#FullPropMapUses)). The same `uses` rule applies.
 <!-- YRY: say refer to the same consistency of uses in Section 4.5. -->
 
 ## Response {#FilteredPropMapResponse}
