@@ -53,7 +53,10 @@ Note that for legacy clients, the ALTO server provides an Endpoint Property
 Service for the `pid` property for the default network map.
 
 ```
-  "meta": { ... },
+  "meta" : {
+      ...
+      "default-alto-network-map" : "default-network-map"
+  },
   "resources" : {
      "default-network-map" : {
         "uri" : "http://alto.example.com/networkmap",
@@ -64,16 +67,16 @@ Service for the `pid` property for the default network map.
         "uri" : "http://alto.example.com/propmap/full/inet-cs",
         "media-type" : "application/alto-propmap+json",
         "capabilities" : {
-          "entity-domain-types": [ "ipv4", "ipv6" ],
-          "prop-types" : [  "country", "state" ]
+          "entity-domains": [ "ipv4", "ipv6" ],
+          "properties" : [  "country", "state" ]
         }
      },
      "isp-asn-property-map" : {
         "uri" : "http://alto.example.com/propmap/full/inet-ia",
         "media-type" : "application/alto-propmap+json",
         "capabilities" : {
-          "entity-domain-types": [ "ipv4", "ipv6" ],
-          "prop-types" : [ "ISP", "ASN" ]
+          "entity-domains": [ "ipv4", "ipv6" ],
+          "properties" : [ "ISP", "ASN" ]
         }
      },
      "iacs-property-map" : {
@@ -81,8 +84,8 @@ Service for the `pid` property for the default network map.
         "media-type" : "application/alto-propmap+json",
         "accepts" : "application/alto-propmapparams+json",
         "capabilities" : {
-          "entity-domain-types": [ "ipv4", "ipv6" ],
-          "prop-types" : [ "ISP", "ASN", "country", "state" ]
+          "entity-domains": [ "ipv4", "ipv6" ],
+          "properties" : [ "ISP", "ASN", "country", "state" ]
         }
      },
      "pid-property-map" : {
@@ -91,8 +94,8 @@ Service for the `pid` property for the default network map.
         "accepts" : "application/alto-propmapparams+json",
         "uses" : [ "default-network-map" ]
         "capabilities" : {
-          "entity-domain-types" : [ "ipv4", "ipv6" ],
-          "prop-types" : [ "pid" ]
+          "entity-domains" : [ "ipv4", "ipv6" ],
+          "properties" : [ "pid" ]
         }
      },
      "location-property-map": {
@@ -102,7 +105,7 @@ Service for the `pid` property for the default network map.
        "uses" : [ "default-network-map" ],
        "capabilities": {
          "domain-types": [ "pid" ],
-         "prop-types": [ "country", "state" ]
+         "properties": [ "country", "state" ]
        }
      },
      "legacy-pid-property" : {
@@ -110,7 +113,7 @@ Service for the `pid` property for the default network map.
         "media-type" : "application/alto-endpointprop+json",
         "accepts" : "application/alto-endpointpropparams+json",
         "capabilities" : {
-          "prop-types" : [ "default-network-map.pid" ]
+          "properties" : [ "default-network-map.pid" ]
         }
      }
   }
