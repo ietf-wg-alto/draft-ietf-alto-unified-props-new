@@ -257,12 +257,11 @@ map resource is `ipv4`, and the `properties` is `pid` . Then, the `uses` field M
 include the resource ID of the specific network map resource.
 
 In the general case, the `uses` field should not have ambiguity in specifying 
-dependencies. To achieve this goal, the server MUST ensure that the following
-`uses` rule: 
+dependencies. To achieve this goal, the server MUST ensure the following
+`uses` rule for each domain in `entity-domains`: 
 
 
 ``` text
-  consider each domain in `entity-domains`
   go over each property in `properties` in array order
     if the property is a resource-specific property 
                        and needs a sequence of S resources, 
