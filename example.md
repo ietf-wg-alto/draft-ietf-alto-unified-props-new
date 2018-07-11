@@ -15,15 +15,26 @@ pid2:        ipv4:192.0.2.0/28  ipv4:192.0.2.16/28
 
 ## Property Definitions {#inet-prop-example}
 
-The examples in this section use four additional properties beyond `pid`,
-`ISP`, `ASN`, `country` and `state`, with the following values:
+Beyond `pid`, the examples in this section use four additional properties for
+Internet address domains, `ISP`, `ASN`, `country` and `state`, with the
+following values:
 
 ```
                         ISP    ASN   country   state
 ipv4:192.0.2.0/24:    BitsRus   -      us       -
 ipv4:192.0.2.0/28:       -    12345    -        NJ
 ipv4:192.0.2.16/28:      -    12345    -        CT
-ipv4:192.0.2.0:          -      -      -        PA
+ipv4:192.0.2.0:          -      -      -        CA
+```
+
+And the examples in this section use the property `region` for PID domain with
+the following values:
+
+```
+                   region
+pid:defaultpid:     -
+pid:pid1:           west
+pid:pid2:           east
 ```
 
 ^[prop-map-values-ex::Example Property Values]
@@ -98,14 +109,14 @@ Service for the `pid` property for the default network map.
           "properties" : [ "pid" ]
         }
      },
-     "location-property-map": {
-       "uri": "http://alto.exmaple.com/propmap/location",
+     "region-property-map": {
+       "uri": "http://alto.exmaple.com/propmap/region",
        "media-type": "application/alto-propmap+json",
        "accepts": "application/alto-propmapparams+json",
        "uses" : [ "default-network-map" ],
        "capabilities": {
          "domain-types": [ "pid" ],
-         "properties": [ "country", "state" ]
+         "properties": [ "region" ]
        }
      },
      "legacy-pid-property" : {
@@ -287,23 +298,19 @@ Content-Type: application/alto-propmap+json
 ## Filtered Property Map Example #4 ## {#filt-prop-map-example-4}
 
 The following example uses the Filtered Property Map resource to request the
-`country` and `state` property for several PIDs defined in
-`default-network-map`.
+`region` property for several PIDs defined in `default-network-map`.
 
 ```
-POST /propmap/lookup/location HTTP/1.1
+POST /propmap/lookup/region HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
 Content-Length: ###
 Content-Type: application/alto-propmapparams+json
 
 {
-  "entities" : ["pid:pid3",
-                "pid:pid4",
-                "pid:pid5",
-                "pid:pid6",
-                "pid:pid7"],
-  "properties" : [ "country", "state" ]
+  "entities" : ["pid:pid1",
+                "pid:pid2"],
+  "properties" : [ "region" ]
 }
 ```
 
@@ -320,24 +327,11 @@ Content-Type: application/alto-propmap+json
     ]
   },
   "property-map": {
-    "pid:pid3": {
-      "country": "us",
-      "state": "CA"
+    "pid:pid1": {
+      "region": "west"
     },
-    "pid:pid4": {
-      "country": "us",
-      "state": "CT"
-    },
-    "pid:pid5": {
-      "country": "ca",
-      "state": "QC"
-    },
-    "pid:pid6": {
-      "country": "ca",
-      "state": "NT"
-    },
-    "pid:pid7": {
-      "country": "fr"
+    "pid:pid2": {
+      "region": "east"
     }
   }
 }
