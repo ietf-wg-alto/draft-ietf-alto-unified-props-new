@@ -187,7 +187,7 @@ There is no hierarchy or inheritance for properties associated with ANEs.
 -->
 <!-- End of removing -->
 
-# Property Map Resource {#prop-map}
+# Property Map Service {#prop-map}
 
 A Property Map returns the properties defined for all entities in one or more
 domains, e.g., the `location` property of entities in `pid` domain, and the
@@ -201,12 +201,12 @@ response.
 
 ## Media Type {#FullPropMapMediaType}
 
-The media type of an ALTO Property Map resource is
+The media type of an ALTO Property Map is
 `application/alto-propmap+json`.
 
 ## HTTP Method
 
-An ALTO Property Map resource is requested using the HTTP GET method.
+An ALTO Property Map is requested using the HTTP GET method.
 
 ## Accept Input Parameters
 
@@ -310,7 +310,7 @@ For efficiency, the ALTO server SHOULD omit property values that are inherited
 rather than explicitly defined; if a client needs inherited values, the client
 SHOULD use the entity domain's inheritance rules to deduce those values.
 
-# Filtered Property Map Resource {#filter-prop-map}
+# Filtered Property Map Service {#filter-prop-map}
 
 A Filtered Property Map returns the values of a set of properties for a set of
 entities selected by the client.
@@ -326,7 +326,7 @@ The media type of an ALTO Property Map resource is
 
 ## HTTP Method
 
-An ALTO Filtered Property Map resource is requested using the HTTP POST method.
+An ALTO Filtered Property Map is requested using the HTTP POST method.
 
 ## Accept Input Parameters {#filter-prop-map-params}
 
@@ -396,7 +396,7 @@ Specifically, a Filtered Property Map request can be invalid as follows:
   property name is not defined in the `property-types` capability of this
   resource in the IRD. 
 
-    It is not an error that the Filtered Property Map
+    It is not an error that a Filtered Property Map
     resource does not define a requested property's value for a particular
     entity. In this case, the ALTO server MUST omit that property from the
     response for that endpoint.
@@ -437,11 +437,11 @@ inherited property values instead of all of them?-->
 
 ## Impact on Endpoint Property Service
 
-The Property Maps defined in this document provide the same functionality as
-the Endpoint Property Service (EPS) defined in Section 11.4 of [](#RFC7285).
-Accordingly, it is RECOMMENDED that the EPS be deprecated in favor of Property
-Maps. However, ALTO servers MAY provide an EPS for the benefit of legacy
-clients.
+Since Property Map and Filtered Property Map defined in this document provide the 
+functionality of the Endpoint Property Service (EPS) defined in Section 11.4 
+of [](#RFC7285), it is RECOMMENDED that the EPS be deprecated in favor of Property
+Map and Filtered Property Map. However, ALTO servers MAY provide an EPS for 
+the benefit of legacy clients.
 
 ## Impact on Resource-Specific Properties
 
