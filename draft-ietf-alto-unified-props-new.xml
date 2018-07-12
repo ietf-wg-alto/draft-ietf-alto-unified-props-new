@@ -136,9 +136,5 @@
       &RFC7159;
       &RFC7285;
   </references>
-
-  <references title="Informative References">
-      &draft-ietf-alto-path-vector;
-  </references>
 </back>
 </rfc>

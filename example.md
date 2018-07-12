@@ -56,17 +56,17 @@ possible. For example, the value of the `ISP` property for `ipv4:192.0.2.0` is
 ## Information Resource Directory (IRD) {#ird-example}
 
 The following IRD defines the relevant resources of the ALTO server. It
-provides two Property Maps, one for the `ISP` and `ASN` properties,
+provides two property maps, one for the `ISP` and `ASN` properties,
 and another for the `country` and `state` properties. The server could have
-provided a single Property Map for all four properties, but did not,
+provided a single property map for all four properties, but did not,
 presumably because the organization that runs the ALTO server believes any
 given client is not interested in all four properties.
 
-The server provides two Filtered Property Maps. The first returns all four
+The server provides two filtered property maps. The first returns all four
 properties, and the second just returns the `pid` property for the default
 network map.
 
-The Filtered Property Maps for the `ISP`, `ASN`, `country` and `state`
+The filtered property maps for the `ISP`, `ASN`, `country` and `state`
 properties do not depend on the default network map (it does not have a `uses`
 capability), because the definitions of those properties do not depend on the
 default network map. The Filtered Property Map for the `pid` property does have
@@ -185,7 +185,7 @@ Content-Type: application/alto-propmap+json
 
 ## Filtered Property Map Example #1 ## {#filt-prop-map-example-1}
 
-The following example uses the Filtered Property Map resource to request the
+The following example uses the filtered property map resource to request the
 `ISP`, `ASN` and `state` properties for several IPv4 addresses.
 
 Note that the value of `state` for `ipv4:192.0.2.0` is the only explicitly
@@ -226,7 +226,7 @@ Content-Type: application/alto-propmap+json
 
 ## Filtered Property Map Example #2 ## {#filt-prop-map-example-2}
 
-The following example uses the Filtered Property Map resource to request the
+The following example uses the filtered property map resource to request the
 `ASN`, `country` and `state` properties for several IPv4 prefixes.
 
 Note that the property values for both entities `ipv4:192.0.2.0/26` and
@@ -291,7 +291,7 @@ Content-Type: application/alto-propmap+json
 
 ## Filtered Property Map Example #3 ## {#filt-prop-map-example-3}
 
-The following example uses the Filtered Property Map resource to request the
+The following example uses the filtered property map resource to request the
 `pid` property for several IPv4 addresses and prefixes.
 
 Note that the entity `ipv4:192.0.3.0/27` is redundant in the response. Although
@@ -350,7 +350,7 @@ Content-Type: application/alto-propmap+json
 
 ## Filtered Property Map Example #4 ## {#filt-prop-map-example-4}
 
-The following example uses the Filtered Property Map resource to request the
+The following example uses the filtered property map resource to request the
 `region` property for several PIDs defined in `default-network-map`. The value
 of the `region` property for each PID is not defined by `default-network-map`,
 but the reason why the PID is defined by the network operator.

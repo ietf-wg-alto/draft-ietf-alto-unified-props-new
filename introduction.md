@@ -18,7 +18,7 @@ defined for new entity domains.
 
 Second, the EPS is only defined as a POST-mode service. Clients must request the
 properties for an explicit set of endpoint addresses. By contrast, [](#RFC7285) defines a
-GET-mode Cost Map resource which returns all available costs, so a client can
+GET-mode cost map resource which returns all available costs, so a client can
 get a full set of costs once, and then processes costs lookups without querying
 the ALTO server. [](#RFC7285) does not define an equivalent service for endpoint
 properties. At first a map of endpoint properties might seem impractical, because it could require
@@ -33,17 +33,17 @@ This document proposes a new approach to retrieve ALTO properties.
 Specifically, it defines two new types of resources, namely Property Maps (see
 [](#prop-map)) and Filtered Property Maps (see [](#filter-prop-map)). The
 former are GET-mode resources which return the property values for all entities
-in a domain, and are analogous to the ALTO's Network Maps and Cost Maps. The
+in a domain, and are analogous to the ALTO's network maps and cost maps. The
 latter are POST-mode resources which return the values for a set of properties
-and entities requested by the client, and are analogous to the ALTO's Filtered
-Network Maps and Filtered Cost Maps.
+and entities requested by the client, and are analogous to the ALTO's filtered
+network maps and filtered cost maps.
 
 Additionally, this document introduces ALTO Entity Domains, where entities
 extend the concept of endpoints to objects that may be endpoints as defined in
-[](#RFC7285) but also, for example, PIDs, Abstract Network Elements as defined
-in [](#I-D.ietf-alto-path-vector) or cells. As a consequence, ALTO Entity
-Domains defined in this document are a super-set of ALTO Address Types defined in [](#RFC7285); their exact relationship is specified in
-[](#consistency-procedure).
+[](#RFC7285) but also, for example, PIDs, network elements or cells in cellular
+networks. As a consequence, ALTO Entity Domains defined in this document are a
+super-set of ALTO Address Types defined in [](#RFC7285); their exact
+relationship is specified in [](#consistency-procedure).
 
 <!-- FIXME: Although it is understandable to clarify the property map can
 represent generic entity domains, it is still not a good idea to introduce ANEs

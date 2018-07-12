@@ -202,26 +202,26 @@ There is no hierarchy or inheritance for properties associated with ANEs.
 -->
 <!-- End of removing -->
 
-# Property Map Service {#prop-map}
+# Property Map {#prop-map}
 
-A Property Map returns the properties defined for all entities in one or more
+A property map returns the properties defined for all entities in one or more
 domains, e.g., the `location` property of entities in `pid` domain, and the
 `ASN` property of entities in `ipv4` and `ipv6` domains.
 
 <!-- Note that Property Map Resource is not applicable to ANE domain. -->
 <!-- It is not RECOMMENDED. But it depends on the implementation. -->
 
-[](#prop-map-example) gives an example of a Property Map request and its
+[](#prop-map-example) gives an example of a property map request and its
 response.
 
 ## Media Type {#FullPropMapMediaType}
 
-The media type of an ALTO Property Map is
+The media type of a property map is
 `application/alto-propmap+json`.
 
 ## HTTP Method
 
-An ALTO Property Map is requested using the HTTP GET method.
+The property map is requested using the HTTP GET method.
 
 ## Accept Input Parameters
 
@@ -243,7 +243,7 @@ where `entity-domains` is an array specifying the entity domains, and
 returned for entities in those domains. The semantics is that each domain
 in `entity-domains` provides all properties defined in `properties`.
 If a property in `properties` is NOT supported by a domain in `entity-domains`,
-the server can declare different Property Maps to conform to the semantics.
+the server can declare different property maps to conform to the semantics.
 
 <!-- TODO: Maybe add some recommendation. Low priority -->
 
@@ -303,17 +303,17 @@ map resource.
 Note that according to [](#RFC7285), a legacy ALTO server with two network maps,
 with resource IDs `net1` and `net2`, could offer a single Endpoint Property Service
 for the two properties `net1.pid` and `net2.pid`. An ALTO server which supports
-the Property Map resource defined in this document, would, instead, offer two different
+the property map resource defined in this document, would, instead, offer two different
 property maps for the `pid` property, one depending on `net1`, and the other on
 `net2`.
 
 ## Response {#FullPropMapResponse}
 
-If the entity domains in this Property Map depend on other resources, the
+If the entity domains in this property map depend on other resources, the
 `dependent-vtags` field in the `meta` field of the response MUST be an array
 that includes the version tags of those resources, and the order MUST be consistent with the IRD
 `uses` field. The data component of
-a Property Map response is named `property-map`, which is a JSON object of type
+a property map response is named `property-map`, which is a JSON object of type
 PropertyMapData, where:
 
 ``` text
@@ -333,7 +333,7 @@ PropertyMapData, where:
 The ResponseEntityBase type is defined in Section 8.4 of [](#RFC7285).
 
 Specifically, a PropertyMapData object has one member for each entity in the
-Property Map. The entity's properties are encoded in the corresponding
+property map. The entity's properties are encoded in the corresponding
 EntityProps object. EntityProps encodes one name/value pair for each property,
 where the property names are encoded as strings of type PropertyName.
 A protocol implementation SHOULD assume that the property value is either
@@ -356,27 +356,27 @@ For efficiency, the ALTO server SHOULD omit property values that are inherited
 rather than explicitly defined; if a client needs inherited values, the client
 SHOULD use the entity domain's inheritance rules to deduce those values.
 
-# Filtered Property Map Service {#filter-prop-map}
+# Filtered Property Map {#filter-prop-map}
 
-A Filtered Property Map returns the values of a set of properties for a set of
+A filtered property map returns the values of a set of properties for a set of
 entities selected by the client.
 
-[](#filt-prop-map-example-1), [](#filt-prop-map-example-2) and
-[](#filt-prop-map-example-3) give examples of Filtered Property Map requests
-and responses.
+[](#filt-prop-map-example-1), [](#filt-prop-map-example-2),
+[](#filt-prop-map-example-3) and [](#filt-prop-map-example-4) give examples of
+filtered property map requests and responses.
 
 ## Media Type {#FilterPropMapMediaType}
 
-The media type of an ALTO Property Map resource is
+The media type of a property map resource is
 `application/alto-propmap+json`.
 
 ## HTTP Method
 
-An ALTO Filtered Property Map is requested using the HTTP POST method.
+The filtered property map is requested using the HTTP POST method.
 
 ## Accept Input Parameters {#filter-prop-map-params}
 
-The input parameters for a Filtered Property Map request are supplied in the
+The input parameters for a filtered property map request are supplied in the
 entity body of the POST request. This document specifies the input parameters
 with a data format indicated by the media type
 `application/alto-propmapparams+json`, which is a JSON object of type
@@ -425,7 +425,7 @@ rule as defined by the property map resource applies (see [](#FullPropMapUses)).
 The response MUST indicate an error, using ALTO protocol error handling, as
 defined in Section 8.5 of [](#RFC7285), if the request is invalid.
 
-Specifically, a Filtered Property Map request can be invalid as follows:
+Specifically, a filtered property map request can be invalid as follows:
 
 - An entity address in `entities` in the request is invalid if:
 
@@ -433,8 +433,8 @@ Specifically, a Filtered Property Map request can be invalid as follows:
       capability of this resource in the IRD;
     - The entity address is an invalid address in the entity domain.
 
-    A valid entity address is never an error, even if this Filtered Property
-    Map resource does not define any properties for it.
+    A valid entity address is never an error, even if this filtered property
+    map resource does not define any properties for it.
 
     If an entity address in `entities` in the request is invalid, the ALTO
     server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section
@@ -445,7 +445,7 @@ Specifically, a Filtered Property Map request can be invalid as follows:
   property name is not defined in the `property-types` capability of this
   resource in the IRD.
 
-    It is not an error that a Filtered Property Map
+    It is not an error that a filtered property map
     resource does not define a requested property's value for a particular
     entity. In this case, the ALTO server MUST omit that property from the
     response for that endpoint.
@@ -543,7 +543,7 @@ inherited property values instead of all of them?-->
 
 ## Impact on Endpoint Property Service
 
-Since Property Map and Filtered Property Map defined in this document provide the
+Since the property map and the filtered property map defined in this document provide the
 functionality of the Endpoint Property Service (EPS) defined in Section 11.4
 of [](#RFC7285), it is RECOMMENDED that the EPS be deprecated in favor of Property
 Map and Filtered Property Map. However, ALTO servers MAY provide an EPS for
@@ -553,11 +553,11 @@ the benefit of legacy clients.
 
 Section 10.8 of [](#RFC7285) defines two categories of endpoint properties:
 `resource-specific` and `global`. Resource-specific property names are prefixed
-with the ID of the resource they depend upon, while global property names
-have no such prefix. Property Map and Filtered Property Map defined in this
-document do not distinguish between those two types of properties. Instead,
-if there is a dependency, it is indicated by the `uses` capability of a
-Property Map, and is shared by all properties and entity domains in that map.
+with the ID of the resource they depend upon, while global property names have
+no such prefix. The property map and the filtered property map defined in this
+document do not distinguish between those two types of properties. Instead, if
+there is a dependency, it is indicated by the `uses` capability of a property
+map, and is shared by all properties and entity domains in that map.
 Accordingly, it is RECOMMENDED that resource-specific endpoint properties be
 deprecated, and no new resource-specific endpoint properties be defined.
 
@@ -569,12 +569,12 @@ compatibility with legacy clients, an ALTO server which provides the `pid`
 property via the EPS MUST use that definition, and that
 syntax.
 
-However, when used with Property Map, this document amends the definition of
+However, when used with property maps, this document amends the definition of
 the `pid` property as follows.
 
 First, the name of the property is simply `pid`; the name is not prefixed with
-the resource ID of a network map. The `uses` capability of the Property Map
-indicates the associated network map. This implies that a Property Map
+the resource ID of a network map. The `uses` capability of the property map
+indicates the associated network map. This implies that a property map
 can only return the `pid` property for one network map; if an ALTO server
 provides several network maps, it MUST provide a Property Map for each
 of the network maps.
@@ -605,7 +605,7 @@ If not, the ALTO server has two optional ways to determines the value:
 The determination depends on the implementation.
 -->
 
-Note that although an ALTO server MAY provide a GET-mode Property Map
+Note that although an ALTO server MAY provide a GET-mode property map
 which returns the entire map for the `pid` property, there is no need
 to do so, because that map is simply the inverse of the network map.
 
