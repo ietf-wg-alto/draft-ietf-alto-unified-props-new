@@ -311,10 +311,10 @@ property maps for the `pid` property, one depending on `net1`, and the other on
 
 If the entity domains in this property map depend on other resources, the
 `dependent-vtags` field in the `meta` field of the response MUST be an array
-that includes the version tags of those resources, and the order MUST be consistent with the IRD
-`uses` field. The data component of
-a property map response is named `property-map`, which is a JSON object of type
-PropertyMapData, where:
+that includes the version tags of those resources, and the order MUST be
+consistent with the `uses` field of this property map resource. The data
+component of a property map response is named `property-map`, which is a JSON
+object of type PropertyMapData, where:
 
 ``` text
     object {
@@ -456,21 +456,28 @@ Specifically, a filtered property map request can be invalid as follows:
     indicate the property name.
     
 The response to a valid request is the same as for the Property Map
-(see [](#FullPropMapResponse)), except that it only includes the entities
-and properties requested by the client. If an entity in the request is an
-address block (e.g., an `ipv4` or `ipv6` entity), the response MUST cover
-properties for all addresses in this block.
+(see [](#FullPropMapResponse)), except that:
+
+- The `dependent-vtags` field in its `meta` field only includes the version tags
+  of resources on which the requested properties of the entity domains depend,
+  and the order MUST be consistent with the `uses` field of this filtered
+  property map resource.
+- It only includes the entities and properties requested by the client. If an
+  entity in the request is an address block (e.g., an `ipv4` or `ipv6` entity),
+  the response MUST cover properties for all addresses in this block.
 
 <!-- FIXME: do we define the term "block" / "address block"? it seems to be
 always used to describe an entity from which there are other entities
 inheriting. -->
 
 It is important that the filtered property map response MUST include all
-inherited property values for the specified entities and all the entities which
+inherited property values for the requested entities and all the entities which
 are able to inherit property values from them. To achieve this goal, the ALTO
 server MAY follow three rules:
 
-<!-- NOTE: We use "MAY" here because there may be multiple solutions achieving this goal. As long as the ALTO client can interpret all properties for all requested singleton entities correctly. -->
+<!-- NOTE: We use "MAY" here because there may be multiple solutions achieving
+this goal. As long as the ALTO client can interpret all properties for all
+requested singleton entities correctly. -->
 
 - If a property for a requested entity is inherited from another entity not
   included in the request, the response SHOULD include this property for the
@@ -490,7 +497,8 @@ server MAY follow three rules:
   example, in the previous example, the entity A=ipv4:192.0.2.0/31 SHOULD be
   removed because A1 and A2 cover all the addresses in A.
 
-An ALTO client should be aware that the entities in the response MAY be different from the entities in its request.
+An ALTO client should be aware that the entities in the response MAY be
+different from the entities in its request.
 
 <!--
 It is possible that the entities in the response are different from the entities
