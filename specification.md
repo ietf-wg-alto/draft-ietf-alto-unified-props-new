@@ -103,6 +103,8 @@ a server MAY perform different behaviours:
 If the ALTO server does not define any properties for an entity, then the
 server MAY omit that entity from the response.
 
+<!--
+
 ### Relationship to Network Maps
 
 Entities in an Internet address domain MAY be associated with multiple ALTO
@@ -114,6 +116,7 @@ provide at least n+1 property maps for entities an in Internet address domain.
 i.e., for each network map, the ALTO server may provide an individual property
 map associated with it. And then the ALTO server may provide a property map not
 associated with any network maps.
+-->
 
 <!-- FIXED: (YRY: not fully clear) -->
 <!--
@@ -242,7 +245,6 @@ in `entity-domains` provides all properties defined in `properties`.
 If a property in `properties` is NOT supported by a domain in `entity-domains`,
 the server can declare different Property Maps to conform to the semantics.
 
-
 <!-- TODO: Maybe add some recommendation. Low priority -->
 
 ## Uses {#FullPropMapUses}
@@ -255,38 +257,44 @@ ALTO server provides the `routingcost` metric for the network maps `net1` and
 `net2`, then the server defines two separate cost maps, one for `net1` and the
 other for `net2`.-->
 
-<!-- YRY: fix make issue -->
-
 The `uses` field of a property map resource in an IRD entry specifies
 dependencies as discussed in Section 2.7. It is an array of the resource ID(s)
 of the resource(s) that each domain in `entity-domains` depends on, in order to
-provide the properties specified in `properties`.
+provide the properties specified in the `properties` capability.
 
 For example, the `pid` property for an ipv4 entity is a resource-specific
 property depending on a specific network map. Assume that the `entity-domains`
-of a property map resource includes `ipv4`, and the `properties` includes `pid`.
-Then, the `uses` field MUST include the resource ID of the specific network map
-resource.
+capability of a property map resource includes `ipv4`, and the `properties`
+capability includes `pid`. Then, the `uses` field MUST include the resource ID
+of the specific network map resource.
 
 In the general case, the `uses` field should not have ambiguity in specifying
-dependencies. To achieve this goal, the server MUST ensure the following
-`uses` rule for each domain in `entity-domains`:
+dependencies. To achieve this goal, the ALTO server MUST ensure the ALTO client
+can interpret the resource dependencies by the following `uses` rule:
 
-``` text
-  initialize the "uses" as an empty list
-  go over each entity domain in "entity-domains" in array order:
-    if the entity domain MUST depend on resource A:
-      put A's resource ID into the "uses" list
-    go over each property in "properties" in array order:
-      if the property is resource-specific and depend on resource B:
-        put B's resource ID into the "uses" list
-```
+- For each domain in `entity-domains`, take the full `uses` list, and then,
+    - go over each property in `properties` capability in array order:
+        - If the property is a resource-specific property for the current
+          domain, and it needs a sequence of S resources, then
+            - take the S resource ID(s) at the beginning of `uses` to
+              interpret the property;
+            - and remove the S resource ID(s) from `uses`.
 
-Specifically, if all entity domains or resource-specific properties depend on
-the same resource, the `uses` list can only include this single resource. For
-example, a property map providing `pid` property for both entities in both
-`ipv4` and `ipv6` domains can specify the `uses` as [ `networkmap1` ], which
-means both `ipv4` and `ipv6` domains associated with the resource `networkmap1`.
+<!--
+  go over each property in `properties` in array order
+    if the property is a resource-specific property
+                       and needs a sequence of S resources,
+      the S resource ID(s) at the beginning of `uses` are used to
+          interpret the property
+      the S resource ID(s) are removed from `uses`
+-->
+
+In the special case when all entity domains or resource-specific properties
+depend on the same resource, the `uses` list can only include this single
+resource. For example, a property map providing `country` and `state` properties
+for all entities in the `pid` domain can specify the `uses` as [
+`default-networkmap` ], which means both `country` and `state` properties for
+the `pid` domain are associated with the resource `default-networkmap`.
 
 To simplify client verifying the `uses` rule, it is RECOMMENDED that
 a single resource-specific property is specified in `properties` in each property
@@ -405,10 +413,10 @@ defined in [](#FullPropMapCapabilities).
 
 ## Uses
 
-An array with the resource ID(s) of resource(s) with which the entities or
-properties in this map are associated. See the specification of `uses` attribute
-of the Property Map resource
-(see [](#FullPropMapUses)). The same `uses` rule applies.
+The `uses` field of a filtered property map is an array with the resource ID(s)
+of resource(s) that each domain in `entity-domains` depends on, in order to
+provide the properties specified in the `properties` capability. The same `uses`
+rule as defined by the property map resource applies (see [](#FullPropMapUses)).
 
 <!-- YRY: say refer to the same consistency of uses in Section 4.5. -->
 
@@ -446,20 +454,55 @@ Specifically, a Filtered Property Map request can be invalid as follows:
     server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section
     8.5.2 of [](#RFC7285). The `value` field of the error message SHOULD
     indicate the property name.
-
+    
 The response to a valid request is the same as for the Property Map
 (see [](#FullPropMapResponse)), except that it only includes the entities
-and properties requested by the client.
+and properties requested by the client. If an entity in the request is an
+address block (e.g., an `ipv4` or `ipv6` entity), the response MUST cover
+properties for all addresses in this block.
 
-It is important that the Filtered Property Map response MUST include all
-inherited property values for the specified entities. A Full
-Property Map may skip a property P for an entity A if P can be derived
-using inheritance from another entity B. A Filtered Property Map request
-may include only A but not B. In such a case, the property B MUST be
-included in the response for A.
+<!-- FIXME: do we define the term "block" / "address block"? it seems to be
+always used to describe an entity from which there are other entities
+inheriting. -->
 
+It is important that the filtered property map response MUST include all
+inherited property values for the specified entities and all the entities which
+are able to inherit property values from them. To achieve this goal, the ALTO
+server MAY follow three rules:
+
+<!-- NOTE: We use "MAY" here because there may be multiple solutions achieving this goal. As long as the ALTO client can interpret all properties for all requested singleton entities correctly. -->
+
+- If a property for a requested entity is inherited from another entity not
+  included in the request, the response SHOULD include this property for the
+  requested entity. For example, A full property map may skip a property P for
+  an entity A (e.g., ipv4:192.0.2.0/31) if P can be derived using inheritance
+  from another entity B (e.g., ipv4:192.0.2.0/30). A filtered property map
+  request may include only A but not B. In such a case, the property P SHOULD be
+  included in the response for A.
+- If there are entities covered by a requested entity but having different
+  values for the requested properties, the response SHOULD include all those
+  entities and the different property values for them. For example, Consider a
+  request for property P of entity A (e.g., ipv4:192.0.2.0/31). Assume that P
+  has value v1 for A1=ipv4:192.0.2.0/32 and v2 for A2=ipv4:192.0.2.1/32. Then,
+  the response SHOULD include A1 and A2.
+- If an entity in the response is already covered by some other entities in the
+  same response, it SHOULD be removed from the response for compactness. For
+  example, in the previous example, the entity A=ipv4:192.0.2.0/31 SHOULD be
+  removed because A1 and A2 cover all the addresses in A.
+
+An ALTO client should be aware that the entities in the response MAY be different from the entities in its request.
+
+<!--
+It is possible that the entities in the response are different from the entities
+in the request. Consider a request for property P of entity A (e.g.,
+ipv4:192.0.2.0/31). Assume that P has value v1 for A1=ipv4:192.0.2.0/32 and v2
+for A2=ipv4:192.0.2.1/32. Then, the response will include entities A1 and A2,
+instead of the request entity A.
+-->
+
+<!--
 An ALTO client should be aware that the entities in the response MAY be
-different from ones it requests. If entities in the requested domain can be
+different from the ones it requests. If entities in the requested domain can be
 inherited, the ALTO server MAY decompose a requested entity address into several
 entities which could inherit it. One example is the Internet Address domains:
 Considering a request for property P of entity A (e.g., ipv4:192.0.2.0/31), if P
@@ -467,10 +510,13 @@ has value v1 for A1=ipv4:192.0.2.0/32 and v2 for A2=ipv4:192.0.2.1/32, then the
 ALTO server could return the response including entities A1 and A2, instead of
 the requested entity A. The ALTO server could also return v1 for A1 and v2 for
 A, and the ALTO client can also deduce v2 for A2 from the inheritance.
+-->
 
+<!--
 An operator should be aware that if the ALTO server supports the entities
 decomposition, there will be potential security considerations. [](#SecSC)
 discusses the details and potential solutions.
+-->
 
 <!--
 YRY: Need to make a decision. It is possible that the entities in the
@@ -535,12 +581,16 @@ of the network maps.
 
 Second, a client MAY request the `pid` property for a block of
 addresses. An ALTO server determines the value of `pid` for an
-address block C as follows. Let CS be the set of all address blocks
+address block C as the rules defined in [](#FilteredPropMapResponse).
+
+<!--
+Let CS be the set of all address blocks
 in the network map. If C is in CS, then the value of `pid` is the
 name of the PID associated with C. Otherwise, find the longest block
 C' in CS such that C' prefix-matches C, but is shorter than C. If
 there is such a block C', the value of `pid` is the name of the PID
 associated with C'.
+YRY: Handle the issue of decomposition.
 If not, the ALTO server has two optional ways to determines the value:
 
 - The ALTO server may just return no value for the `pid` property of block C;
@@ -553,7 +603,7 @@ If not, the ALTO server has two optional ways to determines the value:
   Note that the CS' may not be unique.
   
 The determination depends on the implementation.
-<!-- Done: YRY: Handle the issue of decomposition. -->
+-->
 
 Note that although an ALTO server MAY provide a GET-mode Property Map
 which returns the entire map for the `pid` property, there is no need

@@ -94,13 +94,13 @@ are applied. [YRY: Do we need this?] [Jensen: I think this feature is for reduci
 
 ## Relationship with Other ALTO Resources {#def-relationship-to-other-resources}
 
-[](#RFC7285) recognizes that some properties MAY be specific to an ALTO
-resource, such as a network map. Accordingly Section 10.8.1 of [](#RFC7285) defines the concept
-of `resource-specific endpoint properties`, and indicates
-that dependency by prefixing the property name with the ID of the resource on
-which it depends. That document defines one resource-specific property, namely
-the `pid` property, whose value is the name of the PID containing that endpoint
-in the associated network map.
+[](#RFC7285) recognizes that some properties for some entity domains MAY be
+specific to an ALTO resource, such as a network map. Accordingly Section 10.8.1
+of [](#RFC7285) defines the concept of `resource-specific endpoint properties`,
+and indicates that dependency by prefixing the property name with the ID of the
+resource on which it depends. That document defines one resource-specific
+property, namely the `pid` property, whose value is the name of the PID
+containing that endpoint in the associated network map.
 
 This document takes a different approach. Instead of defining the dependency by
 qualifying the property name, this document attaches the dependency to the
@@ -108,15 +108,21 @@ entity domains. Thus each resource-specific property of all entities in a
 specific domain depends on the same resources; the properties of entities in
 another domain may depend on another resource. For example, in a single property
 map, the `pid` property of all entities in an Internet address domain MUST
-depend on a unique network map.
+depend on the same network map. Each property of all entities in the PID domain
+MUST also depend on a network map; but different properties may depend on
+different network maps.
 
-Meanwhile, some entity domains may be resource-specific, which means an entity
-address in such domains MUST depend on another resource. For example, entities
-in the PID domain depend on a network map.
-<!-- , entities in the ANE domain depend on a cost map or a endpoint cost map. -->
+<!--
+This document takes a different approach. Instead of defining the dependency by
+qualifying the property name, this document attaches the dependency to the
+entity domains. Thus all properties of a specific entity domain depend on the
+same resources (see below); the properties of another entity domain may depend on another
+resource. For example, entities in the PID domain depend on a network map.
+-->
 
-Specifically, this document uses the `uses` and `dependent-vtags` fields 
-defined in Sections 9.1.5 and 11.1 of [](#RFC7285), 
-respectively, to specify the preceding dependency: the `uses` field of an 
-IRD entry providing entity domain related resources (see Property Map and Filtered Property Map resources below) specifies the dependent resources, 
-and the `dependent-vtags` field specifies dependency in message responses.
+Specifically, this document uses the `uses` and `dependent-vtags` fields defined
+in Sections 9.1.5 and 11.1 of [](#RFC7285), respectively, to specify the
+preceding dependency: the `uses` field of an IRD entry providing entity domain
+related resources (see Property Map and Filtered Property Map resources below)
+specifies the dependent resources, and the `dependent-vtags` field specifies
+dependency in message responses.
