@@ -488,10 +488,10 @@ requested singleton entities correctly. -->
   included in the response for A.
 - If there are entities covered by a requested entity but having different
   values for the requested properties, the response SHOULD include all those
-  entities and the different property values for them. For example, Consider a
-  request for property P of entity A (e.g., ipv4:192.0.2.0/31). Assume that P
-  has value v1 for A1=ipv4:192.0.2.0/32 and v2 for A2=ipv4:192.0.2.1/32. Then,
-  the response SHOULD include A1 and A2.
+  entities and the different property values for them. For example, considering
+  a request for property P of entity A (e.g., ipv4:192.0.2.0/31), if P has value
+  v1 for A1=ipv4:192.0.2.0/32 and v2 for A2=ipv4:192.0.2.1/32, then, the
+  response SHOULD include A1 and A2.
 - If an entity in the response is already covered by some other entities in the
   same response, it SHOULD be removed from the response for compactness. For
   example, in the previous example, the entity A=ipv4:192.0.2.0/31 SHOULD be
