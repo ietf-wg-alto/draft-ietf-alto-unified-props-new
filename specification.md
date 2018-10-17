@@ -307,6 +307,20 @@ the property map resource defined in this document, would, instead, offer two di
 property maps for the `pid` property, one depending on `net1`, and the other on
 `net2`.
 
+To make the client can understand the resource dependencies of a property map
+correctly, the following processes are required:
+
+1. Each combination of "entity-domain" and "property" SHOULD specify its
+   dependent resource type explicitly. For example, "<ipv4, pid>" or "<ipv6, pid>"
+   depends on a network map; <ane, pid> depends on a network map and a cost
+   map.
+2. Each combination of "entity-domain" and "property" SHOULD specify how to use
+   the dependent resources to interpret this combination. For example, for
+   "<pid4, pid>", the dependent network map is used to validate and interpret the
+   pid property values; for "<ane, pid>", the dependent cost map is used to
+   validate and interpret the entities in ane domain, and the dependent network
+   map is used to validate and interpret the pid property values.
+
 ## Response {#FullPropMapResponse}
 
 If the entity domains in this property map depend on other resources, the

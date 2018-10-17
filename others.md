@@ -309,3 +309,5 @@ Type Registry", to indicate that it is not restricted to Endpoint Properties.
 If it is not feasible to change the name, the description MUST be amended to
 indicate that it registers properties in all entity domains, rather than just the
 Internet address domain.
+
+TODO: Specify the procedure for the property type registry. To be consistent with the "uses" requirement.
