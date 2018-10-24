@@ -301,7 +301,7 @@ relates to private information and network proximity.
 This specification requests registration of the identifiers `ipv4`, `ipv6` and
 `pid`, as shown in [](#TableDomainNames).
 
-## ALTO Endpoint Property Type Registry {#IANAEndpointProp}
+## ALTO Entity Property Type Registry {#IANAEndpointProp}
 
 The ALTO Endpoint Property Type Registry was created by [](#RFC7285). If
 possible, the name of that registry SHOULD be changed to "ALTO Entity Property
@@ -310,4 +310,13 @@ If it is not feasible to change the name, the description MUST be amended to
 indicate that it registers properties in all entity domains, rather than just the
 Internet address domain.
 
-TODO: Specify the procedure for the property type registry. To be consistent with the "uses" requirement.
+TODO: Specify the process for the property type registry, similar to the
+"ALTO Entity Domain Registry". The process SHOULD follow the following principles:
+
+- **Superset**: An endpoint property MUST be an entity property; an entity
+  property MAY NOT be an endpoint property.
+- **Domain-specific**: An entity property MUST be registered for some entity
+  domains.
+- **Multiple dependencies**: An entity property MAY depend on a sequence of
+  resources. The registry MUST specify how the client uses them in order.
+

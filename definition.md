@@ -29,7 +29,7 @@ The type DomainName is used in this document to denote a JSON string with
 a domain name in this format.
 
 Domain names MUST be registered with the IANA, and the format of the entity
-addresses (see [](entity-addrs)) in that entity domain, as well as any
+addresses (see [](#entity-addrs)) in that entity domain, as well as any
 hierarchical or inheritance rules (see [](#def-hierarchy-and-inheritance)) for
 those entities, MUST be specified at the same time.
 
@@ -60,11 +60,10 @@ a given entity domain. For example, the strings `ipv6:2001:db8::1` and
 
 ## Property Name ##
 
-The space of entity property names associated with entities defined by this document
-is the same as, and is shared with, the endpoint property names defined by
-[](#RFC7285).  Thus entity property names are as defined in Section 10.8.2 of
-that document, and MUST be registered with the `ALTO Endpoint Property Type
-Registry` defined in [](#IANAEndpointProp) of that document. The type
+The space of entity property names associated with entities defined by this
+document is a superset of the endpoint property names defined by [](#RFC7285).
+Thus endpoint property names registered with the `ALTO Endpoint Property Type
+Registry` MUST be defined in [](#IANAEndpointProp) of this document. The type
 PropertyName denotes a JSON string with a property name in this format.
 
 This document defines uniform property names specified in a single property
