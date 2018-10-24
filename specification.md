@@ -259,6 +259,14 @@ other for `net2`.-->
 
 The `uses` field of a property map resource in an IRD entry specifies
 dependencies as discussed in Section 2.7. It is an array of the resource ID(s)
+of the resource(s) that properties of entities in domains specified in
+`entity-domains` depend on. In this property map, every property value of every
+entity depends on this array of resources.
+
+=== Below TBD: ===
+
+The `uses` field of a property map resource in an IRD entry specifies
+dependencies as discussed in Section 2.7. It is an array of the resource ID(s)
 of the resource(s) that each domain in `entity-domains` depends on, in order to
 provide the properties specified in the `properties` capability.
 
@@ -307,6 +315,8 @@ the property map resource defined in this document, would, instead, offer two di
 property maps for the `pid` property, one depending on `net1`, and the other on
 `net2`.
 
+<!-- Deprecate this process. See the principles of ALTO Entity Property Type Registry.
+
 To make the client can understand the resource dependencies of a property map
 correctly, the following processes are required:
 
@@ -320,6 +330,7 @@ correctly, the following processes are required:
    pid property values; for "<ane, pid>", the dependent cost map is used to
    validate and interpret the entities in ane domain, and the dependent network
    map is used to validate and interpret the pid property values.
+-->
 
 ## Response {#FullPropMapResponse}
 
