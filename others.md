@@ -214,19 +214,19 @@ include both Address Encoding and Prefix Encoding of this address type.
 When a new ALTO entity domain is registered, the consistency with the ALTO Address
 Type Registry MUST be ensured by the following procedure:
 
-- test: Do corresponding entity addresses match a known `network` address type?
-    - if yes: (e.g., cell, MAC or socket addresses)
-        - test: Is such an address type present in the ALTO Address Type
+- Test: Do corresponding entity addresses match a known `network` address type?
+    - If yes (e.g., cell, MAC or socket addresses):
+        - Test: Is such an address type present in the ALTO Address Type
           Registry?
-            - if yes: Set the new ALTO entity domain identifier to be the found ALTO
+            - If yes: Set the new ALTO entity domain identifier to be the found ALTO
               address type identifier.
-            - if no: Define a new ALTO entity domain identifier and use it to register
+            - If no: Define a new ALTO entity domain identifier and use it to register
               a new address type in the ALTO Address Type Registry following
               Section 14.4 of [](#RFC7285).
         - Use the new ALTO entity domain identifier to register a new ALTO entity domain in
           the ALTO Entity Domain Registry following [](#dom-reg-process) of this
           document.
-    - if no (e.g., pid name, ane name or country code): Proceed with the ALTO
+    - If no (e.g., pid name, ane name or country code): Proceed with the ALTO
       Entity Domain registration as described in [](#dom-reg-process).
 
 <!--
@@ -303,20 +303,51 @@ This specification requests registration of the identifiers `ipv4`, `ipv6` and
 
 ## ALTO Entity Property Type Registry {#IANAEndpointProp}
 
+<!--
 The ALTO Endpoint Property Type Registry was created by [](#RFC7285). If
 possible, the name of that registry SHOULD be changed to "ALTO Entity Property
 Type Registry", to indicate that it is not restricted to Endpoint Properties.
 If it is not feasible to change the name, the description MUST be amended to
 indicate that it registers properties in all entity domains, rather than just the
 Internet address domain.
+-->
 
-TODO: Specify the process for the property type registry, similar to the
-"ALTO Entity Domain Registry". The process SHOULD follow the following principles:
+This document requests IANA to create and maintain the `ALTO Entity Property
+Type Registry`.
 
+To distinguish with the `ALTO Endpoint Property Type Registry`, this new registry
+is for properties in all possible entity domains, rather than just the Internet
+address domain. So it is necessary to define and process the consistency
+between the two registries.
+
+In the meanwhile, because every entity property is owned by some entity
+domains, for each registered entity property, the ALTO Entity Property Registry
+MUST define its accepted entity domains and its semantics in every different
+accepted entity domains.
+
+Also, an entity property MAY depend on several other ALTO resources. The ALTO
+Entity Property Registry MUST specify the media types of all dependent
+resources and how the ALTO client uses them in order.
+
+TODO: The registry format and the initial content
+
+<!--
+This document specifies the process for the ALTO Entity Property Type Registry,
+similar to the "ALTO Entity Domain Registry". This process follows the
+following principles:
+-->
+
+<!--
 - **Superset**: An endpoint property MUST be an entity property; an entity
   property MAY NOT be an endpoint property.
+-->
+
+<!--
+- **Consistency**: An entity property has no inconsistent meaning with an
+  already defined endpoint property.
 - **Domain-specific**: An entity property MUST be registered for some entity
-  domains.
+  domains explicitly.
 - **Multiple dependencies**: An entity property MAY depend on a sequence of
   resources. The registry MUST specify how the client uses them in order.
+-->
 

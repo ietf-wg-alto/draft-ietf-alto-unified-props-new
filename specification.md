@@ -260,9 +260,13 @@ other for `net2`.-->
 The `uses` field of a property map resource in an IRD entry specifies
 dependencies as discussed in Section 2.7. It is an array of the resource ID(s)
 of the resource(s) that properties of entities in domains specified in
-`entity-domains` depend on. In this property map, every property value of every
-entity depends on this array of resources.
+`entity-domains` depend on.
 
+In a single property map, every property value of every entity depends on the
+same array of resources. Thus, if properties depend on different resources
+arrays would be provided, they MUST be split into different property maps.
+
+<!--
 === Below TBD: ===
 
 The `uses` field of a property map resource in an IRD entry specifies
@@ -287,6 +291,7 @@ can interpret the resource dependencies by the following `uses` rule:
             - take the S resource ID(s) at the beginning of `uses` to
               interpret the property;
             - and remove the S resource ID(s) from `uses`.
+-->
 
 <!--
   go over each property in `properties` in array order
@@ -297,6 +302,7 @@ can interpret the resource dependencies by the following `uses` rule:
       the S resource ID(s) are removed from `uses`
 -->
 
+<!--
 In the special case when all entity domains or resource-specific properties
 depend on the same resource, the `uses` list can only include this single
 resource. For example, a property map providing `country` and `state` properties
@@ -307,6 +313,7 @@ the `pid` domain are associated with the resource `default-networkmap`.
 To simplify client verifying the `uses` rule, it is RECOMMENDED that
 a single resource-specific property is specified in `properties` in each property
 map resource.
+-->
 
 Note that according to [](#RFC7285), a legacy ALTO server with two network maps,
 with resource IDs `net1` and `net2`, could offer a single Endpoint Property Service

@@ -38,7 +38,7 @@ those entities, MUST be specified at the same time.
 Each entity has a unique address of the format:
 
 ``` text
-    domain-name : domain-specific-entity-address
+    EntityAddr ::= DomainName : DomainSpecificEntityAddr
 ```
 
 Examples from the IP domains include individual addresses such as
@@ -66,19 +66,43 @@ Thus endpoint property names registered with the `ALTO Endpoint Property Type
 Registry` MUST be defined in [](#IANAEndpointProp) of this document. The type
 PropertyName denotes a JSON string with a property name in this format.
 
+This document defines property names in the domain-specific context. This
+design is to enforce that each property name MUST be registered for every
+applicable entity domains individually. This design decision is adopted because
+of the following considerations:
+
+- Some properties may only be applicable for particular entity domains, not
+  all. For example, the `pid` property is not applicable for entities in the
+  `pid` domain.
+- The interpretation of the value of a property may depend on the entity
+  domain. For different entity domains, not only the intended semantics but
+  also the dependent resource types may be totally different. For example,
+  suppose that the `geo-location` property is defined as the coordinates of
+  a point, encoded as (say) "latitude longitude [altitude]." When applied to an
+  entity that represents a specific host computer, such as an Internet address,
+  the property defines the host's location and has no required dependency.
+  However, when applied to an entity in the `pid` domain, the property would
+  indicate the location of the center of all hosts in this `pid` entity and
+  depend on a Network Map defining this `pid` entity.
+
+<!-- FIXED: Change the single name space design to the domain-specific design -->
+
+<!--
 This document defines uniform property names specified in a single property
 name space rather than being scoped by a specific entity domain, although some
-properties may only be applicable for particular entity domains.  This design
+properties may only be applicable for particular entity domains. This design
 decision is to enforce a design so that similar properties are named similarly.
 The interpretation of the value of a property, however, may depend on the
-entity domain.  For example, suppose that the `geo-location` property is defined as
-the coordinates of a point, encoded as (say) "latitude longitude [altitude]."
-When applied to an entity that represents a specific host computer, such as an
-Internet address, the property defines the host’s location.  When applied to an
-entity that represents a set of computers, such as a CIDR, the property would
-be the location of the center of that set.  If it is necessary to represent the
-bounding box of a set of hosts, another property, such as `geo-region`, should
-be defined.
+entity domain. (FIXME: This design decision will mess up the dependency
+declaration.) For example, suppose that the `geo-location` property is defined
+as the coordinates of a point, encoded as (say) "latitude longitude
+[altitude]." When applied to an entity that represents a specific host
+computer, such as an Internet address, the property defines the host's
+location.  When applied to an entity that represents a set of computers, such
+as a CIDR, the property would be the location of the center of that set.  If it
+is necessary to represent the bounding box of a set of hosts, another property,
+such as `geo-region`, should be defined.
+-->
 
 ## Hierarchy and Inheritance {#def-hierarchy-and-inheritance}
 
