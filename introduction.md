@@ -30,20 +30,19 @@ blocks of endpoint addresses with a common prefix (e.g., a CIDR) have the same v
 a property. Furthermore, entities in other domains may very well be enumerable.
 
 This document proposes a new approach to retrieve ALTO properties.
-Specifically, it defines two new types of resources, namely Property Maps (see
-[](#prop-map)) and Filtered Property Maps (see [](#filter-prop-map)). The
-former are GET-mode resources which return the property values for all entities
-in a domain, and are analogous to the ALTO's network maps and cost maps. The
-latter are POST-mode resources which return the values for a set of properties
-and entities requested by the client, and are analogous to the ALTO's filtered
-network maps and filtered cost maps.
+Specifically, it defines two new types of resources, namely Property Map (see
+[](#prop-map)) and Filtered Property Map (see [](#filter-prop-map)). The
+former is a GET-mode resource which returns the property values for all entities
+in a domain, and is analogous to a network map or a cost map in [](#RFC7285).
+The latter is a POST-mode resource which returns the values for a set of
+properties and entities requested by the client, and is analogous to a filtered
+network map or a filtered cost map.
 
-Additionally, this document introduces ALTO Entity Domains, where entities
-extend the concept of endpoints to objects that may be endpoints as defined in
-[](#RFC7285) but also, for example, PIDs, network elements or cells in cellular
-networks. As a consequence, ALTO Entity Domains defined in this document are a
-super-set of ALTO Address Types defined in [](#RFC7285); their exact
-relationship is specified in [](#consistency-procedure).
+Additionally, this document introduces ALTO Entity Domains, where an entity is a
+generalization of an endpoint to also represent, a PID, a network element, or a
+cell in a cellular network, etc. As a consequence, ALTO Entity Domains defined
+in this document are a super-set of ALTO Address Types defined in [](#RFC7285).
+Their exact relationship is specified in [](#consistency-procedure).
 
 <!-- FIXME: Although it is understandable to clarify the property map can
 represent generic entity domains, it is still not a good idea to introduce ANEs
