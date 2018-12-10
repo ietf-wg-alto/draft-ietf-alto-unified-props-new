@@ -127,16 +127,16 @@ Change controller:
 This document requests IANA to create and maintain the `ALTO Entity Domain
 Registry`, listed in [](#TableDomainNames).
 
---------------------------------------------------------------
-Identifier Entity Address Encoding Hierarchy &amp; Inheritance
----------- ----------------------- ---------------------------
-ipv4       See [](#ipv4-domain)    See [](#inet-inheritance)
+-------------------------------------------------------------------------------------------
+Identifier Entity Address Encoding Hierarchy &amp; Inheritance Mapping to ALTO Address Type
+---------- ----------------------- --------------------------- ----------------------------
+ipv4       See [](#ipv4-domain)    See [](#inet-inheritance)   Yes
 
-ipv6       See [](#ipv6-domain)    See [](#inet-inheritance)
+ipv6       See [](#ipv6-domain)    See [](#inet-inheritance)   Yes
 
-pid        See [](#pid-domain)     None
+pid        See [](#pid-domain)     None                        No
 
---------------------------------------------------------------
+-------------------------------------------------------------------------------------------
 
 ^[TableDomainNames::ALTO Entity Domains.]
 
@@ -158,12 +158,13 @@ the same identifier when registered as entity domains.
 
 ### Consistency Procedure between ALTO Address Type Registry and ALTO Entity Domain Registry {#consistency-procedure}
 
-One potential issue of introducing the `ALTO Entity Domain Registry` is its relationship
-with the `ALTO Address Types Registry` already defined in Section 14.4 of
-[](#RFC7285). In particular, the entity address of an entity domain registered in the
-`ALTO Entity Domain Registry` MAY match an address type defined in `ALTO Address Type
-Registry`. It is necessary to precisely define and guarantee the consistency
-between `ALTO Address Type Registry` and `ALTO Entity Domain Registry`.
+One potential issue of introducing the `ALTO Entity Domain Registry` is its
+relationship with the `ALTO Address Types Registry` already defined in Section
+14.4 of [](#RFC7285). In particular, the entity address of an entity domain
+registered in the `ALTO Entity Domain Registry` MAY match an address type
+defined in `ALTO Address Type Registry`. It is necessary to precisely define and
+guarantee the consistency between `ALTO Address Type Registry` and `ALTO Entity
+Domain Registry`.
 
 <!--
 This section specifies the consistency procedure between `ALTO Address Type
@@ -176,12 +177,12 @@ ensure the consistency between `ALTO Address Type Registry` (See Section 14.4 of
 [](#RFC7285)) and `ALTO Domain Registry`.-->
 
 
-We define that the ALTO Entity Domain Registry is consistent with ALTO Address Type
-Registry if two conditions are satisfied:
+We define that the ALTO Entity Domain Registry is consistent with ALTO Address
+Type Registry if two conditions are satisfied:
 
 - When an address type is already or able to be registered in the ALTO Address
-Type Registry [](#RFC7285), the same identifier MUST be used when a
-corresponding entity domain is registered in the ALTO Entity Domain Registry.
+  Type Registry [](#RFC7285), the same identifier MUST be used when a
+  corresponding entity domain is registered in the ALTO Entity Domain Registry.
 - If an ALTO entity domain has the same identifier as an ALTO address type, their
   addresses encoding MUST be compatible.
 
@@ -191,10 +192,12 @@ registering a new ALTO entity domain in a future document:
 - Whether the ALTO Address Type Registry contains an address type that can be
   used as an entity address for the candidate domain identifier. This has been
   done for the identifiers `ipv4` and `ipv6` in [](#TableDomainNames).
-- Whether the candidate entity address of the entity domain is able to be an endpoint address,
-  as defined in Sections 2.1 and 2.2 of [](#RFC7285).
+- Whether the candidate entity address of the entity domain is able to be an
+  endpoint address, as defined in Sections 2.1 and 2.2 of [](#RFC7285).
 
-<!-- It is RECOMMANDED that a new ALTO entity domain be registered when the corresponding address type is registered based on ALTO Address Type Registry [](#RFC7285). -->
+<!-- It is RECOMMANDED that a new ALTO entity domain be registered when the
+corresponding address type is registered based on ALTO Address Type Registry
+[](#RFC7285). -->
 
 <!-- TODO: PLACE HOLDER for consistency -->
 
@@ -211,21 +214,21 @@ Registry. And the Entity Address Encoding of the corresponding domain MUST
 include both Address Encoding and Prefix Encoding of this address type.
 -->
 
-When a new ALTO entity domain is registered, the consistency with the ALTO Address
-Type Registry MUST be ensured by the following procedure:
+When a new ALTO entity domain is registered, the consistency with the ALTO
+Address Type Registry MUST be ensured by the following procedure:
 
 - Test: Do corresponding entity addresses match a known `network` address type?
     - If yes (e.g., cell, MAC or socket addresses):
         - Test: Is such an address type present in the ALTO Address Type
           Registry?
-            - If yes: Set the new ALTO entity domain identifier to be the found ALTO
-              address type identifier.
-            - If no: Define a new ALTO entity domain identifier and use it to register
-              a new address type in the ALTO Address Type Registry following
-              Section 14.4 of [](#RFC7285).
-        - Use the new ALTO entity domain identifier to register a new ALTO entity domain in
-          the ALTO Entity Domain Registry following [](#dom-reg-process) of this
-          document.
+            - If yes: Set the new ALTO entity domain identifier to be the found
+              ALTO address type identifier.
+            - If no: Define a new ALTO entity domain identifier and use it to
+              register a new address type in the ALTO Address Type Registry
+              following Section 14.4 of [](#RFC7285).
+        - Use the new ALTO entity domain identifier to register a new ALTO
+          entity domain in the ALTO Entity Domain Registry following
+          [](#dom-reg-process) of this document.
     - If no (e.g., pid name, ane name or country code): Proceed with the ALTO
       Entity Domain registration as described in [](#dom-reg-process).
 
@@ -261,16 +264,17 @@ corresponding full-length prefix MUST be considered aliases for the same entity.
 
 ### ALTO Entity Domain Registration Process {#dom-reg-process}
 
-New ALTO entity domains are assigned after IETF Review [](#RFC5226) to ensure that
-proper documentation regarding the new ALTO entity domains and their security
-considerations has been provided. RFCs defining new entity domains SHOULD indicate how
-an entity in a registered domain is encoded as an EntityAddr, and, if
-applicable, the rules defining the entity hierarchy and property inheritance.
-Updates and deletions of ALTO entity domains follow the same procedure.
+New ALTO entity domains are assigned after IETF Review [](#RFC5226) to ensure
+that proper documentation regarding the new ALTO entity domains and their
+security considerations has been provided. RFCs defining new entity domains
+SHOULD indicate how an entity in a registered domain is encoded as an
+EntityAddr, and, if applicable, the rules defining the entity hierarchy and
+property inheritance. Updates and deletions of ALTO entity domains follow the
+same procedure.
 
-Registered ALTO entity domain identifiers MUST conform to the syntactical requirements
-specified in [](#domain-names). Identifiers are to be recorded and displayed as
-strings.
+Registered ALTO entity domain identifiers MUST conform to the syntactical
+requirements specified in [](#domain-names). Identifiers are to be recorded and
+displayed as strings.
 
 Requests to the IANA to add a new value to the registry MUST include the
 following information:
@@ -278,25 +282,28 @@ following information:
 - Identifier: The name of the desired ALTO entity domain.
 
 - Entity Address Encoding: The procedure for encoding the address of an entity
-of the registered type as an EntityAddr (see [](#entity-addrs)). If
-corresponding entity addresses of an entity domain match a known `network` address type,
-the Entity Address Encoding of this domain identifier MUST include both Address
-Encoding and Prefix Encoding of the same identifier registered in the ALTO
-Address Type Registry [](#RFC7285). For the purpose of defining properties, an
-individual entity address and the corresponding full-length prefix MUST be
-considered aliases for the same entity.
+  of the registered type as an EntityAddr (see [](#entity-addrs)). If
+  corresponding entity addresses of an entity domain match a known `network`
+  address type, the Entity Address Encoding of this domain identifier MUST
+  include both Address Encoding and Prefix Encoding of the same identifier
+  registered in the ALTO Address Type Registry [](#RFC7285). For the purpose of
+  defining properties, an individual entity address and the corresponding
+  full-length prefix MUST be considered aliases for the same entity.
 
 - Hierarchy: If the entities form a hierarchy, the procedure for determining
-that hierarchy.
+  that hierarchy.
 
 - Inheritance: If entities can inherit property values from other entities, the
-procedure for determining that inheritance.
+  procedure for determining that inheritance.
+
+- Mapping to ALTO Address Type: A boolean value to indicate if the entity domain
+  can be mapped to the ALTO address type with the same identifier.
 
 - Security Considerations: In some usage scenarios, entity addresses carried in
-ALTO Protocol messages may reveal information about an ALTO client or an ALTO
-service provider. Applications and ALTO service providers using addresses of
-the registered type should be made aware of how (or if) the addressing scheme
-relates to private information and network proximity.
+  ALTO Protocol messages may reveal information about an ALTO client or an ALTO
+  service provider. Applications and ALTO service providers using addresses of
+  the registered type should be made aware of how (or if) the addressing scheme
+  relates to private information and network proximity.
 
 This specification requests registration of the identifiers `ipv4`, `ipv6` and
 `pid`, as shown in [](#TableDomainNames).

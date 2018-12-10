@@ -2,18 +2,16 @@
 
 ## Entity
 
-An entity is an object with a (possibly empty) set of properties. It is a
-generalization of an endpoint defined in Section 2.1 of [](#RFC7285). Every
-entity is in one and only one domain, such as the IPv4 domain or the IPv6
-domain, and has a unique address.
+The entity is a generalized concept of the endpoint defined in Section 2.1 of
+[](#RFC7285). An entity is an object with a (possibly empty) set of properties.
+Each entity MUST be in one and only one domain, such as the IPv4 domain or the
+IPv6 domain, and has a unique address.
 
 ## Entity Domain
 
-An entity domain is the set of all possible values of a given address type,
-where each valid address value uniquely identifies an entity. Examples of
-domains are the Internet address domains (see [](#inet-addr-domain) and the PID
-domain (see [](#pid-domain)). This document will define the domains precisely
-below.
+An entity domain is a set of entities. Examples of domains are the Internet
+address domains (see [](#inet-addr-domain) and the PID domain (see
+[](#pid-domain)). This document will define the domains precisely below.
 <!-- An additional example is the proposed domain of Abstract Network Elements
 associated with topology and routing, as suggested by
 [](#I-D.ietf-alto-path-vector). -->
@@ -61,6 +59,8 @@ a given entity domain. For example, the strings `ipv6:2001:db8::1` and
 
 ## Property Name ##
 
+<!-- FIXME: This is not correct. Because the ALTO entity domain is not a strict
+superset of the ALTO address type. Revise it! -->
 The space of entity property names associated with entities defined by this
 document is a superset of the endpoint property names defined by [](#RFC7285).
 Thus endpoint property names registered with the `ALTO Endpoint Property Type
