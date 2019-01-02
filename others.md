@@ -320,14 +320,20 @@ Internet address domain.
 -->
 
 This document requests IANA to create and maintain the `ALTO Entity Property
-Type Registry`.
+Type Registry`, listed in [](#TablePropertyTypes).
 
-To distinguish with the `ALTO Endpoint Property Type Registry`, this new registry
-is for properties in all possible entity domains, rather than just the Internet
-address domain. So it is necessary to define and process the consistency
+To distinguish with the `ALTO Endpoint Property Type Registry`, each entry in
+this registry is an ALTO entity property type defined in
+[](#def-property-type). Thus, registered ALTO entity property type identifier
+MUST conform to the syntactical requirements specified in that section.
+
+<!--
+this new registry is for properties in all possible entity domains, rather than
+only the Internet address domain.
+So it is necessary to define and process the consistency
 between the two registries.
 
-In the meanwhile, because every entity property is owned by some entity
+In the meantime, because every entity property is owned by some entity
 domains, for each registered entity property, the ALTO Entity Property Registry
 MUST define its accepted entity domains and its semantics in every different
 accepted entity domains.
@@ -335,8 +341,48 @@ accepted entity domains.
 Also, an entity property MAY depend on several other ALTO resources. The ALTO
 Entity Property Registry MUST specify the media types of all dependent
 resources and how the ALTO client uses them in order.
+-->
 
-TODO: The registry format and the initial content
+<!-- TODO: The registry format and the initial content -->
+
+The initial registered ALTO entity property types are listed in
+[](#TablePropertyTypes).
+
+---------------------------------------------------------------
+Identifier Intended Semantics Dependencies and Interpretation
+---------- ------------------ ---------------------------------
+ipv4:pid   PID for the IPv4   application/alto-networkmap+json,
+           entity             where the PID names are defined
+
+ipv6:pid   PID for the IPv6   application/alto-networkmap+json,
+           entity             where the PID names are defined
+
+---------------------------------------------------------------
+
+^[TablePropertyTypes::ALTO Entity Property Types.]
+
+Requests to the IANA to add a new value to the registry MUST include the
+following information:
+
+- Identifier: The unique id for the desired ALTO entity property type. The
+  format MUST be as defined in [](#def-property-type) of this document. It
+  includes the information of the applied ALTO entity domain and the property
+  name.
+
+- Intended Semantics: ALTO entity properties carry with them semantics to guide
+  their usage by ALTO clients. Hence, a document defining a new type SHOULD
+  provide guidance to both ALTO service providers and applications utilizing
+  ALTO clients as to how values of the registered ALTO entity property should
+  be interpreted.
+
+- Dependencies and Interpretation: Dependent ALTO resources MAY be required by
+  ALTO clients to interpret ALTO entity properties. Hence, a document defining
+  a new type SHOULD provide a sequence of media types in which the dependent
+  ALTO resources are and the guidance how ALTO clients use them to interpret
+  the property.
+
+This specification requests registration of the identifiers `ipv4:pid` and
+`ipv6:pid`, as shown in [](#TablePropertyTypes).
 
 <!--
 This document specifies the process for the ALTO Entity Property Type Registry,

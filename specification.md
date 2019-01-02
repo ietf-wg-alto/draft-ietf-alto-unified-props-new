@@ -239,7 +239,7 @@ The capabilities are defined by an object of type PropertyMapCapabilities:
 ```
 
 where `entity-domains` is an array specifying the entity domains, and
-`properties` is an array specifying the names of the properties
+`properties` is an array specifying the property names
 returned for entities in those domains. The semantics is that each domain
 in `entity-domains` provides all properties defined in `properties`.
 If a property in `properties` is NOT supported by a domain in `entity-domains`,

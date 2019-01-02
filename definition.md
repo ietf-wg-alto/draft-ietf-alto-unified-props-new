@@ -57,20 +57,16 @@ Note that an entity address MAY have different textual representations, for
 a given entity domain. For example, the strings `ipv6:2001:db8::1` and
 `ipv6:2001:db8:0:0:0:0:0:1` refer to the same entity.
 
-## Property Name ##
+## Property Type and Property Name {#def-property-type}
 
-<!-- FIXME: This is not correct. Because the ALTO entity domain is not a strict
-superset of the ALTO address type. Revise it! -->
-The space of entity property names associated with entities defined by this
-document is a superset of the endpoint property names defined by [](#RFC7285).
-Thus endpoint property names registered with the `ALTO Endpoint Property Type
-Registry` MUST be defined in [](#IANAEndpointProp) of this document. The type
-PropertyName denotes a JSON string with a property name in this format.
+Every entity in some domain MAY have one or more properties. Every property
+MUST have a unique Property Type.
 
-This document defines property names in the domain-specific context. This
-design is to enforce that each property name MUST be registered for every
-applicable entity domains individually. This design decision is adopted because
-of the following considerations:
+This document defines property types in the domain-specific context. This
+design is to enforce that each property type MUST be registered for a single
+specific entity domain. But multiple property types with the similar semantics
+MAY share the same Property Name in different entity domains. This design
+decision is adopted because of the following considerations:
 
 - Some properties may only be applicable for particular entity domains, not
   all. For example, the `pid` property is not applicable for entities in the
@@ -85,6 +81,38 @@ of the following considerations:
   However, when applied to an entity in the `pid` domain, the property would
   indicate the location of the center of all hosts in this `pid` entity and
   depend on a Network Map defining this `pid` entity.
+
+To achieve this, each property type has a unique identifier encoded as the
+following format:
+
+``` text
+PropertyType ::= DomainName : PropertyName
+```
+
+The `DomainName` indicates which entity domain the property type applies to.
+The `PropertyName` SHOULD refer to the semantics of this property type. It does
+not have to be global unique. In other words, different property types could
+have the same property name applied to different entity domains, if they have
+the similar semantics. For example, the property types `ipv4:pid` and
+`ipv6:pid` have the same property name `pid` applied to both `ipv4` and `ipv6`
+domains.
+
+Property types MUST be registered with the IANA, and the intended semantics, as
+well as the media types of dependent resources and the interpretation, MUST be
+specified at the same time.
+
+<!-- ## Property Name ## -->
+
+<!-- FIXME: This is not correct. Because the ALTO entity domain is not a strict
+superset of the ALTO address type. Revise it! -->
+
+<!--
+The space of entity property names associated with entities defined by this
+document is a superset of the endpoint property names defined by [](#RFC7285).
+Thus endpoint property names registered with the `ALTO Endpoint Property Type
+Registry` MUST be defined in [](#IANAEndpointProp) of this document. The type
+PropertyName denotes a JSON string with a property name in this format.
+-->
 
 <!-- FIXED: Change the single name space design to the domain-specific design -->
 
