@@ -53,5 +53,5 @@ defined without revising the messages defined in this document, in the same way
 that new cost metrics and new endpoint properties can be defined without
 revising the messages defined in [](#RFC7285).
 
-This proposal would subsume the Endpoint Property Service defined in [](#RFC7285),
+This proposal subsumes the Endpoint Property Service defined in [](#RFC7285),
 although that service may be retained for legacy clients (see [](#legacy)).

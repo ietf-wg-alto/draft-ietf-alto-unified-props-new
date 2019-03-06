@@ -1,5 +1,7 @@
 # Examples {#examples}
 
+<!-- FIXME: Examples should be revised -->
+
 ## Network Map {#net-map-example}
 
 The examples in this section use a very simple default network map:

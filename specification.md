@@ -1,3 +1,5 @@
+<!-- FIXME: Make the specification coherent with the definition -->
+
 # Entity Domains
 
 This document defines three entity domains. The definition of each
@@ -263,7 +265,7 @@ of the resource(s) that properties of entities in domains specified in
 `entity-domains` depend on.
 
 In a single property map, every property value of every entity depends on the
-same array of resources. Thus, if properties depend on different resources
+same array of resources. Thus, if properties depending on different resources
 arrays would be provided, they MUST be split into different property maps.
 
 <!--

@@ -1,17 +1,26 @@
 # Definitions and Concepts
 
+<!-- FIXME:
+Please add some text on the concepts and their motivation before diving into
+technical specifications. Even if the Introduction has some, the goal is to
+explain to implementors when and why this extension is useful. See
+suggestions in the text and attached txt file.
+-->
+
 ## Entity
 
 The entity is a generalized concept of the endpoint defined in Section 2.1 of
 [](#RFC7285). An entity is an object with a (possibly empty) set of properties.
 Each entity MUST be in one and only one domain, such as the IPv4 domain or the
-IPv6 domain, and has a unique address.
+IPv6 domain, and has a unique identifier.
 
 ## Entity Domain
 
-An entity domain is a set of entities. Examples of domains are the Internet
+Each entity MUST be in one and only one entity domain.
+An entity domain is a set of entities. Examples of entity domains are the Internet
 address domains (see [](#inet-addr-domain) and the PID domain (see
-[](#pid-domain)). This document will define the domains precisely below.
+[](#pid-domain)).
+<!-- This document will define the domains precisely below. -->
 <!-- An additional example is the proposed domain of Abstract Network Elements
 associated with topology and routing, as suggested by
 [](#I-D.ietf-alto-path-vector). -->
@@ -34,7 +43,9 @@ those entities, MUST be specified at the same time.
 
 ## Entity Address {#entity-addrs}
 
-Each entity has a unique address of the format:
+Each entity has a unique identifier of the format:
+
+<!-- TODO: Replace all entity address to entity identifier -->
 
 ``` text
     EntityAddr ::= DomainName : DomainSpecificEntityAddr
@@ -59,10 +70,14 @@ a given entity domain. For example, the strings `ipv6:2001:db8::1` and
 
 ## Property Type and Property Name {#def-property-type}
 
+<!-- FIXME: Section needs be reorganized to first motivate the attachment of
+address to address domain before setting rules. -->
+
 Every entity in some domain MAY have one or more properties. Every property
+is identified by a Property Type and is specific to a domain. Every property
 MUST have a unique Property Type.
 
-This document defines property types in the domain-specific context. This
+This document defines property types in the domain-specific semantics. This
 design is to enforce that each property type MUST be registered for a single
 specific entity domain. But multiple property types with the similar semantics
 MAY share the same Property Name in different entity domains. This design
@@ -82,20 +97,21 @@ decision is adopted because of the following considerations:
   indicate the location of the center of all hosts in this `pid` entity and
   depend on a Network Map defining this `pid` entity.
 
-To achieve this, each property type has a unique identifier encoded as the
+To address these issues, each property type has a unique identifier encoded with the
 following format:
 
 ``` text
 PropertyType ::= DomainName : PropertyName
 ```
 
-The `DomainName` indicates which entity domain the property type applies to.
-The `PropertyName` SHOULD refer to the semantics of this property type. It does
-not have to be global unique. In other words, different property types could
-have the same property name applied to different entity domains, if they have
-the similar semantics. For example, the property types `ipv4:pid` and
-`ipv6:pid` have the same property name `pid` applied to both `ipv4` and `ipv6`
-domains.
+- The `DomainName` indicates which entity domain the property type applies
+  to.
+- The `PropertyName` SHOULD relate to the semantics of this property type. It
+  does not have to be globally unique. In other words, different property types
+  could have the same property name applied to different entity domains, if
+  they have the similar semantics. For example, the property types `ipv4:pid`
+  and `ipv6:pid` have the same property name `pid` applied to both `ipv4` and
+  `ipv6` domains.
 
 Property types MUST be registered with the IANA, and the intended semantics, as
 well as the media types of dependent resources and the interpretation, MUST be
@@ -145,6 +161,10 @@ if the property of an entity is undefined, the hierarchy and inheritance rules
 are applied. [YRY: Do we need this?] [Jensen: I think this feature is for reducing the response size.] -->
 
 ## Relationship with Other ALTO Resources {#def-relationship-to-other-resources}
+
+<!-- FIXME: very hard to grab the new rationale, needs re-phrasing. Pls see in
+text. For instance, some confusion between relation between prop name and
+domain and prop value and resource. -->
 
 [](#RFC7285) recognizes that some properties for some entity domains MAY be
 specific to an ALTO resource, such as a network map. Accordingly Section 10.8.1
