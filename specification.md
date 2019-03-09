@@ -247,7 +247,8 @@ in `entity-domains` provides all properties defined in `properties`.
 If a property in `properties` is NOT supported by a domain in `entity-domains`,
 the server can declare different property maps to conform to the semantics.
 
-<!-- TODO: Maybe add some recommendation. Low priority -->
+<!-- FIXME: take examples to show how to derive `property-types` from
+`entity-domains` and `properties`. -->
 
 ## Uses {#FullPropMapUses}
 

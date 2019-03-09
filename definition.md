@@ -9,17 +9,36 @@ suggestions in the text and attached txt file.
 
 ## Entity
 
+<!-- FIXME:
+This section introduces a new concept and deserves more explanations before
+diving in the technical "how to handle".
+For instance:
+- what kind of object other than an addressable ALTO endpoint is eligible to be
+  an ALTO entity?
+- an entity must be related to network address(es) e.g. entity such as PID, ASN
+  nb, Country code have a defined mapping to IP or cellular addresses.
+-->
+
 The entity is a generalized concept of the endpoint defined in Section 2.1 of
 [](#RFC7285). An entity is an object with a (possibly empty) set of properties.
-Each entity MUST be in one and only one domain, such as the IPv4 domain or the
-IPv6 domain, and has a unique identifier.
+It MAY or MAY NOT be related to a network address.
+
+<!-- TODO: Examples of entities -->
+
+<!--
+Each entity MUST be in one and only one domain, such as the IPv4 domain, the
+IPv6 domain or PID domain (defined in this document), and has a unique identifier.
+-->
 
 ## Entity Domain
 
-Each entity MUST be in one and only one entity domain.
-An entity domain is a set of entities. Examples of entity domains are the Internet
-address domains (see [](#inet-addr-domain) and the PID domain (see
-[](#pid-domain)).
+Each entity MUST be in one and only one entity domain. An entity domain is a set
+of entities. Examples of entity domains are the Internet address domains (see
+[](#inet-addr-domain) and the PID domain (see [](#pid-domain)). The future
+documents can define new entity domains to satisfy the additional requirements
+such as cellular network information and routing capability exposure. But they
+are not in the scope of this document.
+
 <!-- This document will define the domains precisely below. -->
 <!-- An additional example is the proposed domain of Abstract Network Elements
 associated with topology and routing, as suggested by
@@ -42,6 +61,8 @@ hierarchical or inheritance rules (see [](#def-hierarchy-and-inheritance)) for
 those entities, MUST be specified at the same time.
 
 ## Entity Address {#entity-addrs}
+
+<!-- FIXME: The entity identifier is not global unique. -->
 
 Each entity has a unique identifier of the format:
 
