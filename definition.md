@@ -98,11 +98,18 @@ Every entity in some domain MAY have one or more properties. Every property
 is identified by a Property Type and is specific to a domain. Every property
 MUST have a unique Property Type.
 
+<!-- OLD-0 -->
 This document defines property types in the domain-specific semantics. This
 design is to enforce that each property type MUST be registered for a single
 specific entity domain. But multiple property types with the similar semantics
 MAY share the same Property Name in different entity domains. This design
 decision is adopted because of the following considerations:
+
+<!-- NEW-0 -->
+This document defines domain-specific property types. Multiple property types
+with similar semantics MAY share the same Property Name in different entity
+domains. But each property type MUST be registered for a single specific entity
+domain for the following reasons:
 
 - Some properties may only be applicable for particular entity domains, not
   all. For example, the `pid` property is not applicable for entities in the
@@ -195,6 +202,7 @@ resource on which it depends. That document defines one resource-specific
 property, namely the `pid` property, whose value is the name of the PID
 containing that endpoint in the associated network map.
 
+<!-- OLD-1 -->
 This document takes a different approach. Instead of defining the dependency by
 qualifying the property name, this document attaches the dependency to the
 entity domains. Thus each resource-specific property of all entities in a
@@ -205,6 +213,24 @@ depend on the same network map. Each property of all entities in the PID domain
 MUST also depend on a network map; but different properties may depend on
 different network maps.
 
+<!-- NEW-1 -->
+Because a property name may be associated to different entity domains and
+different information resources within an entity domain, this document takes a
+different approach. Firstly, instead of defining the dependency by prefixing the
+property name with a specific dependent resource identifier, this document
+introduces a Property Type that appends a property name to an entity domain
+name. This gives a hint on the dependent resources. Secondly, it identifies, in
+the IRD and Server responses, the information resource associated to a given
+property in the property map. Last, it sets a rule saying that in a
+resources-dependent property map, the values of a given property MUST depend on
+one and only one information resource. For example, in a property map:
+
+- the property "ipv4 : pid" applying to entities in the ipv4 entity domain MUST
+  depend on one and only one network map,
+- the fictitious property "pid : region " applying to entities in the "pid"
+  domain MUST depend on the one network map in which the input PID entities have
+  been defined.
+
 <!--
 This document takes a different approach. Instead of defining the dependency by
 qualifying the property name, this document attaches the dependency to the
@@ -213,9 +239,18 @@ same resources (see below); the properties of another entity domain may depend o
 resource. For example, entities in the PID domain depend on a network map.
 -->
 
+<!-- OLD-2 -->
 Specifically, this document uses the `uses` and `dependent-vtags` fields defined
 in Sections 9.1.5 and 11.1 of [](#RFC7285), respectively, to specify the
 preceding dependency: the `uses` field of an IRD entry providing entity domain
 related resources (see Property Map and Filtered Property Map resources below)
 specifies the dependent resources, and the `dependent-vtags` field specifies
 dependency in message responses.
+
+<!-- NEW-2 -->
+To specify the aforementionned dependencies, this document uses the "uses" and "dependent-vtags" fields defined respectively in Sections 9.1.5 and 11.1 of [RFC7285].
+
+- the "uses" field is included in the IRD entry of a resources-dependent
+  information resource and specifies the dependent IRD resource.
+- the "dependent-vtags" member is used in a Server response message to specify
+  the dependent resource.
