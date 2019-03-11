@@ -19,9 +19,35 @@ For instance:
   nb, Country code have a defined mapping to IP or cellular addresses.
 -->
 
-The entity is a generalized concept of the endpoint defined in Section 2.1 of
-[](#RFC7285). An entity is an object with a (possibly empty) set of properties.
-It MAY or MAY NOT be related to a network address.
+The entity generalizes the concept of the endpoint defined in Section 2.1 of
+[](#RFC7285). An entity is an object that can be an endpoint and is identified
+by its network address, but can also be an object that has a defined mapping to
+a set of one or more network addresses or is even not related to any network
+address.
+
+Examples of eligible entities are:
+
+- a PID, defined in [](#RFC7285), that has a provider defined human readable
+  abstract identifier and maps to a set of ipv4 and ipv6 addresses,
+- an ASN number, that has a specified identifier and direct mapping to network
+  addresses,
+- a country code, that specified in ISO 3166 format and that can be retrieved
+  from an IP of cellular address. As a consequence, all endpoints are entities
+  while not all entities are endpoints,
+- a TCP/IP network flow, that has a server defined identifier and represents in
+  a TCP/IP 5-Tuple,
+- a routing element, that specified in [](#RFC7921) and includes routing
+  capability information,
+- an abstract network element, that has a server defined identifier and
+  represents a network node, link or their aggregation.
+
+<!--
+An entity is an object with a (possibly empty) set of properties.
+It MAY or MAY NOT be related to a network address. There are a lot of examples
+of entities, such as applications or end-hosts in a communication network, cells
+in a wireless network, network flows, network functions, routing elements in a
+routing system or even general network elements.
+-->
 
 <!-- TODO: Examples of entities -->
 
@@ -32,7 +58,7 @@ IPv6 domain or PID domain (defined in this document), and has a unique identifie
 
 ## Entity Domain
 
-Each entity MUST be in one and only one entity domain. An entity domain is a set
+Each entity MUST be in one and only one entity domain. An entity domain is a class
 of entities. Examples of entity domains are the Internet address domains (see
 [](#inet-addr-domain) and the PID domain (see [](#pid-domain)). The future
 documents can define new entity domains to satisfy the additional requirements
@@ -60,27 +86,30 @@ addresses (see [](#entity-addrs)) in that entity domain, as well as any
 hierarchical or inheritance rules (see [](#def-hierarchy-and-inheritance)) for
 those entities, MUST be specified at the same time.
 
-## Entity Address {#entity-addrs}
+## Entity Identifier {#entity-addrs}
 
 <!-- FIXME: The entity identifier is not global unique. -->
 
-Each entity has a unique identifier of the format:
+Each entity has an identifier of the format:
 
 <!-- TODO: Replace all entity address to entity identifier -->
 
 ``` text
-    EntityAddr ::= DomainName : DomainSpecificEntityAddr
+    EntityId ::= DomainName : DomainSpecificEntityId
 ```
 
-Examples from the IP domains include individual addresses such as
+An entity identifier uniquely identifies a particular entity within an ALTO
+property map resource (see [](#prop-map)).
+
+Examples from the IP domains include individual IP addresses such as
 `ipv4:192.0.2.14` and `ipv6:2001:db8::12`, as well as address blocks such as
 `ipv4:192.0.2.0/26` and `ipv6:2001:db8::1/48`.
 
-The type EntityAddr is used in this document to denote a JSON string with an
-entity address in this format.
+The type EntityId is used in this document to denote a JSON string with an
+entity identifier in this format.
 
-The format of the second part of an entity address depends on the entity
-domain, and MUST be specified when registering a new entity domain. Addresses
+The format of the second part of an entity identifier depends on the entity
+domain, and MUST be specified when registering a new entity domain. Identifiers
 MAY be hierarchical, and properties MAY be inherited based on that hierarchy.
 Again, the rules defining any hierarchy or inheritance MUST be defined when the
 entity domain is registered.
@@ -99,33 +128,35 @@ is identified by a Property Type and is specific to a domain. Every property
 MUST have a unique Property Type.
 
 <!-- OLD-0 -->
+<!--
 This document defines property types in the domain-specific semantics. This
 design is to enforce that each property type MUST be registered for a single
 specific entity domain. But multiple property types with the similar semantics
 MAY share the same Property Name in different entity domains. This design
 decision is adopted because of the following considerations:
+-->
 
 <!-- NEW-0 -->
-This document defines domain-specific property types. Multiple property types
-with similar semantics MAY share the same Property Name in different entity
-domains. But each property type MUST be registered for a single specific entity
-domain for the following reasons:
+This document defines property types in the domain-specific semantics. Multiple
+property types with similar semantics MAY share the same Property Name in
+different entity domains. But each property type MUST be registered for a single
+specific entity domain for the following reasons:
 
 - Some properties may only be applicable for particular entity domains, not
   all. For example, the `pid` property is not applicable for entities in the
   `pid` domain.
-- The interpretation of the value of a property may depend on the entity
-  domain. For different entity domains, not only the intended semantics but
-  also the dependent resource types may be totally different. For example,
-  suppose that the `geo-location` property is defined as the coordinates of
-  a point, encoded as (say) "latitude longitude [altitude]." When applied to an
-  entity that represents a specific host computer, such as an Internet address,
-  the property defines the host's location and has no required dependency.
-  However, when applied to an entity in the `pid` domain, the property would
-  indicate the location of the center of all hosts in this `pid` entity and
-  depend on a Network Map defining this `pid` entity.
+- The interpretation of the value of a property may depend on the entity domain.
+  For different entity domains, not only the intended semantics but also the
+  dependent resource types may be totally different. For example, suppose that
+  the `geo-location` property is defined as the coordinates of a point, encoded
+  as (say) "latitude longitude [altitude]." When applied to an entity that
+  represents a specific host computer, identified by an address in the ipv4 or
+  ipv6 domain, the property defines the host's location and has no required
+  dependency. However, when applied to an entity in the `pid` domain, the
+  property would indicate the location of the center of all hosts in this `pid`
+  entity and depend on the Network Map defining this `pid` entity.
 
-To address these issues, each property type has a unique identifier encoded with the
+Therefore, each property type has a unique identifier encoded with the
 following format:
 
 ``` text
@@ -179,11 +210,11 @@ such as `geo-region`, should be defined.
 
 ## Hierarchy and Inheritance {#def-hierarchy-and-inheritance}
 
-Entities in a given domain MAY form a hierarchy based on entity addresses, and
-introducing hierarchy allows the introduction of inheritance. Each
-entity domain MUST define its own hierarchy and inheritance rules when
-registered. The hierarchy and inheritance rule makes it possible for an entity
-to inherit a property value from another entity in the same domain.
+Entities in a given domain MAY form a hierarchy based on entity identifiers, and
+introducing hierarchy allows the introduction of inheritance. Each entity domain
+MUST define its own hierarchy and inheritance rules when registered. The
+hierarchy and inheritance rule makes it possible for an entity to inherit a
+property value from another entity in the same domain.
 <!--If and only
 if the property of an entity is undefined, the hierarchy and inheritance rules
 are applied. [YRY: Do we need this?] [Jensen: I think this feature is for reducing the response size.] -->
@@ -203,6 +234,7 @@ property, namely the `pid` property, whose value is the name of the PID
 containing that endpoint in the associated network map.
 
 <!-- OLD-1 -->
+<!--
 This document takes a different approach. Instead of defining the dependency by
 qualifying the property name, this document attaches the dependency to the
 entity domains. Thus each resource-specific property of all entities in a
@@ -212,24 +244,31 @@ map, the `pid` property of all entities in an Internet address domain MUST
 depend on the same network map. Each property of all entities in the PID domain
 MUST also depend on a network map; but different properties may depend on
 different network maps.
+-->
 
 <!-- NEW-1 -->
-Because a property name may be associated to different entity domains and
-different information resources within an entity domain, this document takes a
-different approach. Firstly, instead of defining the dependency by prefixing the
-property name with a specific dependent resource identifier, this document
-introduces a Property Type that appends a property name to an entity domain
-name. This gives a hint on the dependent resources. Secondly, it identifies, in
-the IRD and Server responses, the information resource associated to a given
-property in the property map. Last, it sets a rule saying that in a
-resources-dependent property map, the values of a given property MUST depend on
-one and only one information resource. For example, in a property map:
+Because a property may be associated to more than one information resources
+within an entity domain, this document takes a different approach as follows:
 
-- the property "ipv4 : pid" applying to entities in the ipv4 entity domain MUST
-  depend on one and only one network map,
-- the fictitious property "pid : region " applying to entities in the "pid"
-  domain MUST depend on the one network map in which the input PID entities have
-  been defined.
+- Firstly, instead of defining the dependency by prefixing the property name
+  with a specific dependent resource identifier, this document introduces a
+  Property Type that appends a property name to an entity domain name, and
+  registers the dependency types for this Property Type. This gives a hint on
+  the types of dependent resources. For example, the fictitious property
+  `pid:region` applying to entities in the PID domain depends on the network map
+  in which the input PID entities have been defined; but the fictitious property
+  `ipv4:region` does not depend on any information resource.
+- Secondly, it sets a rule saying that in a property map, all provided property
+  types MUST have the same dependency types. For example, `pid:region` and
+  `ipv4:region` cannot be provided by an individual property map.
+- Finally, it identifies, in the IRD and Server responses, the sequence of
+  information resources associated to all provided properties in a particular
+  property map. If a property depends on some different information resources
+  from other properties, the ALTO server should define a different property map
+  to provide it. For example, the property `ipv4:pid` provided by a particular
+  property map MUST depend on one and only one network map. If an ALTO server
+  wants to provide `ipv4:pid` for PIDs defined in both network maps `net1` and
+  `net2`, it MUST define two individual property maps.
 
 <!--
 This document takes a different approach. Instead of defining the dependency by
@@ -240,15 +279,19 @@ resource. For example, entities in the PID domain depend on a network map.
 -->
 
 <!-- OLD-2 -->
+<!--
 Specifically, this document uses the `uses` and `dependent-vtags` fields defined
 in Sections 9.1.5 and 11.1 of [](#RFC7285), respectively, to specify the
 preceding dependency: the `uses` field of an IRD entry providing entity domain
 related resources (see Property Map and Filtered Property Map resources below)
 specifies the dependent resources, and the `dependent-vtags` field specifies
 dependency in message responses.
+-->
 
 <!-- NEW-2 -->
-To specify the aforementionned dependencies, this document uses the "uses" and "dependent-vtags" fields defined respectively in Sections 9.1.5 and 11.1 of [RFC7285].
+To specify the aforementionned dependencies, this document uses the "uses" and
+"dependent-vtags" fields defined respectively in Sections 9.1.5 and 11.1 of
+[RFC7285].
 
 - the "uses" field is included in the IRD entry of a resources-dependent
   information resource and specifies the dependent IRD resource.
