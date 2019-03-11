@@ -128,15 +128,15 @@ This document requests IANA to create and maintain the `ALTO Entity Domain
 Registry`, listed in [](#TableDomainNames).
 
 -----------------------------------------------------------------------------------------------
-Identifier Entity Identifiers Encoding Hierarchy &amp; Inheritance Mapping to ALTO Address Type
----------- --------------------------- --------------------------- ----------------------------
-ipv4       See [](#ipv4-domain)    See [](#inet-inheritance)   Yes
+Identifier Entity Identifier Encoding Hierarchy &amp; Inheritance Mapping to ALTO Address Type
+---------- -------------------------- --------------------------- ----------------------------
+ipv4       See [](#ipv4-domain)       See [](#inet-inheritance)   Yes
 
-ipv6       See [](#ipv6-domain)    See [](#inet-inheritance)   Yes
+ipv6       See [](#ipv6-domain)       See [](#inet-inheritance)   Yes
 
-pid        See [](#pid-domain)     None                        No
+pid        See [](#pid-domain)        None                        No
 
------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
 
 ^[TableDomainNames::ALTO Entity Domains.]
 
