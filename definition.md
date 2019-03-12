@@ -144,7 +144,8 @@ specific entity domain for the following reasons:
 
 - Some properties may only be applicable for particular entity domains, not
   all. For example, the `pid` property is not applicable for entities in the
-  `pid` domain.
+  `pid` domain, but is applicable for instance to entities in the `ipv4` or
+  `ipv6` domain.
 - The interpretation of the value of a property may depend on the entity domain.
   For different entity domains, not only the intended semantics but also the
   dependent resource types may be totally different. For example, suppose that
@@ -247,8 +248,34 @@ different network maps.
 -->
 
 <!-- NEW-1 -->
+<!--
 Because a property may be associated to more than one information resources
 within an entity domain, this document takes a different approach as follows:
+-->
+<!--
+However, considering the unified properties, the approach of
+`resource-specific properties` has issues for several reasons:
+-->
+
+However, A property may be associated to more than one information resources
+within an entity domain. For example, the fictitious property
+`pid:cdni-fci-capabilities` indicates CDNI capabilities (see [](#RFC8008)) of a
+set of `ipv4` or `ipv6` typed CDNI footprints included by some entities in PID
+domain. It depends on two resources:
+
+- the network map in which the input PID entities have been defined,
+- the fictitious CDNI FCI map in which the CDNI footprints and capabilities
+  advertisement objects (see [](#RFC8008)) are included.
+
+A `resource-specific property` can only indicate one of them. Thus, using
+`resource-specific properties` cannot handle multiple dependencies very well.
+
+<!--
+- Mixing properties depending on different resources is unnecessary.
+- [](#RFC7285) already proposes the `uses` attribute to indicate resource dependencies.
+-->
+
+To address this issue, this document takes a different approach as follows:
 
 - Firstly, instead of defining the dependency by prefixing the property name
   with a specific dependent resource identifier, this document introduces a
@@ -257,18 +284,35 @@ within an entity domain, this document takes a different approach as follows:
   the types of dependent resources. For example, the fictitious property
   `pid:region` applying to entities in the PID domain depends on the network map
   in which the input PID entities have been defined; but the fictitious property
-  `ipv4:region` does not depend on any information resource.
+  `ipv4:region` applying to entities in IPv4 domain does not depend on any
+  information resource.
 - Secondly, it sets a rule saying that in a property map, all provided property
-  types MUST have the same dependency types. For example, `pid:region` and
-  `ipv4:region` cannot be provided by an individual property map.
+  types MUST have the same media types of dependent information resources
+  (denoted as "dependency types" in short). For example, the fictitious
+  property types `pid:region` and `ipv4:region` cannot be provided in the same
+  property map, as they have different dependency types.
 - Finally, it identifies, in the IRD and Server responses, the sequence of
-  information resources associated to all provided properties in a particular
-  property map. If a property depends on some different information resources
-  from other properties, the ALTO server should define a different property map
-  to provide it. For example, the property `ipv4:pid` provided by a particular
-  property map MUST depend on one and only one network map. If an ALTO server
-  wants to provide `ipv4:pid` for PIDs defined in both network maps `net1` and
-  `net2`, it MUST define two individual property maps.
+  information resources associated to all provided properties of entities in a
+  particular property map. In other words, the ALTO server MUST NOT mix
+  properties depending on different resources into the same resources, even if
+  they have the same dependency types. There are two kinds of examples:
+
+  - Assume there are a set of entities in IPv4 and IPv6 domain, and all of them
+    have the property `pid`. The `pid` properties of entities in IPv4 domain
+    depend on the network map `net1`, but the `pid` properties of entities in
+    IPv6 domain depend on another network map `net2`. Although the property
+    types `ipv4:pid` and `ipv6:pid` have the same dependency type sequence
+    `["application/alto-networkmap+json"]`, the ALTO server cannot put them into
+    the same property map.
+  - Assume there are a set of entities in IPv4 domain, and each of them have two
+    `pid` properties. One `pid` property depends on the network map `net1`, the
+    other `pid` property depends on another network map `net2`. To distinguish
+    them, the ALTO server can provide two `resource-specific endpoint
+    properties` called `pid.net1` and `pid.net2` for each IPv4 entities in the
+    same endpoint property map. But using the property map service defined in
+    this document, the ALTO server has to define two individual property maps.
+    Both property maps provide the property type `ipv4:pid`, but one depends on
+    `net1` and the other one depends on `net2`.
 
 <!--
 This document takes a different approach. Instead of defining the dependency by

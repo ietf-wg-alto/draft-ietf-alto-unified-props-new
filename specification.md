@@ -463,7 +463,7 @@ defined in Section 8.5 of [](#RFC7285), if the request is invalid.
 
 Specifically, a filtered property map request can be invalid as follows:
 
-- An entity identifiers in `entities` in the request is invalid if:
+- An entity identifier in `entities` in the request is invalid if:
 
     - The domain of this entity is not defined in the `entity-domain-types`
       capability of this resource in the IRD;

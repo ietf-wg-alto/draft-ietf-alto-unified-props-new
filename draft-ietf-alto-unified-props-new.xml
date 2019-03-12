@@ -8,6 +8,7 @@
   <!ENTITY RFC7159 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7159.xml">
   <!ENTITY RFC7285 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7285.xml">
   <!ENTITY RFC7921 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7921.xml">
+  <!ENTITY RFC8008 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8008.xml">
 
   <!ENTITY abstract PUBLIC '' "abstract.xml.gen">
   <!ENTITY introduction PUBLIC '' "introduction.xml.gen">
@@ -22,7 +23,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 <rfc category="std"
-     docName="draft-ietf-alto-unified-props-new-07"
+     docName="draft-ietf-alto-unified-props-new-08"
      ipr="trust200902">
 <front>
   <title abbrev="Unified Properties">Unified Properties for the ALTO Protocol</title>
@@ -137,6 +138,7 @@
       &RFC7159;
       &RFC7285;
       &RFC7921;
+      &RFC8008;
   </references>
 </back>
 </rfc>
