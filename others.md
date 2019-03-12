@@ -404,3 +404,10 @@ following principles:
   resources. The registry MUST specify how the client uses them in order.
 -->
 
+## Acknowledgments {#ack}
+
+The authors would like to thank discussions with Kai Gao, Qiao Xiang, Shawn
+Lin, Xin Wang, Danny Perez, and Vijay Gurbani. The authors thank Dawn Chen
+(Tongji University), and Shenshen Chen (Tongji/Yale University) for their
+contributions to earlier drafts.
+
