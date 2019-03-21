@@ -2,16 +2,16 @@
 
 # Entity Domains
 
-This document defines three entity domain types. The definition of each
-entity domain type below includes the following: (1) entity domain type name, (3) entity domain 
-name, (2) entity domain-specific entity identifiers, and (3) hierarchy and inheritance semantics. Since a global entity domain type defines a single global entity domain, we say entity domain instead of entity domain type.
+This document defines three entity domains. The definition of each
+entity domain below includes the following: (1) domain name, (2) domain-specific
+entity identifiers, and (3) hierarchy and inheritance semantics.
 
-## Internet Address Domain Types {#inet-addr-domain}
+## Internet Address Domains {#inet-addr-domain}
 
-The document defines two entity domain types (IPv4 and IPv6) for Internet addresses. Both
-types are global entity domain types and hence define a corresponding global entity domain as well. 
-Since the two domains use the same hierarchy and inheritance semantics, we define the semantics 
-together, instead of repeating for each.
+The document defines two entity domains (IPv4 and IPv6) for Internet addresses. Both
+entity domains include individual addresses and blocks of addresses. Since the two
+domains use the same hierarchy and inheritance semantics, we define the semantics together,
+instead of repeating for each.
 
 ### IPv4 Domain {#ipv4-domain}
 

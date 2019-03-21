@@ -110,7 +110,7 @@
       Optimization (ALTO) Protocol <xref target="RFC7285"/>
       by generalizing the concept of "endpoint properties"
       to domains of other entities, and by presenting those properties
-      as maps, similar to the network and cost maps in ALTO.
+      as maps, similar to the network and cost maps in <xref target="RFC7285"/>.
     </t>
   </abstract>
   <note title="Requirements Language">

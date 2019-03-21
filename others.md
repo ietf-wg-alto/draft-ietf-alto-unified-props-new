@@ -125,7 +125,7 @@ Change controller:
 ## ALTO Entity Domain Registry {#IANADomain}
 
 This document requests IANA to create and maintain the `ALTO Entity Domain
-Registry`, listed in [](#TableDomainNames).
+Registry`, listed in [](#TableEntityDomainNames).
 
 -----------------------------------------------------------------------------------------------
 Identifier Entity Identifier Encoding Hierarchy &amp; Inheritance Mapping to ALTO Address Type
@@ -138,7 +138,7 @@ pid        See [](#pid-domain)        None                        No
 
 ----------------------------------------------------------------------------------------------
 
-^[TableDomainNames::ALTO Entity Domains.]
+^[TableEntityDomainNames::ALTO Entity Domains.]
 
 This registry serves two purposes. First, it ensures uniqueness of identifiers
 referring to ALTO entity domains. Second, it states the requirements for allocated
@@ -149,7 +149,7 @@ This registry is considered as an extension of the `ALTO Address Type Registry`
 defined in Section 14.4 of [](#RFC7285). It must be noted that:
 
 - An entity MAY or MAY NOT be an endpoint. For example, `pid` is registered as
-an entity domain in [](#TableDomainNames), but it is not an endpoint address
+an entity domain in [](#TableEntityDomainNames), but it is not an endpoint address
 type.
 - An endpoint MUST be an entity. For example, `ipv4` and `ipv6` are already
 registered in `ALTO Address Type Registry` in [](#RFC7285), so they MUST have
@@ -168,13 +168,13 @@ Domain Registry`.
 
 <!--
 This section specifies the consistency procedure between `ALTO Address Type
-Registry` and `ALTO Domain Registry`.
+Registry` and `ALTO Entity Domain Registry`.
 -->
 
 <!-- there is therefore a risk of separately registering the address type
 and the domain when they point to the same thing. This section specifies how to
 ensure the consistency between `ALTO Address Type Registry` (See Section 14.4 of
-[](#RFC7285)) and `ALTO Domain Registry`.-->
+[](#RFC7285)) and `ALTO Entity Domain Registry`.-->
 
 
 We define that the ALTO Entity Domain Registry is consistent with ALTO Address
@@ -191,7 +191,7 @@ registering a new ALTO entity domain in a future document:
 
 - Whether the ALTO Address Type Registry contains an address type that can be
   used as an entity identifier for the candidate domain identifier. This has been
-  done for the identifiers `ipv4` and `ipv6` in [](#TableDomainNames).
+  done for the identifiers `ipv4` and `ipv6` in [](#TableEntityDomainNames).
 - Whether the candidate entity identifier of the entity domain is able to be an
   endpoint address, as defined in Sections 2.1 and 2.2 of [](#RFC7285).
 
@@ -202,14 +202,14 @@ corresponding address type is registered based on ALTO Address Type Registry
 <!-- TODO: PLACE HOLDER for consistency -->
 
 <!--
-One potential issue of introducing the ALTO Domain Registry is its relationship
+One potential issue of introducing the ALTO Entity Domain Registry is its relationship
 with the ALTO Address Types Registry already defined in [RFC7285].
 
 To achieve consistency, this document considers each ALTO address type defines
 an ALTO domain. For example, the address types ipv4 and ipv6 define the ipv4 and
 ipv6 domains respectively. To achieve consistency for future ALTO address types,
 it is required that each new ALTO address type to be registered in the ALTO
-Address Type Registry MUST also be registered as a domain in the ALTO Domain
+Address Type Registry MUST also be registered as a domain in the ALTO Entity Domain
 Registry. And the Entity Address Encoding of the corresponding domain MUST
 include both Address Encoding and Prefix Encoding of this address type.
 -->
@@ -237,7 +237,7 @@ Other extensions that introduce new ALTO address types and domains that
 are also cognizant of the present extensions can directly proceed as follows:
 
 - When a new address type is registered in the ALTO Address Type Registry
-[](#RFC7285), the same identifier MUST be also registered in the ALTO Domain
+[](#RFC7285), the same identifier MUST be also registered in the ALTO Entity Domain
 Registry.
 - Proceed as described in [](#dom-reg-process).
 -->
@@ -247,7 +247,7 @@ This registry is considered as an extension of the "ALTO Address Type Registry"
 defined in Section 14.4 of [](#RFC7285). In particularly,
 
 - An entity MAY or MAY NOT be an endpoint. For example, "pid" is registered as
-an entity domain in [](#TableDomainNames), but it is not an endpoint address
+an entity domain in [](#TableEntityDomainNames), but it is not an endpoint address
 type.
 - An endpoint MUST be an entity. For example, "ipv4" and "ipv6" are already
 registered in "ALTO Address Type Registry" in [](#RFC7285), so they MUST be
@@ -306,7 +306,7 @@ following information:
   relates to private information and network proximity.
 
 This specification requests registration of the identifiers `ipv4`, `ipv6` and
-`pid`, as shown in [](#TableDomainNames).
+`pid`, as shown in [](#TableEntityDomainNames).
 
 ## ALTO Entity Property Type Registry {#IANAEndpointProp}
 

@@ -28,14 +28,14 @@ address.
 Examples of eligible entities are:
 
 - a PID, defined in [](#RFC7285), that has a provider defined human readable
-  abstract identifier defined by a ALTO network map, which maps a PID to a set of ipv4 and ipv6 addresses;
+  abstract identifier and maps to a set of ipv4 and ipv6 addresses;
 - an autonomous system (AS), that has an AS number (ASN) as its identifier 
   and maps to a set of ipv4 and ipv6 addresses;
 - a region representing a country, that is identified by its country code defined 
-  by ISO 3166 and maps to a set of cellular addresses;
-- a TCP/IP network flow, that has a server defined identifier consisting of the 
-  defining TCP/IP 5-Tuple, , which is an example that all endpoints 
+  by ISO 3166, maps to a set of cellular addresses, and is an example that all endpoints 
   are entities while not all entities are endpoints;
+- a TCP/IP network flow, that has a server defined identifier consisting of the 
+  defining TCP/IP 5-Tuple;
 - a routing element, that is specified in [](#RFC7921) and includes routing
   capability information;
 - an abstract network element, that has a server defined identifier and
@@ -58,88 +58,83 @@ IPv6 domain or PID domain (defined in this document), and has a unique identifie
 
 ## Entity Domain
 
-Each entity MUST belong to one and only one entity domain, where an entity domain is defined as a set
-of entities. An entity domain can be a global entity domain; this document defines two global entity 
-domains, for two Internet address domains (see [](#inet-addr-domain)). An entity domain
-can also be defined by an ALTO resource; this document defines PID entity domains to be derived 
-from ALTO network maps (see [](#pid-domain)). Future documents can define additional entity 
-domains to satisfy their additional requirements such as cellular network information and routing 
-capability exposure. But they are not in the scope of this document.
+Each entity MUST be in one and only one entity domain, where an entity domain is defined as a set
+of entities. This document defines two entity domains for the Internet address domains (see
+[](#inet-addr-domain)) and one entity domain for the PID domain (see [](#pid-domain)). Future
+documents can define additional entity domains to satisfy their additional requirements
+such as cellular network information and routing capability exposure. But they
+are not in the scope of this document.
 
 <!-- This document will define the domains precisely below. -->
 <!-- An additional example is the proposed domain of Abstract Network Elements
 associated with topology and routing, as suggested by
 [](#I-D.ietf-alto-path-vector). -->
 
-## Entity Domain Type {#domain-types}
-
-An entity domain has a type, which is defined by a string that MUST be no more than 32
-characters, and MUST NOT contain characters other than US-ASCII alphanumeric
-characters (U+0030-U+0039, U+0041-U+005A, and U+0061-U+007A), hyphen ('-',
-U+002D), and low line ('\_', U+005F). For example, the strings `ipv4`, `ipv6`, and `pid` are 
-valid entity domain types.
-
-The type EntityDomainType is used in this document to denote a JSON string confirming to the 
-preceding requirement.
-
 ## Entity Domain Name {#domain-names}
 
-Each entity domain is identified by an entity domain name, which is derived as follows. 
-For a global entity domain (i.e., not resource-specific), its entity domain name is 
-EntityDomainType. Hence, there is a single, global entity domain for an EntityDomainType. 
-For example, the `ipv4` and `ipv6` entity domain types identify two Internet address entity 
-domains (see [](#inet-addr-domain)). 
+Each entity domain MUST has a unique entity domain name, which MUST be no more than 32
+characters, and MUST NOT contain characters other than US-ASCII alphanumeric
+characters (U+0030-U+0039, U+0041-U+005A, and U+0061-U+007A), hyphen ('-',
+U+002D), and low line ('\_', U+005F). For example, the names `ipv4` and `ipv6`
+identify two Internet address entity domains (see [](#inet-addr-domain)). When there is no
+confusion with the term domain names in domain systems (FIXME: add DNS reference), we use
+the shorter domain name instead of the longer entity domain name.
 
-A resource-specific entity domain is identified by an entity domain name derived as follows. 
-It MUST start with a resource ID using the ResourceID type defined in [](#RFC7285), 
-followed by the '.' separator (U+002E), followed by an EntityDomainType. Hence, 
-there can be as many entity domains as 
+The type EntityDomainName is used in this document to denote a JSON string confirming to the 
+preceding requirement.
 
-Note that the '.' separator is not allowed in EntityDomainType and hence there is no ambiguity 
-on whether an entity domain name refers to a global entity domain or a resource specific entity 
-domain.
-
-It is the EntityDomainType which defines the semantics of an entity domain. Each EntityDomainType 
-MUST be registered with the IANA. The format of the entity addresses (see [](#entity-addrs)) 
-in that entity domain, as well as any hierarchical or inheritance rules 
-(see [](#def-hierarchy-and-inheritance)) for those entities, MUST be specified at the same time. 
-For an EntityDomainType which defines resource-specific entity domains, the valid type(s) resources MUST be specified.
-
+Each Entity Domain name MUST be registered with the IANA. The format of the entity
+addresses (see [](#entity-addrs)) in that entity domain, as well as any
+hierarchical or inheritance rules (see [](#def-hierarchy-and-inheritance)) for
+those entities, MUST be specified at the same time.
 
 ## Entity Address {#entity-addrs}
 
 <!-- FIXME: The entity identifier is not global unique. -->
 
-Entities in an entity domain are identified by entity addresses (EntityAddr) of the following format:
+FIXME: Entity Identifier => Entity Address DomainEntityAddr to be the same as 7285
+
+revise to use the same notation, Type attr. Currently mixed up. EntityID defines
+the type; Later entity identifier defines a set of entities (or inheritance?)
+
+Following the same format as TypedEndpointAddr defined in 7285, 
+
+Each entity has an entity identifier (EntityId) of the format:
+
+<!-- TODO: Replace all entity address to entity identifier -->
 
 ``` text
-    EntityAddr ::= EntityDomainName : DomainTypeSpecificEntityAddr
+    EntityId ::= EntityDomainName : DomainSpecificEntityId
 ```
+
+An entity identifier uniquely identifies a particular entity within an ALTO
+property map resource (see [](#prop-map)). FIXME, wrong
 
 Examples from the Internet address entity domains include individual IP addresses such as
 `ipv4:192.0.2.14` and `ipv6:2001:db8::12`, as well as address blocks such as
 `ipv4:192.0.2.0/26` and `ipv6:2001:db8::1/48`.
 
-The format of the second part of an entity address depends on the entity
-domain type, and MUST be specified when registering a new entity domain type. Identifiers
+The format of the second part of an entity identifier depends on the entity
+domain, and MUST be specified when registering a new entity domain. Identifiers
 MAY be hierarchical, and properties MAY be inherited based on that hierarchy.
 Again, the rules defining any hierarchy or inheritance MUST be defined when the
-entity domain type is registered.
+entity domain is registered.
 
-The type EntityAddr is used in this document to denote a JSON string representing an
-entity address in this format.
+The type EntityId is used in this document to denote a JSON string representing an
+entity identifier in this format.
 
-Note that two entity addresses with different textual representations may refer to the
+Note that two entity identifiers with different textual representations may refer to the
 same entity, for a given entity domain. For example, the strings `ipv6:2001:db8::1` and
 `ipv6:2001:db8:0:0:0:0:0:1` refer to the same entity in the 'ipv6' entity domain.
 
 ## Property Type and Property Name {#def-property-type}
 
-FIXME: remove most. Use RFC 7285 Section 10.8, for resource-specific properties and 
-global properties.
-
 <!-- FIXME: Section needs be reorganized to first motivate the attachment of
 address to address domain before setting rules. -->
+
+Every entity in an entity domain MAY have one or more properties. Every property
+is identified by a Property Type and is specific to the entity domain. Every property
+MUST have a unique Property Type. FIXME: not MAY, mixed up name and type
 
 <!-- OLD-0 -->
 <!--
@@ -151,31 +146,31 @@ decision is adopted because of the following considerations:
 -->
 
 <!-- NEW-0 -->
-An entity in an entity domain MAY have one or more properties, where each property is 
-defined by a Property Type. This document defines properties to be entity-domain-type 
-specific for the following reasons: 
+This document defines property types in the domain-specific semantics. Multiple
+property types with similar semantics MAY share the same Property Name in
+different entity domains. But each property type MUST be registered for a single
+specific entity domain for the following reasons: FIXME: bad wording
 
-- Some properties may be applicable to only particular entity domain types, not
-  all. For example, the `pid` property is not applicable to entities in a
-  `pid` type entity domain domain, but is applicable to entities in the `ipv4` or
+- Some properties may only be applicable for particular entity domains, not
+  all. For example, the `pid` property is not applicable to entities in the
+  `pid` domain, but is applicable to  entities in the `ipv4` or
   `ipv6` domains.
-- The interpretation of the value of a property may depend on the type of the entity 
-  domain.
-  For different types of entity domains, not only the intended semantics but also the
-  dependent resource types may be totally different. For example, suppose that
-  the `geo-location` property is defined as the coordinates of a point, encoded
+- The interpretation of the value of a property may depend on the entity domain.
+  For different entity domains, not only the intended semantics but also the
+  dependent FIXME resource types may be totally different. For example, suppose that
+  the `geo-location` property is defined as the coordinatesof a point, encoded
   as (say) "latitude longitude [altitude]." When applied to an entity that
-  represents a specific host computer, identified by an address in the `ipv4` or
-  `ipv6` entity domain, the property defines the host's location and has no required
-  dependency. However, when applied to an entity in a `pid` domain, the
+  represents a specific host computer, identified by an address in the ipv4 or
+  ipv6 domain, the property defines the host's location and has no required
+  dependency. However, when applied to an entity in the `pid` domain, the
   property would indicate the location of the center of all hosts in this `pid`
   entity and depend on the Network Map defining this `pid` entity.
 
 Therefore, each property type has a unique identifier encoded with the
-following format: 
+following format: FIXME type vs name vs property
 
 ``` text
-PropertyType ::= EntityDomainType : PropertyName
+PropertyType ::= EntityDomainName : PropertyName
 ```
 
 - The `EntityDomainName` indicates which entity domain the property type applies
@@ -206,6 +201,7 @@ PropertyName denotes a JSON string with a property name in this format.
 
 <!-- FIXED: Change the single name space design to the domain-specific design -->
 
+CHANGE BACK below:
 <!--
 This document defines uniform property names specified in a single property
 name space rather than being scoped by a specific entity domain, although some
@@ -227,7 +223,7 @@ such as `geo-region`, should be defined.
 
 Entities in a given domain MAY form a hierarchy based on entity identifiers, and
 introducing hierarchy allows the introduction of inheritance. Each entity domain
-type MUST define its own hierarchy and inheritance rules when registered. The
+MUST define its own hierarchy and inheritance rules when registered. The
 hierarchy and inheritance rule makes it possible for an entity to inherit a
 property value from another entity in the same domain.
 <!--If and only
@@ -235,8 +231,6 @@ if the property of an entity is undefined, the hierarchy and inheritance rules
 are applied. [YRY: Do we need this?] [Jensen: I think this feature is for reducing the response size.] -->
 
 ## Relationship with Other ALTO Resources {#def-relationship-to-other-resources}
-
-FIXME: very messy below. Delete most.
 
 <!-- FIXME: very hard to grab the new rationale, needs re-phrasing. Pls see in
 text. For instance, some confusion between relation between prop name and
@@ -273,7 +267,7 @@ However, considering the unified properties, the approach of
 `resource-specific properties` has issues for several reasons:
 -->
 
-However, a property may be associated to more than one information resources
+However, A property may be associated to more than one information resources
 within an entity domain. For example, the fictitious property
 `pid:cdni-fci-capabilities` indicates CDNI capabilities (see [](#RFC8008)) of a
 set of `ipv4` or `ipv6` typed CDNI footprints included by some entities in PID
