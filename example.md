@@ -121,7 +121,7 @@ Service for the `pid` property for the default network map.
         "uses" : [ "default-network-map" ]
         "capabilities" : {
           "entity-domains" : [ "ipv4", "ipv6" ],
-          "properties" : [ "pid" ]
+          "properties" : [ "default-network-map.pid" ]
         }
      },
      "region-property-map": {
@@ -130,7 +130,7 @@ Service for the `pid` property for the default network map.
        "accepts": "application/alto-propmapparams+json",
        "uses" : [ "default-network-map" ],
        "capabilities": {
-         "domain-types": [ "pid" ],
+         "domain-types": [ "default-network-map.pid" ],
          "properties": [ "region" ]
        }
      },
@@ -323,7 +323,7 @@ Content-Type: application/alto-propmapparams+json
   "entities" : [
                 "ipv4:192.0.2.128",
                 "ipv4:192.0.3.0/27" ],
-  "properties" : [ "pid" ]
+  "properties" : [ "default-network-map.pid" ]
 }
 ```
 
@@ -340,10 +340,10 @@ Content-Type: application/alto-propmap+json
     ]
   },
   "property-map": {
-    "ipv4:192.0.2.128":   {"pid": "defaultpid"},
-    "ipv4:192.0.2.0/27":  {"pid": "defaultpid"},
-    "ipv4:192.0.3.0/28":  {"pid": "pid3"},
-    "ipv4:192.0.3.16/28": {"pid": "pid4"}
+    "ipv4:192.0.2.128":   {"default-network-map.pid": "defaultpid"},
+    "ipv4:192.0.2.0/27":  {"default-network-map.pid": "defaultpid"},
+    "ipv4:192.0.3.0/28":  {"default-network-map.pid": "pid3"},
+    "ipv4:192.0.3.16/28": {"default-network-map.pid": "pid4"}
   }
 }
 ```
@@ -365,8 +365,8 @@ Content-Length: ###
 Content-Type: application/alto-propmapparams+json
 
 {
-  "entities" : ["pid:pid1",
-                "pid:pid2"],
+  "entities" : ["default-network-map.pid:pid1",
+                "default-network-map.pid:pid2"],
   "properties" : [ "region" ]
 }
 ```
@@ -384,10 +384,10 @@ Content-Type: application/alto-propmap+json
     ]
   },
   "property-map": {
-    "pid:pid1": {
+    "default-network-map.pid:pid1": {
       "region": "west"
     },
-    "pid:pid2": {
+    "default-network-map.pid:pid2": {
       "region": "east"
     }
   }

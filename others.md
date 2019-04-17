@@ -122,21 +122,21 @@ Author:
 Change controller:
 ~ Internet Engineering Task Force (mailto:iesg@ietf.org).
 
-## ALTO Entity Domain Registry {#IANADomain}
+## ALTO Entity Domain Type Registry {#IANADomain}
 
-This document requests IANA to create and maintain the `ALTO Entity Domain
+This document requests IANA to create and maintain the `ALTO Entity Domain Type
 Registry`, listed in [](#TableEntityDomainNames).
 
------------------------------------------------------------------------------------------------
-Identifier Entity Identifier Encoding Hierarchy &amp; Inheritance Mapping to ALTO Address Type
----------- -------------------------- --------------------------- ----------------------------
-ipv4       See [](#ipv4-domain)       See [](#inet-inheritance)   Yes
+-----------------------------------------------------------------
+Identifier Entity Identifier Encoding Hierarchy &amp; Inheritance
+---------- -------------------------- ---------------------------
+ipv4       See [](#ipv4-domain)       See [](#inet-inheritance)
 
-ipv6       See [](#ipv6-domain)       See [](#inet-inheritance)   Yes
+ipv6       See [](#ipv6-domain)       See [](#inet-inheritance)
 
-pid        See [](#pid-domain)        None                        No
+pid        See [](#pid-domain)        None
 
-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------
 
 ^[TableEntityDomainNames::ALTO Entity Domains.]
 
@@ -403,6 +403,24 @@ following principles:
 - **Multiple dependencies**: An entity property MAY depend on a sequence of
   resources. The registry MUST specify how the client uses them in order.
 -->
+
+## ALTO Resource Type Registry {#IANAResourceType}
+
+The initial registered ALTO entity property types are listed in
+[](#TableResourceTypes).
+
+--------------------------------------------------------------------------------
+Resource Type Media Types                        Entities and Properties Mapping
+------------- ---------------------------------- -------------------------------
+networkmap    application/alto-networkmap+json   See [](#netmap-mapping)
+
+endpointprop  application/alto-endpointprop+json See [](#ep-mapping)
+
+propmap       application/alto-propmap+json      See [](#up-mapping)
+
+--------------------------------------------------------------------------------
+
+^[TableResourceTypes::ALTO Resource Types.]
 
 ## Acknowledgments {#ack}
 

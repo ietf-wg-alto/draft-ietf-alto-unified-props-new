@@ -1,10 +1,12 @@
 <!-- FIXME: Make the specification coherent with the definition -->
 
-# Entity Domains
+# Entity Domain Types
 
-This document defines three entity domain types. The definition of each
-entity domain type below includes the following: (1) entity domain type name, (3) entity domain 
-name, (2) entity domain-specific entity identifiers, and (3) hierarchy and inheritance semantics. Since a global entity domain type defines a single global entity domain, we say entity domain instead of entity domain type.
+This document defines three entity domain types. The definition of each entity
+domain type below includes the following: (1) entity domain type name, (2)
+entity domain-specific entity identifiers, and (3) hierarchy and inheritance
+semantics. Since a global entity domain type defines a single global entity
+domain, we say entity domain instead of entity domain type.
 
 ## Internet Address Domain Types {#inet-addr-domain}
 
@@ -15,7 +17,7 @@ together, instead of repeating for each.
 
 ### IPv4 Domain {#ipv4-domain}
 
-#### Domain Name
+#### Entity Domain Type
 
 ipv4
 
@@ -30,7 +32,7 @@ prefix are considered aliases for the same entity. Thus `ipv4:192.0.2.0` and
 
 ### IPv6 Domain {#ipv6-domain}
 
-#### Domain Name
+#### Entity Domain Type
 
 ipv6
 
@@ -139,7 +141,7 @@ associated with any PID in the network map.
 The PID domain associates property values with the PIDs in a network map.
 Accordingly, this entity domain always depends on a network map.
 
-### Domain Name
+### Entity Domain Type
 
 pid
 
@@ -204,6 +206,73 @@ There is no hierarchy or inheritance for properties associated with ANEs.
 -->
 <!-- End of removing -->
 
+# Resource Types
+
+<!-- TODO: May need to be moved to behind of property map spec. -->
+
+## Network Map Resource
+
+### Resource Type
+
+networkmap
+
+### Media Type
+
+application/alto-networkmap+json
+
+### Entities and Properties Mapping {#netmap-mapping}
+
+An `networkmap` typed resource defines a `pid` domain, an `ipv4` domain
+and an `ipv6` domain by follows:
+
+- The defined `pid` domain includes all PIDs in keys of the `network-map`
+  object.
+- The defined `ipv4` domain includes all IPv4 addresses appearing in the `ipv4`
+  field of the endpoint address group of each PID.
+- The defined `ipv6` domain includes all IPv6 addresses appearing in the `ipv6`
+  field of the endpoint address group of each PID.
+
+For each of the preceding entity domains, an `networkmap` typed resource
+provides the properties mapping as follows:
+
+`ipv4 -> pid`:
+~ An `networkmap` typed resource can map an `ipv4` entity to a `pid` property
+  whose value is a PID defined by this `networkmap` resource and including the
+  IPv4 address of this entity.
+
+`ipv6 -> pid`:
+~ An `networkmap` typed resource can map an `ipv6` entity to a `pid` property
+  whose value is a PID defined by this `networkmap` resource and including the
+  IPv6 address of this entity.
+
+## Endpoint Property Resource
+
+### Resource Type
+
+endpointprop
+
+### Media Type
+
+application/alto-endpointprop+json
+
+### Entities and Properties Mapping {#ep-mapping}
+
+TBD.
+
+## Property Map Resource
+
+### Resource Type
+
+propmap
+
+### Media Type
+
+application/alto-propmap+json
+
+### Entities and Properties Mapping {#up-mapping}
+
+TODO: property map is special and should be able to provide any mapping.
+
 # Property Map {#prop-map}
 
 A property map returns the properties defined for all entities in one or more
@@ -236,7 +305,7 @@ The capabilities are defined by an object of type PropertyMapCapabilities:
 ``` text
     object {
       EntityDomainName entity-domains<1..*>;
-      PropertyName properties<1..*>;
+      EntityPropertyName properties<1..*>;
     } PropertyMapCapabilities;
 ```
 
@@ -358,11 +427,11 @@ object of type PropertyMapData, where:
     } InfoResourceProperties : ResponseEntityBase;
 
     object-map {
-      EntityId -> EntityProps;
+      EntityID -> EntityProps;
     } PropertyMapData;
 
     object {
-      PropertyName -> JSONValue;
+      EntityPropertyName -> JSONValue;
     } EntityProps;
 ```
 
@@ -420,8 +489,8 @@ ReqFilteredPropertyMap:
 
 ``` text
   object {
-    EntityId     entities<1..*>;
-    PropertyName   properties<1..*>;
+    EntityID             entities<1..*>;
+    EntityPropertyName   properties<1..*>;
   } ReqFilteredPropertyMap;
 ```
 
@@ -465,7 +534,7 @@ Specifically, a filtered property map request can be invalid as follows:
 
 - An entity identifier in `entities` in the request is invalid if:
 
-    - The domain of this entity is not defined in the `entity-domain-types`
+    - The domain of this entity is not defined in the `entity-domains`
       capability of this resource in the IRD;
     - The entity identifier is an invalid identifier in the entity domain.
 
@@ -478,7 +547,7 @@ Specifically, a filtered property map request can be invalid as follows:
     indicate this entity identifier.
 
 - A property name in `properties` in the request is invalid if this
-  property name is not defined in the `property-types` capability of this
+  property name is not defined in the `properties` capability of this
   resource in the IRD.
 
     It is not an error that a filtered property map
