@@ -99,7 +99,7 @@ This document distinguish two types of entity domains: global entity domains and
 resource-specific entity domains. Their entity domain names are derived as
 follows.
 
-Each entity domain type may has a global entity domain. For a global entity
+Each entity domain type may have a global entity domain. For a global entity
 domain (i.e., not resource-specific), its entity domain name is an
 EntityDomainType typed string. For example, the `ipv4` and `ipv6` entity domain
 types identify two Internet address entity domains (see [](#inet-addr-domain)).
@@ -108,7 +108,10 @@ A resource-specific entity domain is identified by an entity domain name derived
 as follows. It MUST start with a resource ID using the ResourceID type defined
 in [](#RFC7285), followed by the '.' separator (U+002E), followed by an
 EntityDomainType typed string. Hence, there can be as many entity domains as the
-number of ALTO information resources for each entity domain type.
+number of ALTO information resources for each entity domain type. For example,
+if an ALTO server provides two network maps `net-map-1` and `net-map-2`, they
+can define two different `pid` domains identified by `net-map-1.pid` and
+`net-map-2.pid` respectively.
 
 Note that the '.' separator is not allowed in EntityDomainType and hence there
 is no ambiguity on whether an entity domain name refers to a global entity
@@ -152,9 +155,8 @@ An entity property defines a property of an entity. It is similar to the
 endpoint property defined by Section 7.1 of [](#RFC7285), but can be general
 besides network-aware.
 
-For example, a `pid` entity may have a property whose value is an Autonomous
-System (AS) number indicating the AS in which the endpoints are owned by this
-PID.
+For example, an `ipv4` entity may have a property whose value is an Autonomous
+System (AS) number indicating the AS which this IPv4 address is owned by.
 
 #### Entity Property Type {#def-property-type}
 
@@ -206,9 +208,8 @@ each entity property may be defined by either the property map itself
 (self-defined) or some other specific resource (resource-specific).
 
 The entity property name of a self-defined entity property is an
-EntityPropertyType typed string. For example, the `asn` property of a `pid`
-entity indicates the AS number of the AS in which the endpoints are owned by
-this PID.
+EntityPropertyType typed string. For example, the `asn` property of an `ipv4`
+entity indicates the AS number of the AS which this IPv4 address is owned by.
 
 The entity property name of a resource-specific entity property starts with a
 string of the type ResourceID defined in [](#RFC7285), followed by the '.'
