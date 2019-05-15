@@ -343,21 +343,16 @@ Entity Property Registry MUST specify the media types of all dependent
 resources and how the ALTO client uses them in order.
 -->
 
-<!-- TODO: The registry format and the initial content -->
-
 The initial registered ALTO entity property types are listed in
 [](#TablePropertyTypes).
 
----------------------------------------------------------------
-Identifier Intended Semantics Dependencies and Interpretation
----------- ------------------ ---------------------------------
-ipv4:pid   PID for the IPv4   application/alto-networkmap+json,
-           entity             where the PID names are defined
+-----------------------------
+Identifier Intended Semantics
+---------- ------------------
+pid        See Section 7.1.1
+           of [](#RFC7285)
 
-ipv6:pid   PID for the IPv6   application/alto-networkmap+json,
-           entity             where the PID names are defined
-
----------------------------------------------------------------
+-----------------------------
 
 ^[TablePropertyTypes::ALTO Entity Property Types.]
 
@@ -375,14 +370,16 @@ following information:
   ALTO clients as to how values of the registered ALTO entity property should
   be interpreted.
 
+<!--
 - Dependencies and Interpretation: Dependent ALTO resources MAY be required by
   ALTO clients to interpret ALTO entity properties. Hence, a document defining
   a new type SHOULD provide a sequence of media types in which the dependent
   ALTO resources are and the guidance how ALTO clients use them to interpret
   the property.
+-->
 
-This specification requests registration of the identifiers `ipv4:pid` and
-`ipv6:pid`, as shown in [](#TablePropertyTypes).
+This document requests registration of the identifier `pid`, as shown in
+[](#TablePropertyTypes).
 
 <!--
 This document specifies the process for the ALTO Entity Property Type Registry,
@@ -409,23 +406,58 @@ following principles:
 The initial registered ALTO entity property types are listed in
 [](#TableResourceTypes).
 
---------------------------------------------------------------------------------
-Resource Type Media Types                        Entities and Properties Mapping
-------------- ---------------------------------- -------------------------------
-networkmap    application/alto-networkmap+json   See [](#netmap-mapping)
+------------------------------------------------
+Resource Type Media Types
+------------- ----------------------------------
+networkmap    application/alto-networkmap+json
 
-endpointprop  application/alto-endpointprop+json See [](#ep-mapping)
+costmap       application/alto-costmap+json
 
-propmap       application/alto-propmap+json      See [](#up-mapping)
+endpointcost  application/alto-endpointcost+json
 
---------------------------------------------------------------------------------
+endpointprop  application/alto-endpointprop+json
+
+propmap       application/alto-propmap+json
+
+------------------------------------------------
 
 ^[TableResourceTypes::ALTO Resource Types.]
 
-## Acknowledgments {#ack}
+## ALTO Resource Entity Domain Export Registries {#IANAResourceEDE}
+
+### networkmap
+
+--------------------------------------
+Entity Domain Type Export Function
+------------------ -------------------
+ipv4               See [](#netmap-ede)
+
+ipv6               See [](#netmap-ede)
+
+pid                See [](#netmap-ede)
+
+--------------------------------------
+
+^[TableNetMapEDE::ALTO Network Map Entity Domain Export.]
+
+## ALTO Resource Entity Property Transfer Registries {#IANAResourceEPT}
+
+### networkmap
+
+----------------------------------------------
+Entity Property Descriptor Transfer Function
+-------------------------- -------------------
+ipv4 -> pid                See [](#netmap-ept)
+
+ipv6 -> pid                See [](#netmap-ept)
+
+----------------------------------------------
+
+^[TableNetMapEPT::ALTO Network Map Entity Property Transfer.]
+
+# Acknowledgments {#ack}
 
 The authors would like to thank discussions with Kai Gao, Qiao Xiang, Shawn
 Lin, Xin Wang, Danny Perez, and Vijay Gurbani. The authors thank Dawn Chen
 (Tongji University), and Shenshen Chen (Tongji/Yale University) for their
 contributions to earlier drafts.
-

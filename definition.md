@@ -302,22 +302,46 @@ A resource indicates an ALTO information resource in this document.
 ### Resource Type {#def-resource-type}
 
 Each resource has a type identified by a JSON string, which aliases to a media
-type of an ALTO information resource.
+type of the response of an ALTO information resource.
 
-### Entities and Properties Mapping {#def-epmapping}
+When a new ALTO service is defined and introduces a new media type of response,
+a new resource type SHOULD be defined as well.
 
-Each type of resource MAY defines several entity domains in some entity domain
+Each resource type MUST be registered with the IANA. The aliased media type MUST
+be specified.
+
+### Entity Domain Export {#def-epe}
+
+Each type of resource MAY export several entity domains in some entity domain
 types. For example, a network map resource defines a `pid` domain, a `ipv4`
 domain and a `ipv6` domain (which may be empty).
 
-For each entity domain defined by a resource, this resource MAY also provide a
-properties mapping function, which maps each entity in this entity domain to a
-JSON object including several entity properties. For example, a network map
-resource can map an `ipv4` entity to its `pid` property.
+When a new resource type is registered, if this type of resource can export an
+entity domain in an existing entity domain type, the corresponding document MUST
+define how to export such type of entity domain from such type of resource.
 
-Each resource type MUST be registered with the IANA. The aliased media type, the
-supported entity domain types, as well as properties mapping functions of each
-types of entity domains, MUST be specified at the same time.
+When a new entity domain type is defined, if an existing type of resource can
+export an entity domain in this entity domain type, the corresponding document
+MUST define how to export such type of entity domain from such type of resource.
+
+### Entity Property Transfer {#def-ept}
+
+For each entity domain which could be exported by a resource, this resource MAY
+be transferred to a property map mapping entities in this entity domain to some
+entity property. For example, a network map resource can map an `ipv4` entity to
+its `pid` property.
+
+When a new resource type is registered, if this type of resource can export an
+entity domain in an existing entity domain type, and be transferred to a
+property map mapping entities in this entity domain to an existing type of
+entity property, the corresponding document MUST define how to transfer such
+type of resource to such a property map.
+
+When a new entity domain type or a new entity property type is defined, if an
+existing type of resource can export an entity domain in this entity domain
+type, and be transferred to a property map mapping entities in this entity
+domain to this type of entity property, the corresponding document MUST define
+how to transfer such type of resource to such a property map.
 
 <!--
 ## Relationship with Other ALTO Resources {#def-relationship-to-other-resources}

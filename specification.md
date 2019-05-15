@@ -220,9 +220,9 @@ networkmap
 
 application/alto-networkmap+json
 
-### Entities and Properties Mapping {#netmap-mapping}
+### Entity Domain Export {#netmap-ede}
 
-An `networkmap` typed resource defines a `pid` domain, an `ipv4` domain
+A `networkmap` typed resource defines a `pid` domain, an `ipv4` domain
 and an `ipv6` domain by follows:
 
 - The defined `pid` domain includes all PIDs in keys of the `network-map`
@@ -231,6 +231,8 @@ and an `ipv6` domain by follows:
   field of the endpoint address group of each PID.
 - The defined `ipv6` domain includes all IPv6 addresses appearing in the `ipv6`
   field of the endpoint address group of each PID.
+
+### Entity Property Transfer {#netmap-ept}
 
 For each of the preceding entity domains, an `networkmap` typed resource
 provides the properties mapping as follows:
@@ -244,6 +246,26 @@ provides the properties mapping as follows:
 ~ An `networkmap` typed resource can map an `ipv6` entity to a `pid` property
   whose value is a PID defined by this `networkmap` resource and including the
   IPv6 address of this entity.
+  
+## Cost Map Resource
+
+### Resource Type
+
+costmap
+
+### Media Type
+
+application/alto+costmap+json
+  
+## Endpoint Cost Resource
+
+### Resource Type
+
+endpointcost
+
+### Media Type
+
+application/alto+endpointcost+json
 
 ## Endpoint Property Resource
 
@@ -255,7 +277,11 @@ endpointprop
 
 application/alto-endpointprop+json
 
-### Entities and Properties Mapping {#ep-mapping}
+### Entity Domain Export {#ep-ede}
+
+TBD.
+
+### Entity Property Transfer {#ep-ept}
 
 TBD.
 
@@ -267,11 +293,15 @@ propmap
 
 ### Media Type
 
-application/alto-propmap+json
+application/alto-propmap+json (See [](#FullPropMapMediaType).)
 
-### Entities and Properties Mapping {#up-mapping}
+### Entity Domain Export {#up-ede}
 
-TODO: property map is special and should be able to provide any mapping.
+TODO: property map is special and should be able to export any entity domains.
+
+### Entity Property Transfer {#up-ept}
+
+TODO: property map is special and should be able to transfer any entity properties.
 
 # Property Map {#prop-map}
 
