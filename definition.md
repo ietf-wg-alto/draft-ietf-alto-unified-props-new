@@ -95,15 +95,12 @@ following format:
 EntityDomainName ::= [ ResourceID '.' ] EntityDomainType
 ```
 
-This document distinguish two types of entity domains: global entity domains and
-resource-specific entity domains. Their entity domain names are derived as
+This document distinguish two types of entity domains: resource-specific entity
+domains and shared entity domains. Their entity domain names are derived as
 follows.
 
-Each entity domain type may have a global entity domain. For a global entity
-domain (i.e., not resource-specific), its entity domain name is an
-EntityDomainType typed string. For example, the `ipv4` and `ipv6` entity domain
-types identify two Internet address entity domains (see [](#inet-addr-domain)).
-
+Each ALTO information resource MAY define a resource-specific entity domain
+(which could be empty) in a given entity domain type.
 A resource-specific entity domain is identified by an entity domain name derived
 as follows. It MUST start with a resource ID using the ResourceID type defined
 in [](#RFC7285), followed by the '.' separator (U+002E), followed by an
@@ -112,6 +109,21 @@ number of ALTO information resources for each entity domain type. For example,
 if an ALTO server provides two network maps `net-map-1` and `net-map-2`, they
 can define two different `pid` domains identified by `net-map-1.pid` and
 `net-map-2.pid` respectively.
+
+Given a set of ALTO information resources, there MAY be a shared entity domain
+in a given entity domain type amongst them. A shared entity domain is simply
+identified by its entity domain type. To avoid ambiguity, the shared entity
+domain can only be used when a scope of a set of ALTO information resources is
+given. For example, given two network maps `net-map-1` and `net-map-2`, the
+`ipv4` and `ipv6` entity domain types identify two shared Internet address
+entity domains (see [](#inet-addr-domain)) for them.
+
+<!--
+Each entity domain type may have a global entity domain. For a global entity
+domain (i.e., not resource-specific), its entity domain name is an
+EntityDomainType typed string. For example, the `ipv4` and `ipv6` entity domain
+types identify two Internet address entity domains (see [](#inet-addr-domain)).
+-->
 
 Note that the '.' separator is not allowed in EntityDomainType and hence there
 is no ambiguity on whether an entity domain name refers to a global entity
