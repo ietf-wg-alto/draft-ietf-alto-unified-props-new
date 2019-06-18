@@ -1,74 +1,32 @@
-# Definitions and Concepts
+# Protocol Specification: Basic Data Type
 
-## Entity
-
-<!-- FIXME:
-This section introduces a new concept and deserves more explanations before
-diving in the technical "how to handle".
-For instance:
-- what kind of object other than an addressable ALTO endpoint is eligible to be
-  an ALTO entity?
-- an entity must be related to network address(es) e.g. entity such as PID, ASN
-  nb, Country code have a defined mapping to IP or cellular addresses.
--->
-
-The entity concept generalizes the concept of the endpoint defined in Section 2.1 of
-[](#RFC7285). An entity is an object that can be an endpoint and is identified
-by its network address, but can also be an object that has a defined mapping to
-a set of one or more network addresses or is even not related to any network
-address.
-
-<!-- Examples of entities -->
-
-Examples of eligible entities are:
-
-- a PID, defined in [](#RFC7285), that has a provider defined human readable
-  abstract identifier defined by a ALTO network map, which maps a PID to a set of ipv4 and ipv6 addresses;
-- an autonomous system (AS), that has an AS number (ASN) as its identifier 
-  and maps to a set of ipv4 and ipv6 addresses;
-- a region representing a country, that is identified by its country code defined 
-  by ISO 3166 and maps to a set of cellular addresses;
-- a TCP/IP network flow, that has a server defined identifier consisting of the 
-  defining TCP/IP 5-Tuple, , which is an example that all endpoints 
-  are entities while not all entities are endpoints;
-- a routing element, that is specified in [](#RFC7921) and includes routing
-  capability information;
-- an abstract network element, that has a server defined identifier and
-  represents a network node, link or their aggregation.
-
-<!--
-An entity is an object with a (possibly empty) set of properties.
-It MAY or MAY NOT be related to a network address. There are a lot of examples
-of entities, such as applications or end-hosts in a communication network, cells
-in a wireless network, network flows, network functions, routing elements in a
-routing system or even general network elements.
--->
-
-<!--
-Each entity MUST be in one and only one domain, such as the IPv4 domain, the
-IPv6 domain or PID domain (defined in this document), and has a unique identifier.
--->
-
-### Entity Domain
+## Entity Domain
 
 <!-- FIXME: Illustrate what means by "global" here. -->
 
+<!--
 Each entity MUST belong to one and only one entity domain, where an entity
-domain is defined as a set of entities. An entity domain can be a global entity
-domain; this document defines two global entity domains, for two Internet
-address domains (see [](#inet-addr-domain)). An entity domain can also be
-defined by an ALTO resource; this document defines PID entity domains to be
-derived from ALTO network maps (see [](#pid-domain)). Future documents can
+domain is defined as a set of entities.
+An entity domain can be
+defined by a specific ALTO information resource; this document defines PID entity domains to be
+derived from ALTO network maps (see [](#pid-domain)).
+An entity domain can be also defined by a set of ALTO information resources.
+Future documents can
 define additional entity domains to satisfy their additional requirements such
 as cellular network information and routing capability exposure. But they are
 not in the scope of this document.
+-->
+
+<!-- An entity domain can be a global entity -->
+<!-- domain; this document defines two global entity domains, for two Internet -->
+<!-- address domains (see [](#inet-addr-domain)). -->
 
 <!-- This document will define the domains precisely below. -->
 <!-- An additional example is the proposed domain of Abstract Network Elements
 associated with topology and routing, as suggested by
 [](#I-D.ietf-alto-path-vector). -->
 
-#### Entity Domain Type {#domain-types}
+### Entity Domain Type {#domain-types}
 
 An entity domain has a type, which is defined by a string that MUST be no more
 than 64 characters, and MUST NOT contain characters other than US-ASCII
@@ -85,14 +43,14 @@ identifiers (see [](#entity-addrs)) in that type of entity domains, as well as a
 hierarchical or inheritance rules (see [](#def-hierarchy-and-inheritance)) for
 those entities, MUST be specified at the same time.
 
-#### Entity Domain Name {#domain-names}
+### Entity Domain Name {#domain-names}
 
 <!-- FIXME: What is a global entity domain here? Requrie the definition. -->
 Each entity domain is identified by an entity domain name, a string of the
 following format:
 
 ``` text
-EntityDomainName ::= [ ResourceID '.' ] EntityDomainType
+EntityDomainName ::= [ [ ResourceID ] '.' ] EntityDomainType
 ```
 
 This document distinguish two types of entity domains: resource-specific entity
@@ -161,19 +119,26 @@ to the same entity, for a given entity domain. For example, the strings
 `ipv6:2001:db8::1` and `ipv6:2001:db8:0:0:0:0:0:1` refer to the same entity in
 the 'ipv6' entity domain.
 
-### Entity Property
+### Hierarchy and Inheritance {#def-hierarchy-and-inheritance}
 
-An entity property defines a property of an entity. It is similar to the
-endpoint property defined by Section 7.1 of [](#RFC7285), but can be general
-besides network-aware.
+Entities in a given domain MAY form a hierarchy based on entity identifiers, and
+introducing hierarchy allows the introduction of inheritance. Each entity domain
+type MUST define its own hierarchy and inheritance rules when registered. The
+hierarchy and inheritance rule makes it possible for an entity to inherit a
+property value from another entity in the same domain.
+<!--If and only
+if the property of an entity is undefined, the hierarchy and inheritance rules
+are applied. [YRY: Do we need this?] [Jensen: I think this feature is for reducing the response size.] -->
 
-For example, an `ipv4` entity may have a property whose value is an Autonomous
-System (AS) number indicating the AS which this IPv4 address is owned by.
-
-#### Entity Property Type {#def-property-type}
+## Entity Property {#def-property}
 
 Each entity property has a type to indicate the encoding and the semantics of
-the value of this entity property. The type EntityPropertyType is used in this
+the value of this entity property, and has a name to be identified. One entity
+MAY have multiple properties in the same type.
+
+### Entity Property Type {#def-property-type}
+
+The type EntityPropertyType is used in this
 document to indicate a string denoting an entity property type. The string MUST
 be no more than 32 characters, and it MUST NOT contain characters other than
 US-ASCII alphanumeric characters (U+0030-U+0039, U+0041-U+005A, and
@@ -203,7 +168,7 @@ following features.
   applied to an entity in a `pid` domain, the property would indicate the
   location of the center of all hosts in this `pid` entity.
 
-#### Entity Property Name
+### Entity Property Name
 
 <!-- FIXME: remove most. Use RFC 7285 Section 10.8, for resource-specific
 properties and global properties. -->
@@ -296,17 +261,6 @@ is necessary to represent the bounding box of a set of hosts, another property,
 such as `geo-region`, should be defined.
 -->
 
-### Hierarchy and Inheritance {#def-hierarchy-and-inheritance}
-
-Entities in a given domain MAY form a hierarchy based on entity identifiers, and
-introducing hierarchy allows the introduction of inheritance. Each entity domain
-type MUST define its own hierarchy and inheritance rules when registered. The
-hierarchy and inheritance rule makes it possible for an entity to inherit a
-property value from another entity in the same domain.
-<!--If and only
-if the property of an entity is undefined, the hierarchy and inheritance rules
-are applied. [YRY: Do we need this?] [Jensen: I think this feature is for reducing the response size.] -->
-
 ## Resource
 
 A resource indicates an ALTO information resource in this document.
@@ -337,6 +291,8 @@ export an entity domain in this entity domain type, the corresponding document
 MUST define how to export such type of entity domain from such type of resource.
 
 ### Entity Property Transfer {#def-ept}
+
+<!-- TODO: May not be necessary -->
 
 For each entity domain which could be exported by a resource, this resource MAY
 be transferred to a property map mapping entities in this entity domain to some

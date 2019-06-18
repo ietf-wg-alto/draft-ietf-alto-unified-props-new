@@ -12,6 +12,7 @@
 
   <!ENTITY abstract PUBLIC '' "abstract.xml.gen">
   <!ENTITY introduction PUBLIC '' "introduction.xml.gen">
+  <!ENTITY concept PUBLIC '' "concept.xml.gen">
   <!ENTITY definition PUBLIC '' "definition.xml.gen">
   <!ENTITY specification PUBLIC '' "specification.xml.gen">
   <!ENTITY example PUBLIC '' "example.xml.gen">
@@ -122,6 +123,7 @@
 
 <middle>
   &introduction;
+  &concept;
   &definition;
   &specification;
   &example;
