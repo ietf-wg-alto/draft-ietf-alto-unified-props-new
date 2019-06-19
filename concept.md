@@ -62,10 +62,22 @@ System (AS) number indicating the AS which this IPv4 address is owned by.
 
 ## Resource {#con-resource}
 
+ALTO information resource. The media type bound to the JSON object.
+
 ## Entity Domain {#con-entity-domain}
+
+A set of entities in the same type.
 
 ### Resource-Specific Entity Domain
 
+Each resource may export some types of entities. e.g., netowrk map can export ipv4, ipv6 and pid entities.
+
+To query entity properties, the client should know which entities are effective.
+
 ### Aggregated Entity Domain
 
+Some entities may appear in multiple resource-specific entity domains. Each associated resource may define properties. The client may want to know all of those properties for the same entity.
+
 ## Hierarchy and Inheritance {#con-hierarchy-and-inheritance}
+
+Enumerate all individual effective entities are not efficient. Some types of entities have the hierarchy format, e.g., cidr, which stand for sets of individual entities. Many entities in the same hierarchical format entity sets may have the same proprety values. To reduce the data transmition size, we allow the individual entities inherit the property from its hierarchical format entity set.
