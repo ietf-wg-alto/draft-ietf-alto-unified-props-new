@@ -2,30 +2,6 @@
 
 ## Entity Domain
 
-<!-- FIXME: Illustrate what means by "global" here. -->
-
-<!--
-Each entity MUST belong to one and only one entity domain, where an entity
-domain is defined as a set of entities.
-An entity domain can be
-defined by a specific ALTO information resource; this document defines PID entity domains to be
-derived from ALTO network maps (see [](#pid-domain)).
-An entity domain can be also defined by a set of ALTO information resources.
-Future documents can
-define additional entity domains to satisfy their additional requirements such
-as cellular network information and routing capability exposure. But they are
-not in the scope of this document.
--->
-
-<!-- An entity domain can be a global entity -->
-<!-- domain; this document defines two global entity domains, for two Internet -->
-<!-- address domains (see [](#inet-addr-domain)). -->
-
-<!-- This document will define the domains precisely below. -->
-<!-- An additional example is the proposed domain of Abstract Network Elements
-associated with topology and routing, as suggested by
-[](#I-D.ietf-alto-path-vector). -->
-
 ### Entity Domain Type {#domain-types}
 
 An entity domain has a type, which is defined by a string that MUST be no more
@@ -54,27 +30,25 @@ EntityDomainName ::= [ [ ResourceID ] '.' ] EntityDomainType
 ```
 
 This document distinguish two types of entity domains: resource-specific entity
-domains and shared entity domains. Their entity domain names are derived as
+domains and aggregated entity domains. Their entity domain names are derived as
 follows.
 
 Each ALTO information resource MAY define a resource-specific entity domain
-(which could be empty) in a given entity domain type.
-A resource-specific entity domain is identified by an entity domain name derived
-as follows. It MUST start with a resource ID using the ResourceID type defined
-in [](#RFC7285), followed by the '.' separator (U+002E), followed by an
-EntityDomainType typed string. Hence, there can be as many entity domains as the
-number of ALTO information resources for each entity domain type. For example,
-if an ALTO server provides two network maps `net-map-1` and `net-map-2`, they
-can define two different `pid` domains identified by `net-map-1.pid` and
-`net-map-2.pid` respectively.
+(which could be empty) in a given entity domain type. A resource-specific entity
+domain is identified by an entity domain name derived as follows. It MUST start
+with a resource ID using the ResourceID type defined in [](#RFC7285), followed
+by the '.' separator (U+002E), followed by an EntityDomainType typed string. For
+example, if an ALTO server provides two network maps `netmap-1` and `netmap-2`,
+they can define two different `pid` domains identified by `netmap-1.pid` and
+`netmap-2.pid` respectively. To be simplified, in the scope of a specific
+information resource, the resource-specific entity domain defined by itself can
+be identified by the '.' EntityDomainTyep without the ResourceID.
 
-Given a set of ALTO information resources, there MAY be a shared entity domain
-in a given entity domain type amongst them. A shared entity domain is simply
-identified by its entity domain type. To avoid ambiguity, the shared entity
-domain can only be used when a scope of a set of ALTO information resources is
-given. For example, given two network maps `net-map-1` and `net-map-2`, the
-`ipv4` and `ipv6` entity domain types identify two shared Internet address
-entity domains (see [](#inet-addr-domain)) for them.
+Given a set of ALTO information resources, there MAY be an aggregated entity
+domain in a given entity domain type amongst them. An aggregated entity domain
+is simply identified by its entity domain type. For example, given two network
+maps `net-map-1` and `net-map-2`, `ipv4` and `ipv6` identify two aggregated
+Internet address entity domains (see [](#inet-addr-domain)) between them.
 
 <!--
 Each entity domain type may have a global entity domain. For a global entity
@@ -85,10 +59,12 @@ types identify two Internet address entity domains (see [](#inet-addr-domain)).
 
 Note that the '.' separator is not allowed in EntityDomainType and hence there
 is no ambiguity on whether an entity domain name refers to a global entity
-domain or a resource specific entity domain.
+domain or a resource-specific entity domain.
 
+<!--
 For an EntityDomainType which allows resource-specific entity domains, the valid
 type(s) resources MUST be specified.
+-->
 
 ### Entity Identifier {#entity-addrs}
 
@@ -261,6 +237,7 @@ is necessary to represent the bounding box of a set of hosts, another property,
 such as `geo-region`, should be defined.
 -->
 
+<!--
 ## Resource
 
 A resource indicates an ALTO information resource in this document.
@@ -275,24 +252,26 @@ a new resource type SHOULD be defined as well.
 
 Each resource type MUST be registered with the IANA. The aliased media type MUST
 be specified.
+-->
 
-### Entity Domain Export {#def-epe}
+## Information Resource Entity Domain Export {#def-epe}
 
-Each type of resource MAY export several entity domains in some entity domain
-types. For example, a network map resource defines a `pid` domain, a `ipv4`
-domain and a `ipv6` domain (which may be empty).
+Each type of information resource MAY export several types of entity domains.
+For example, a network map resource defines a `pid` domain, a `ipv4` domain and
+a `ipv6` domain (which may be empty).
 
-When a new resource type is registered, if this type of resource can export an
-entity domain in an existing entity domain type, the corresponding document MUST
-define how to export such type of entity domain from such type of resource.
+When a new ALTO information resource type is registered, if this type of
+information resource can export an existing type of entity domain, the
+corresponding document MUST define how to export such type of entity domain from
+such type of information resource.
 
-When a new entity domain type is defined, if an existing type of resource can
-export an entity domain in this entity domain type, the corresponding document
-MUST define how to export such type of entity domain from such type of resource.
+When a new entity domain type is defined, if an existing type of information
+resource can export an entity domain in this entity domain type, the
+corresponding document MUST define how to export such type of entity domain from
+such type of information resource.
 
+<!--
 ### Entity Property Transfer {#def-ept}
-
-<!-- TODO: May not be necessary -->
 
 For each entity domain which could be exported by a resource, this resource MAY
 be transferred to a property map mapping entities in this entity domain to some
@@ -310,6 +289,7 @@ existing type of resource can export an entity domain in this entity domain
 type, and be transferred to a property map mapping entities in this entity
 domain to this type of entity property, the corresponding document MUST define
 how to transfer such type of resource to such a property map.
+-->
 
 <!--
 ## Relationship with Other ALTO Resources {#def-relationship-to-other-resources}
