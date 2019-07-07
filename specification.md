@@ -206,21 +206,17 @@ There is no hierarchy or inheritance for properties associated with ANEs.
 -->
 <!-- End of removing -->
 
-# Resource Types
+# Entity Domains and Property Mappings in Information Resources
 
 <!-- TODO: May need to be moved to behind of property map spec. -->
 
 ## Network Map Resource
 
-### Resource Type
+The ALTO network map resource defined by the media type
+`application/alto-networkmap+json` exports the following types of entity domains
+and entity property mappings.
 
-networkmap
-
-### Media Type
-
-application/alto-networkmap+json
-
-### Entity Domain Export {#netmap-ede}
+### Resource-Specific Entity Domain {#netmap-ede}
 
 A `networkmap` typed resource defines a `pid` domain, an `ipv4` domain
 and an `ipv6` domain by follows:
@@ -232,7 +228,7 @@ and an `ipv6` domain by follows:
 - The defined `ipv6` domain includes all IPv6 addresses appearing in the `ipv6`
   field of the endpoint address group of each PID.
 
-### Entity Property Transfer {#netmap-ept}
+### Entity Property Mapping {#netmap-ept}
 
 For each of the preceding entity domains, an `networkmap` typed resource
 provides the properties mapping as follows:
@@ -247,61 +243,35 @@ provides the properties mapping as follows:
   whose value is a PID defined by this `networkmap` resource and including the
   IPv6 address of this entity.
   
-## Cost Map Resource
-
-### Resource Type
-
-costmap
-
-### Media Type
-
-application/alto+costmap+json
-  
-## Endpoint Cost Resource
-
-### Resource Type
-
-endpointcost
-
-### Media Type
-
-application/alto+endpointcost+json
-
 ## Endpoint Property Resource
 
-### Resource Type
+The ALTO endpoint property resource defined by the media type
+`application/alto-endpointprop+json` exports the following types of entity
+domains and entity property mappings.
 
-endpointprop
-
-### Media Type
-
-application/alto-endpointprop+json
-
-### Entity Domain Export {#ep-ede}
+### Resource-Specific Entity Domain {#ep-ede}
 
 TBD.
 
-### Entity Property Transfer {#ep-ept}
+### Entity Property Mapping {#ep-ept}
 
 TBD.
 
 ## Property Map Resource
 
-### Resource Type
+The ALTO property map resource defined by the media type
+`application/alto-propmap+json` (see [](#FullPropMapMediaType)) exports the
+following types of entity domains and entity property mappings.
 
-propmap
+TODO: shall we forbid nested references?
 
-### Media Type
+### Resource-Specific Entity Domain {#up-ede}
 
-application/alto-propmap+json (See [](#FullPropMapMediaType).)
+TODO: property map is special and should be able to export any entity domains in its capabilities.
 
-### Entity Domain Export {#up-ede}
+### Entity Property Mapping {#up-ept}
 
-TODO: property map is special and should be able to export any entity domains.
-
-### Entity Property Transfer {#up-ept}
-
-TODO: property map is special and should be able to transfer any entity properties.
+TODO: property map is special and should be able to export any entity property mappings in its capabilities.
 
 # Property Map {#prop-map}
 
@@ -334,6 +304,27 @@ The capabilities are defined by an object of type PropertyMapCapabilities:
 
 ``` text
     object {
+      EntityPropertyMapping mappings;
+    } PropertyMapCapabilities;
+    
+    object-map {
+      EntityDomainName -> EntityPropertyName<1..*>;
+    } EntityPropertyMapping
+```
+
+with fields:
+
+mappings:
+~ A JSON object whose keys are names of entity domains and values are the
+supported entity properties of the corresponding entity domains.
+
+<!-- OLD Design -->
+
+<!--
+The capabilities are defined by an object of type PropertyMapCapabilities:
+
+``` text
+    object {
       EntityDomainName entity-domains<1..*>;
       EntityPropertyName properties<1..*>;
     } PropertyMapCapabilities;
@@ -353,6 +344,7 @@ corresponding resource.
 properties:
 ~ List of entity property names to be returned for each entity in this property
 map.
+-->
 
 <!--
 where the value of `entity-domains` is an array of entity domain names specifying the entity domains, and

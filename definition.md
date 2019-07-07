@@ -21,7 +21,6 @@ those entities, MUST be specified at the same time.
 
 ### Entity Domain Name {#domain-names}
 
-<!-- FIXME: What is a global entity domain here? Requrie the definition. -->
 Each entity domain is identified by an entity domain name, a string of the
 following format:
 
@@ -29,9 +28,9 @@ following format:
 EntityDomainName ::= [ [ ResourceID ] '.' ] EntityDomainType
 ```
 
-This document distinguish two types of entity domains: resource-specific entity
-domains and aggregated entity domains. Their entity domain names are derived as
-follows.
+This document distinguish three types of entity domains: resource-specific
+entity domains, self-defined entity domain and aggregated entity domains. Their
+entity domain names are derived as follows.
 
 Each ALTO information resource MAY define a resource-specific entity domain
 (which could be empty) in a given entity domain type. A resource-specific entity
@@ -43,6 +42,11 @@ they can define two different `pid` domains identified by `netmap-1.pid` and
 `netmap-2.pid` respectively. To be simplified, in the scope of a specific
 information resource, the resource-specific entity domain defined by itself can
 be identified by the '.' EntityDomainTyep without the ResourceID.
+
+When the associated information resource of a resource-specific entity domain is
+the current information resource itself, this resource-specific entity domain is
+a self-defined entity domain, and its ResourceID SHOULD be ignored from its
+entity domain name.
 
 Given a set of ALTO information resources, there MAY be an aggregated entity
 domain in a given entity domain type amongst them. An aggregated entity domain
@@ -153,22 +157,23 @@ Each entity property is identified by an entity property name, which is a string
 of the following format:
 
 ``` text
-EntityPropertyName ::= [ ResourceID '.' ] EntityPropertyType
+EntityPropertyName ::= [ ResourceID ] '.' EntityPropertyType
 ```
 
 Similar to the endpoint property type defined in Section 10.8 of [](#RFC7285),
 each entity property may be defined by either the property map itself
-(self-defined) or some other specific resource (resource-specific).
-
-The entity property name of a self-defined entity property is an
-EntityPropertyType typed string. For example, the `asn` property of an `ipv4`
-entity indicates the AS number of the AS which this IPv4 address is owned by.
+(self-defined) or some other specific information resource (resource-specific).
 
 The entity property name of a resource-specific entity property starts with a
 string of the type ResourceID defined in [](#RFC7285), followed by the '.'
 separator (U+002E) and a EntityDomainType typed string. For example, the `pid`
 properties of an `ipv4` entity defined by two different maps `net-map-1` and
 `net-map-2` are identified by `net-map-1.pid` and `net-map-2.pid` respectively.
+
+When the associated information resource of the entity property is the current
+information resource itself, the ResourceID in the property name SHOULD be
+ignored. For example, the `.asn` property of an `ipv4` entity indicates the AS
+number of the AS which this IPv4 address is owned by.
 
 <!-- ## Property Type and Property Name {#def-property-type} -->
 

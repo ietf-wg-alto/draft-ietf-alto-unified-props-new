@@ -401,34 +401,14 @@ following principles:
   resources. The registry MUST specify how the client uses them in order.
 -->
 
-## ALTO Resource Type Registry {#IANAResourceType}
-
-The initial registered ALTO entity property types are listed in
-[](#TableResourceTypes).
-
-------------------------------------------------
-Resource Type Media Types
-------------- ----------------------------------
-networkmap    application/alto-networkmap+json
-
-costmap       application/alto-costmap+json
-
-endpointcost  application/alto-endpointcost+json
-
-endpointprop  application/alto-endpointprop+json
-
-propmap       application/alto-propmap+json
-
-------------------------------------------------
-
-^[TableResourceTypes::ALTO Resource Types.]
-
-## ALTO Resource Entity Domain Export Registries {#IANAResourceEDE}
+## ALTO Resource-Specific Entity Domain Registries {#IANAResourceEDE}
 
 ### networkmap
 
+Media-type: application/alto-networkmap+json
+
 --------------------------------------
-Entity Domain Type Export Function
+Entity Domain Type Intended Semantics
 ------------------ -------------------
 ipv4               See [](#netmap-ede)
 
@@ -438,22 +418,24 @@ pid                See [](#netmap-ede)
 
 --------------------------------------
 
-^[TableNetMapEDE::ALTO Network Map Entity Domain Export.]
+^[TableNetMapEDE::ALTO Network Map Resource-Specific Entity Domain.]
 
-## ALTO Resource Entity Property Transfer Registries {#IANAResourceEPT}
+## ALTO Resource Entity Property Mapping Registries {#IANAResourceEPT}
 
 ### networkmap
 
-----------------------------------------------
-Entity Property Descriptor Transfer Function
--------------------------- -------------------
-ipv4 -> pid                See [](#netmap-ept)
+Media-type: application/alto-networkmap+json
 
-ipv6 -> pid                See [](#netmap-ept)
+-----------------------------------------------------------------------
+Mapping Descriptor Entity Domain Type Property Type Intended Semantics
+------------------ ------------------ ------------- -------------------
+ipv4 -> pid        ipv4               pid           See [](#netmap-ept)
 
-----------------------------------------------
+ipv6 -> pid        ipv6               pid           See [](#netmap-ept)
 
-^[TableNetMapEPT::ALTO Network Map Entity Property Transfer.]
+-----------------------------------------------------------------------
+
+^[TableNetMapEPT::ALTO Network Map Entity Property Mapping.]
 
 # Acknowledgments {#ack}
 

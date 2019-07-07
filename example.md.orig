@@ -103,77 +103,72 @@ Service for the `pid` property for the default network map.
 
 ```
   "meta" : {
-    ...
-    "default-alto-network-map" : "default-network-map"
+      ...
+      "default-alto-network-map" : "default-network-map"
   },
   "resources" : {
-    "default-network-map" : {
-      "uri" : "http://alto.example.com/networkmap/default",
-      "media-type" : "application/alto-networkmap+json"
-    },
-    "alt-network-map" : {
-      "uri" : "http://alto.example.com/networkmap/alt",
-      "media-type" : "application/alto-networkmap+json"
-    },
-    .... property map resources ....
-    "ia-property-map" : {
-      "uri" : "http://alto.example.com/propmap/full/inet-ia",
-      "media-type" : "application/alto-propmap+json",
-      "uses": [ "default-network-map", "alt-network-map" ],
-      "capabilities" : {
-        "mappings": {
-          "ipv4": [ ".ISP", ".ASN" ],
-          "ipv6": [ ".ISP", ".ASN" ]
+     "default-network-map" : {
+        "uri" : "http://alto.example.com/networkmap/default",
+        "media-type" : "application/alto-networkmap+json"
+     },
+     "alt-network-map" : {
+        "uri" : "http://alto.example.com/networkmap/alt",
+        "media-type" : "application/alto-networkmap+json"
+     },
+     .... property map resources ....
+     "country-state-property-map" : {
+        "uri" : "http://alto.example.com/propmap/full/inet-cs",
+        "media-type" : "application/alto-propmap+json",
+        "capabilities" : {
+          "entity-domains": [ "ipv4", "ipv6" ],
+          "properties" : [  "country", "state" ]
         }
-      }
-    },
-    "iacs-property-map" : {
-      "uri" : "http://alto.example.com/propmap/full/inet-iacs",
-      "media-type" : "application/alto-propmap+json",
-      "accepts": "application/alto-propmapparams+json",
-      "uses": [ "default-network-map", "alt-network-map" ],
-      "capabilities" : {
-        "mappings": {
-          "ipv4": [ ".ISP", ".ASN", ".country", ".state" ],
-          "ipv6": [ ".ISP", ".ASN", ".country", ".state" ]
+     },
+     "isp-asn-property-map" : {
+        "uri" : "http://alto.example.com/propmap/full/inet-ia",
+        "media-type" : "application/alto-propmap+json",
+        "capabilities" : {
+          "entity-domains": [ "ipv4", "ipv6" ],
+          "properties" : [ "ISP", "ASN" ]
         }
-      }
-    },
-    "region-property-map": {
-      "uri": "http://alto.exmaple.com/propmap/region",
-      "media-type": "application/alto-propmap+json",
-      "accepts": "application/alto-propmapparams+json",
-      "uses" : [ "default-network-map", "alt-network-map" ],
-      "capabilities": {
-        "mappings": {
-          "default-network-map.pid": [ ".region" ],
-          "alt-network-map.pid": [ ".ASN" ],
+     },
+     "iacs-property-map" : {
+        "uri" : "http://alto.example.com/propmap/lookup/inet-iacs",
+        "media-type" : "application/alto-propmap+json",
+        "accepts" : "application/alto-propmapparams+json",
+        "capabilities" : {
+          "entity-domains": [ "ipv4", "ipv6" ],
+          "properties" : [ "ISP", "ASN", "country", "state" ]
         }
-      }
-    },
-    "ip-pid-property-map" : {
-      "uri" : "http://alto.example.com/propmap/lookup/pid",
-      "media-type" : "application/alto-propmap+json",
-      "accepts" : "application/alto-propmapparams+json",
-      "uses" : [ "default-network-map", "alt-network-map" ],
-      "capabilities" : {
-        "mappings": {
-          "ipv4": [ "default-network-map.pid",
-                    "alt-network-map.pid" ],
-          "ipv6": [ "default-network-map.pid",
-                    "alt-network-map.pid" ]
+     },
+     "pid-property-map" : {
+        "uri" : "http://alto.example.com/propmap/lookup/pid",
+        "media-type" : "application/alto-propmap+json",
+        "accepts" : "application/alto-propmapparams+json",
+        "uses" : [ "default-network-map" ]
+        "capabilities" : {
+          "entity-domains" : [ "ipv4", "ipv6" ],
+          "properties" : [ "default-network-map.pid" ]
         }
-      }
-    },
-    "legacy-endpoint-property" : {
-       "uri" : "http://alto.example.com/legacy/eps-pid",
-       "media-type" : "application/alto-endpointprop+json",
-       "accepts" : "application/alto-endpointpropparams+json",
-       "capabilities" : {
-         "properties" : [ "default-network-map.pid",
-                          "alt-network-map.pid" ]
+     },
+     "region-property-map": {
+       "uri": "http://alto.exmaple.com/propmap/region",
+       "media-type": "application/alto-propmap+json",
+       "accepts": "application/alto-propmapparams+json",
+       "uses" : [ "default-network-map" ],
+       "capabilities": {
+         "domain-types": [ "default-network-map.pid" ],
+         "properties": [ "region" ]
        }
-    }
+     },
+     "legacy-pid-property" : {
+        "uri" : "http://alto.example.com/legacy/eps-pid",
+        "media-type" : "application/alto-endpointprop+json",
+        "accepts" : "application/alto-endpointpropparams+json",
+        "capabilities" : {
+          "properties" : [ "default-network-map.pid" ]
+        }
+     }
   }
 ```
 ^[example-ird::Example IRD]
@@ -195,6 +190,8 @@ property. The same rule applies to the entities `ipv4:192.0.3.0/28` and
 the value for the `ISP` property, because it is inherited from
 `ipv4:192.0.2.0/23`.
 
+<!-- Done: Revise the description to match the new property map data. -->
+
 ```
 GET /propmap/full/inet-ia HTTP/1.1
 Host: alto.example.com
@@ -207,18 +204,10 @@ Content-Length: ###
 Content-Type: application/alto-propmap+json
 
 {
-  "meta": {
-    "dependent-vtags": [
-      {"resource-id": "default-network-map",
-       "tag": "3ee2cb7e8d63d9fab71b9b34cbf764436315542e"},
-      {"resource-id": "alt-network-map",
-       "tag": "c0ce023b8678a7b9ec00324673b98e54656d1f6d"}
-    ]
-  },
   "property-map": {
-    "ipv4:192.0.2.0/23":   {".ISP": "BitsRus"},
-    "ipv4:192.0.2.0/27":   {".ASN": "12345"},
-    "ipv4:192.0.3.0/27":   {".ASN": "12346"}
+    "ipv4:192.0.2.0/23":   {"ISP": "BitsRus"},
+    "ipv4:192.0.2.0/27":   {"ASN": "12345"},
+    "ipv4:192.0.3.0/27":   {"ASN": "12346"}
   }
 }
 ```
@@ -243,7 +232,7 @@ Content-Type: application/alto-propmapparams+json
   "entities" : [ "ipv4:192.0.2.0",
                  "ipv4:192.0.2.1",
                  "ipv4:192.0.2.17" ],
-  "properties" : [ ".ISP", ".ASN", ".state" ]
+  "properties" : [ "ISP", "ASN", "state" ]
 }
 ```
 
@@ -253,21 +242,13 @@ Content-Length: ###
 Content-Type: application/alto-propmap+json
 
 {
-  "meta": {
-    "dependent-vtags": [
-      {"resource-id": "default-network-map",
-       "tag": "3ee2cb7e8d63d9fab71b9b34cbf764436315542e"},
-      {"resource-id": "alt-network-map",
-       "tag": "c0ce023b8678a7b9ec00324673b98e54656d1f6d"}
-    ]
-  },
   "property-map": {
     "ipv4:192.0.2.0":
-           {".ISP": "BitsRus", ".ASN": "12345", ".state": "PA"},
+           {"ISP": "BitsRus", "ASN": "12345", "state": "PA"},
     "ipv4:192.0.2.1":
-           {".ISP": "BitsRus", ".ASN": "12345", ".state": "NJ"},
+           {"ISP": "BitsRus", "ASN": "12345", "state": "NJ"},
     "ipv4:192.0.2.17":
-           {".ISP": "BitsRus", ".ASN": "12345", ".state": "CT"}
+           {"ISP": "BitsRus", "ASN": "12345", "state": "CT"}
   }
 }
 ```
@@ -311,7 +292,7 @@ Content-Type: application/alto-propmapparams+json
   "entities" : [ "ipv4:192.0.2.0/26",
                  "ipv4:192.0.3.0/26",
                  "ipv4:192.0.4.0/26" ],
-  "properties" : [ ".ASN", ".country", ".state" ]
+  "properties" : [ "ASN", "country", "state" ]
 }
 ```
 
@@ -321,26 +302,18 @@ Content-Length: ###
 Content-Type: application/alto-propmap+json
 
 {
-  "meta": {
-    "dependent-vtags": [
-      {"resource-id": "default-network-map",
-       "tag": "3ee2cb7e8d63d9fab71b9b34cbf764436315542e"},
-      {"resource-id": "alt-network-map",
-       "tag": "c0ce023b8678a7b9ec00324673b98e54656d1f6d"}
-    ]
-  },
   "property-map": {
-    "ipv4:192.0.2.0/26":  {".country": "us"},
-    "ipv4:192.0.2.0/28":  {".ASN": "12345",
-                           ".state": "NJ"},
-    "ipv4:192.0.2.16/28": {".ASN": "12345",
-                           ".state": "CT"},
-    "ipv4:192.0.2.0":     {".state": "PA"},
-    "ipv4:192.0.3.0/26":  {".country": "us"},
-    "ipv4:192.0.3.0/28":  {".ASN": "12345",
-                           ".state": "TX"},
-    "ipv4:192.0.3.16/28": {".ASN": "12345",
-                           ".state": "MN"}
+    "ipv4:192.0.2.0/26":  {"country": "us"},
+    "ipv4:192.0.2.0/28":  {"ASN": "12345",
+                           "state": "NJ"},
+    "ipv4:192.0.2.16/28": {"ASN": "12345",
+                           "state": "CT"},
+    "ipv4:192.0.2.0":     {"state": "PA"},
+    "ipv4:192.0.3.0/26":  {"country": "us"},
+    "ipv4:192.0.3.0/28":  {"ASN": "12345",
+                           "state": "TX"},
+    "ipv4:192.0.3.16/28": {"ASN": "12345",
+                           "state": "MN"}
  }
 }
 ```
@@ -387,12 +360,10 @@ Content-Length: ###
 Content-Type: application/alto-propmap+json
 
 {
-  "meta": {
-    "dependent-vtags": [
-      {"resource-id": "default-network-map",
-       "tag": "3ee2cb7e8d63d9fab71b9b34cbf764436315542e"},
-      {"resource-id": "alt-network-map",
-       "tag": "c0ce023b8678a7b9ec00324673b98e54656d1f6d"}
+  "meta" : {
+    "dependent-vtags" : [
+       {"resource-id": "default-network-map",
+        "tag": "7915dc0290c2705481c491a2b4ffbec482b3cf62"}
     ]
   },
   "property-map": {
@@ -423,7 +394,7 @@ Content-Type: application/alto-propmapparams+json
 {
   "entities" : ["default-network-map.pid:pid1",
                 "default-network-map.pid:pid2"],
-  "properties" : [ ".region" ]
+  "properties" : [ "region" ]
 }
 ```
 
@@ -441,10 +412,10 @@ Content-Type: application/alto-propmap+json
   },
   "property-map": {
     "default-network-map.pid:pid1": {
-      "region": "us-west"
+      "region": "west"
     },
     "default-network-map.pid:pid2": {
-      "region": "us-east"
+      "region": "east"
     }
   }
 }
