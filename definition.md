@@ -82,8 +82,9 @@ EntityID ::= EntityDomainName ':' DomainTypeSpecificEntityID
 ```
 
 Examples from the Internet address entity domains include individual IP
-addresses such as `ipv4:192.0.2.14` and `ipv6:2001:db8::12`, as well as address
-blocks such as `ipv4:192.0.2.0/26` and `ipv6:2001:db8::1/48`.
+addresses such as `net1.ipv4:192.0.2.14` and `net1.ipv6:2001:db8::12`, as well
+as address blocks such as `net1.ipv4:192.0.2.0/26` and
+`net1.ipv6:2001:db8::1/48`.
 
 The format of the second part of an entity identifier depends on the entity
 domain type, and MUST be specified when registering a new entity domain type.
@@ -94,18 +95,20 @@ defined when the entity domain type is registered.
 The type EntityID is used in this document to denote a JSON string
 representing an entity identifier in this format.
 
-Note that two entity identifiers with different textual representations may refer
-to the same entity, for a given entity domain. For example, the strings
-`ipv6:2001:db8::1` and `ipv6:2001:db8:0:0:0:0:0:1` refer to the same entity in
-the 'ipv6' entity domain.
+Note that two entity identifiers with different textual representations may
+refer to the same entity, for a given entity domain. For example, the strings
+`net1.ipv6:2001:db8::1` and `net1.ipv6:2001:db8:0:0:0:0:0:1` refer to the same
+entity in the 'ipv6' entity domain.
 
 ### Hierarchy and Inheritance {#def-hierarchy-and-inheritance}
 
-Entities in a given domain MAY form a hierarchy based on entity identifiers, and
-introducing hierarchy allows the introduction of inheritance. Each entity domain
-type MUST define its own hierarchy and inheritance rules when registered. The
-hierarchy and inheritance rule makes it possible for an entity to inherit a
-property value from another entity in the same domain.
+To make the representation efficient, some types of entity domains MAY allow the
+ALTO client/server to use a hierarchical format entity identifier to represent a
+block of individual entities. e.g., In an IPv4 domain `net1.ipv4`, a cidr
+`net1.ipv4:192.0.2.0/26` represents 64 individual IPv4 entities. In this case,
+the corresponding property inheritance rule MUST be defined for the entity
+domain type. The hierarchy and inheritance rule MUST have no ambiguity.
+
 <!--If and only
 if the property of an entity is undefined, the hierarchy and inheritance rules
 are applied. [YRY: Do we need this?] [Jensen: I think this feature is for reducing the response size.] -->

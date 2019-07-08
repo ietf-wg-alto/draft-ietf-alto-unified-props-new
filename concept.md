@@ -31,10 +31,10 @@ Examples of eligible entities are:
   of ipv4 and ipv6 addresses;
 - an autonomous system (AS), that has an AS number (ASN) as its identifier
   and maps to a set of ipv4 and ipv6 addresses;
-- a region representing a country, that is identified by its country code defined 
+- a region representing a country, that is identified by its country code defined
   by ISO 3166 and maps to a set of cellular addresses;
-- a TCP/IP network flow, that has a server defined identifier consisting of the 
-  defining TCP/IP 5-Tuple, , which is an example that all endpoints 
+- a TCP/IP network flow, that has a server defined identifier consisting of the
+  defining TCP/IP 5-Tuple, , which is an example that all endpoints
   are entities while not all entities are endpoints;
 - a routing element, that is specified in [](#RFC7921) and includes routing
   capability information;
@@ -69,7 +69,7 @@ For example,
 
 ## Property Map {#con-propmap}
 
-An ALTO property map defines a set of properties for a set of entities. These
+An ALTO property map provides a set of properties for a set of entities. These
 entities may be in different types. For example, an ALTO property map may define
 the ASN property for both `ipv4` and `ipv6` entities.
 
@@ -108,6 +108,17 @@ are called resource-specific entity domains. An ALTO property map only need to
 indicate which types of entity domain defined by which information resources can
 be queried, the ALTO client will know which entities are effective to be queried.
 
+### Relationship between Entity and Entity Domain
+
+In this document, an entity is owned by exact one entity domain. It requires
+that when an ALTO client or server references an entity, it must indicate its
+entity domain explicitly. Even two entities in two different entity domains may
+reflect to the same physical or logical object, we treat them as different
+entities.
+
+Because of this rule, although the resource-specific entity domain approach has
+no ambiguity, it may introduce redundancy.
+
 ### Aggregated Entity Domain
 
 Two entities in two different resource-specific entity domains may reflect to
@@ -140,6 +151,41 @@ multiple properties in the same type but associated to different information
 resources. To distinguish them, this document uses the same approach proposed by
 Section 10.8.1 of [](#RFC7285), which is called `Resource-Specific Entity Property`.
 
+## Scope of Property Map
+
+Using entity domains to organize entities, an ALTO property map resource
+actually provides a set of properties for some entity domains. If we ignore the
+syntax sugar of the aggregated entity domain, we can consider an ALTO property
+map resource just provides a set of (ri, di) => (ro, po) mappings, where (ri,
+di) means a resource-specific entity domain of type di defined by the
+information resource ri, and (ro, po) means a resource-specific entity property
+po defined by the information resource ro.
+
+For each (ri, di) => (ro, po) mapping, the scope of an ALTO property map
+resource must be one of cases in the following diagram:
+
+``` text
+                    domain.resource   domain.resource
+                    (ri) = r          (ri) = this
+                  +-----------------|-----------------+
+    prop.resource | Export          | Non-exist       |
+    (ro) = r      |                 |                 |
+                  +-----------------|-----------------+
+    prop.resource | Extend          | Define          |
+    (ro) = this   |                 |                 |
+                  +-----------------|-----------------+
+```
+
+- ri = ro = r (an existing ALTO information resource r): the property map
+  resource just transforms the property mapping di => po defined by r into the
+  unified representation format and export it.
+- ri = r, ro = this: the property map extends new property po into entities in
+  the entity domain (r, di).
+- ri = ro = this: the property map defines a new entity domain and defines
+  property po for each entities in this domain.
+- ri = this, ro = r: in the scope of a property map resource, it does not make
+  sense that another existing ALTO information resource defines a property for
+  this property map resource.
 
 ## Entity Hierarchy and Property Inheritance {#con-hierarchy-and-inheritance}
 
@@ -150,7 +196,3 @@ may have the same proprety values. To reduce the size of the property map
 representation, this document introduces an approach called `Property
 Inheritance`. Individual entities can inherit the property from its hierarchical
 format entity set.
-
-## Example Property Map
-
-TBD.

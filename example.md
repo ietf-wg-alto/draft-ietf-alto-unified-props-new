@@ -441,10 +441,10 @@ Content-Type: application/alto-propmap+json
   },
   "property-map": {
     "default-network-map.pid:pid1": {
-      "region": "us-west"
+      ".region": "us-west"
     },
     "default-network-map.pid:pid2": {
-      "region": "us-east"
+      ".region": "us-east"
     }
   }
 }

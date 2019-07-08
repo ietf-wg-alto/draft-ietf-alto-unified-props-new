@@ -403,7 +403,7 @@ following principles:
 
 ## ALTO Resource-Specific Entity Domain Registries {#IANAResourceEDE}
 
-### networkmap
+### Network Map
 
 Media-type: application/alto-networkmap+json
 
@@ -420,9 +420,24 @@ pid                See [](#netmap-ede)
 
 ^[TableNetMapEDE::ALTO Network Map Resource-Specific Entity Domain.]
 
+### Endpoint Property
+
+Media-type: application/alto-endpointprop+json
+
+--------------------------------------
+Entity Domain Type Intended Semantics
+------------------ -------------------
+ipv4               See [](#ep-ede)
+
+ipv6               See [](#ep-ede)
+
+--------------------------------------
+
+^[TableEndpointPropEDE::ALTO Endpoint Property Resource-Specific Entity Domain.]
+
 ## ALTO Resource Entity Property Mapping Registries {#IANAResourceEPT}
 
-### networkmap
+### Network Map
 
 Media-type: application/alto-networkmap+json
 
