@@ -140,7 +140,7 @@
       &RFC7159;
       &RFC7285;
       &RFC7921;
-      &RFC8008;
+      <!-- &RFC8008; -->
   </references>
 </back>
 </rfc>

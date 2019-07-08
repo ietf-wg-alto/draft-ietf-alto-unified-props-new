@@ -176,13 +176,21 @@ resource must be one of cases in the following diagram:
                   +-----------------|-----------------+
 ```
 
-- ri = ro = r (an existing ALTO information resource r): the property map
-  resource just transforms the property mapping di => po defined by r into the
-  unified representation format and export it.
-- ri = r, ro = this: the property map extends new property po into entities in
-  the entity domain (r, di).
-- ri = ro = this: the property map defines a new entity domain and defines
-  property po for each entities in this domain.
+where `this` points to the resulting property map resource, "r" presents an
+existing ALTO information resource other the resulting property map resource.
+
+- ri = ro = r (`export` mode): the property map resource just transforms the
+  property mapping di => po defined by r into the unified representation format
+  and exports it. For example: r = `netmap1`, di = `ipv4`, po = `pid`. The
+  property map resource exports the `ipv4 => pid` mapping defined by `netmap1`.
+- ri = r, ro = this (`extend` mode): the property map extends properties of
+  entities in the entity domain (r, di) and defines a new property po on them.
+  For example: the property map resource (`this`) defines a `geolocation`
+  property on domain `netmap1.pid`.
+- ri = ro = this (`define` mode): the property map defines a new intrinsic
+  entity domain and defines property po for each entities in this domain. For
+  example: the property map resource (`this`) defines a new entity domain `asn`
+  and defines a property `ipprefixes` on this domain.
 - ri = this, ro = r: in the scope of a property map resource, it does not make
   sense that another existing ALTO information resource defines a property for
   this property map resource.
