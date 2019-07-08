@@ -262,7 +262,12 @@ Each resource type MUST be registered with the IANA. The aliased media type MUST
 be specified.
 -->
 
-## Information Resource Entity Domain Export {#def-epe}
+## Information Resource Export
+
+Each information resource MAY export a set of entity domains and entity property
+mappings.
+
+### Resource-Specific Entity Domain Export {#def-epe}
 
 Each type of information resource MAY export several types of entity domains.
 For example, a network map resource defines a `pid` domain, a `ipv4` domain and
@@ -278,26 +283,25 @@ resource can export an entity domain in this entity domain type, the
 corresponding document MUST define how to export such type of entity domain from
 such type of information resource.
 
-<!--
-### Entity Property Transfer {#def-ept}
 
-For each entity domain which could be exported by a resource, this resource MAY
-be transferred to a property map mapping entities in this entity domain to some
+### Entity Property Mapping Export {#def-ept}
+
+For each entity domain which could be exported by an information resource, this information resource MAY
+also export some mapping from this entity domain to some
 entity property. For example, a network map resource can map an `ipv4` entity to
 its `pid` property.
 
-When a new resource type is registered, if this type of resource can export an
-entity domain in an existing entity domain type, and be transferred to a
-property map mapping entities in this entity domain to an existing type of
-entity property, the corresponding document MUST define how to transfer such
-type of resource to such a property map.
+When a new ALTO information resource type is registered, if this type of
+information resource can export an entity domain in an existing entity domain
+type, and map entities in this entity domain to an existing type of entity
+property, the corresponding document MUST define how to export such type of an
+entity property.
 
-When a new entity domain type or a new entity property type is defined, if an
-existing type of resource can export an entity domain in this entity domain
-type, and be transferred to a property map mapping entities in this entity
-domain to this type of entity property, the corresponding document MUST define
-how to transfer such type of resource to such a property map.
--->
+When a new ALTO entity domain type or a new entity property type is defined, if
+an existing type of resource can export an entity domain in this entity domain
+type, and map entities in this entity domain to this type of entity property,
+the corresponding document MUST define how to export such type of an entity
+property.
 
 <!--
 ## Relationship with Other ALTO Resources {#def-relationship-to-other-resources}
