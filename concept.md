@@ -136,13 +136,21 @@ the resource-specific entity domain, the ALTO client has to query the IPv4
 entity `192.0.2.34` twice.
 
 To simplify the query process of the ALTO client, this document introduces the
-concept `Aggregated Entity Domain`. An aggregated entity domain defines an
-aggregated set of entities coming from multiple resource-specific entity domains
-in the same type. An entity in the aggregated entity domain includes all
-properties defined for the associated entity in each associated
-resource-specific entity domains. For example, the IPv4 entity `192.0.2.34` in
-the aggregated entity domain between the IPv4 domain of `netmap1` and the IPv4
-domain of `netmap2` has PID properties defined by both `netmap1` and `netmap2`.
+concept `Aggregated Entity Domain`. An aggregated entity domain defines a union
+set of entities coming from multiple resource-specific entity domains in the
+same type. An entity in the aggregated entity domain inherits all properties
+defined for its associated entity in each associated resource-specific entity
+domains. For example, the IPv4 entity `192.0.2.34` in the aggregated entity
+domain between the IPv4 domain of `netmap1` and the IPv4 domain of `netmap2` has
+PID properties defined by both `netmap1` and `netmap2`.
+
+Note that some resource-specific entity domains may not be able to be aggregated
+even if they are in the same type. For example, a property map `propmap1` may
+define the `asn` property on both PID domains `netmap1.pid` and `netmap2.pid`.
+But the PID `pid1` in `netmap1.pid` and the PID with the same name in
+`netmap2.pid` have different `asn` property values. It does not make sense to
+define an aggregated PID domain between `netmap1.pid` and `netmap2.pid` to
+provide the `propmap1.asn` property because it is ambiguous.
 
 ### Resource-Specific Entity Property
 
