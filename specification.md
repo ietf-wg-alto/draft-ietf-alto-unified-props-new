@@ -734,12 +734,21 @@ Section 10.8 of [](#RFC7285) defines two categories of endpoint properties:
 `resource-specific` and `global`. Resource-specific property names are prefixed
 with the ID of the resource they depend upon, while global property names have
 no such prefix. The property map and the filtered property map defined in this
+document defines the similar categories for entity properties. The difference is
+that there is no `global` entity properties but the `self-defined` entity
+properties as the special case of the `resource-specific` entity properties
+instead.
+
+<!--
+The property map and the filtered property map defined in this
 document do not distinguish between those two types of properties. Instead, if
 there is a dependency, it is indicated by the `uses` capability of a property
 map, and is shared by all properties and entity domains in that map.
 Accordingly, it is RECOMMENDED that resource-specific endpoint properties be
 deprecated, and no new resource-specific endpoint properties be defined.
+-->
 
+<!--
 ## Impact on the `pid` Property
 
 Section 7.1.1 of [](#RFC7285) defines the resource-specific endpoint property
@@ -761,6 +770,7 @@ of the network maps.
 Second, a client MAY request the `pid` property for a block of
 Internet addresses. An ALTO server determines the value of `pid` for an
 address block C as the rules defined in [](#FilteredPropMapResponse).
+-->
 
 <!--
 Let CS be the set of all address blocks
@@ -784,13 +794,15 @@ If not, the ALTO server has two optional ways to determines the value:
 The determination depends on the implementation.
 -->
 
+<!--
 Note that although an ALTO server MAY provide a GET-mode property map
 which returns the entire map for the `pid` property, there is no need
 to do so, because that map is simply the inverse of the network map.
+-->
 
 ## Impact on Other Properties
 
 In general, there should be little or no impact on other previously defined
 properties. The only consideration is that properties can now be defined on
-blocks of identifiers, rather than just individual identifiers, which might change
-the semantics of a property.
+blocks of entity identifiers, rather than just individual entity identifiers,
+which might change the semantics of a property.
