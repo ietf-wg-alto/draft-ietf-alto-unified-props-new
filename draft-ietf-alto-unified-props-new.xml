@@ -5,6 +5,7 @@
   <!ENTITY RFC4632 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4632.xml">
   <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
   <!ENTITY RFC5952 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5952.xml">
+  <!ENTITY RFC7011 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7011.xml">
   <!ENTITY RFC7159 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7159.xml">
   <!ENTITY RFC7285 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7285.xml">
   <!ENTITY RFC7921 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7921.xml">
@@ -106,13 +107,7 @@
   <workgroup>ALTO WG</workgroup>
   <keyword>ALTO</keyword>
   <abstract>
-    <t>
-      This document extends the Application-Layer Traffic
-      Optimization (ALTO) Protocol <xref target="RFC7285"/>
-      by generalizing the concept of "endpoint properties"
-      to domains of other entities, and by presenting those properties
-      as maps, similar to the network and cost maps in <xref target="RFC7285"/>.
-    </t>
+    &abstract;
   </abstract>
   <note title="Requirements Language">
     <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -137,6 +132,7 @@
       &RFC4632;
       &RFC5226;
       &RFC5952;
+      &RFC7011;
       &RFC7159;
       &RFC7285;
       &RFC7921;
