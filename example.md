@@ -184,7 +184,7 @@ Service for the `pid` property for the default network map.
 The following example uses the properties and IRD defined above to retrieve a
 Property Map for entities with the `ISP` and `ASN` properties.
 
-Note that, to be compact, the response does not includes the entity
+Note that, to be compact, the response does not include the entity
 `ipv4:192.0.2.0`, because values of all those properties for this entity are
 inherited from other entities.
 
@@ -353,7 +353,7 @@ The following example uses the filtered property map resource to request the
 Note that the entity `ipv4:192.0.3.0/27` is redundant in the response. Although
 it can inherit a value of `defaultpid` for the `pid` property from the entity
 `ipv4:0.0.0.0/0`, none of addresses in it is in `defaultpid`. Because blocks
-`ipv4:192.0.3.0/28` and `ipv4:192.0.3.16/28` have already cover all addresses in
+`ipv4:192.0.3.0/28` and `ipv4:192.0.3.16/28` have already covered all addresses in
 that block. So an ALTO server who wants a compact response can omit this entity.
 
 <!--

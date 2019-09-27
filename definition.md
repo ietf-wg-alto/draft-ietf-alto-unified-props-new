@@ -142,8 +142,8 @@ following features.
   types of entity domains, not all. For example, the `pid` property is not
   applicable to entities in a `pid` typed entity domain, but is applicable to
   entities in the `ipv4` or `ipv6` domains.
-- The intended semantics of the value of a entity property may also depend on
-  the the entity domain type of this entity. For example, suppose that the
+- The intended semantics of the value of an entity property may also depend on
+  the entity domain type of this entity. For example, suppose that the
   `geo-location` property is defined as the coordinates of a point, encoded as
   (say) "latitude longitude [altitude]." When applied to an entity that
   represents a specific host computer, identified by an address in the `ipv4` or

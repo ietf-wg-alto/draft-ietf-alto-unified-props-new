@@ -32,16 +32,16 @@ defined for new entity domains.
 Second, the EPS only allows endpoints identified by global communication
 addresses. However, many other generic entities like PIDs may not have global
 identifiers. Even for Internet addresses, there may be some local IP addresses
-and anycast IP addresses which are also not global unique.
+and anycast IP addresses which are also not globally unique.
 
 Third, the EPS is only defined as a POST-mode service. Clients must request the
 properties for an explicit set of endpoint addresses. By contrast, [](#RFC7285)
 defines a GET-mode cost map resource which returns all available costs, so a
 client can get a full set of costs once, and then processes costs lookups
 without querying the ALTO server. [](#RFC7285) does not define a similar service
-for endpoint properties. At first a map of endpoint properties might seem
+for endpoint properties. At first, a map of endpoint properties might seem
 impractical, because it could require enumerating the property value for every
-possible endpoint. But in practice, it is highly unlikely that properties will
+possible endpoint. However, in practice, it is highly unlikely that properties will
 be defined for every endpoint address. It is much more likely that properties
 may be defined for only a subset of endpoint addresses, and the specification of
 properties uses an aggregation representation to allow enumeration. This is
@@ -58,13 +58,13 @@ properties to address the three limitations:
   called ALTO Entity which is a generalization of an endpoint to represent a
   PID, a network element, a cell in a cellular network, or other physical or
   logical objects used by ALTO. Each entity is included by a collection called
-  ALTO Entity Domain. And each entity domain includes only one type of entities.
+  ALTO Entity Domain. Also, each entity domain includes only one type of entities.
   Thus, each entity domain also has a type to indicate the type of entities in
   it.
 
 - Additionally, this document addresses the second limitation by using
   resource-specific entity domains. A resource-specific entity domain is an
-  entity domain exported by an existing ALTO information resource. And a
+  entity domain exported by an existing ALTO information resource. Also, a
   resource-specific entity domain is named by its type and the resource id of
   the ALTO information resource which exports it. As each resource-specific
   entity domain name is unique, an entity can be uniquely identified by the name
@@ -80,8 +80,8 @@ properties to address the three limitations:
   filtered network map or a filtered cost map.
 
 This approach is extensible, because new entity domain types can be defined
-without revising the protocol specification defined in this document, in the
-same way that new cost metrics and new endpoint properties can be defined
+without revising the protocol specification defined in this document. In the
+same way, new cost metrics and new endpoint properties can be defined
 without revising the protocol specification defined in [](#RFC7285).
 
 This document subsumes the Endpoint Property Service defined in [](#RFC7285),

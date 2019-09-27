@@ -11,36 +11,36 @@ domain, we say entity domain instead of entity domain type.
 ## Internet Address Domain Types {#inet-addr-domain}
 
 The document defines two entity domain types (IPv4 and IPv6) for Internet addresses. Both
-types are global entity domain types and hence define a corresponding global entity domain as well. 
-Since the two domains use the same hierarchy and inheritance semantics, we define the semantics 
+types are global entity domain types and hence define a corresponding global entity domain as well.
+Since the two domains use the same hierarchy and inheritance semantics, we define the semantics
 together, instead of repeating for each.
 
 ### IPv4 Domain {#ipv4-domain}
 
-#### Entity Domain Type
+#### Entity Domain Type {#ipv4-edt}
 
 ipv4
 
-#### Domain-Specific Entity Identifiers
+#### Domain-Specific Entity Identifiers {#ipv4-dsei}
 
 Individual addresses are strings as specified by the IPv4Addresses rule of
 Section 3.2.2 of [](#RFC3986); blocks of addresses are prefix-match strings as
-specified in Section 3.1 of  [](#RFC4632). For the purpose of defining
+specified in Section 3.1 of  [](#RFC4632). To define
 properties, an individual Internet address and the corresponding full-length
 prefix are considered aliases for the same entity. Thus `ipv4:192.0.2.0` and
 `ipv4:192.0.2.0/32` are equivalent.
 
 ### IPv6 Domain {#ipv6-domain}
 
-#### Entity Domain Type
+#### Entity Domain Type {#ipv6-edt}
 
 ipv6
 
-#### Domain-Specific Entity Identifiers
+#### Domain-Specific Entity Identifiers {#ipv6-dsei}
 
 Individual addresses are strings as specified by Section 4 of [](#RFC5952);
 blocks of addresses are prefix-match strings as specified in Section 7 of
-[](#RFC5952). For the purpose of defining properties, an individual Internet
+[](#RFC5952). To define properties, an individual Internet
 address and the corresponding 128-bit prefix are considered aliases for the
 same entity. That is, `ipv6:2001:db8::1` and `ipv6:2001:db8::1/128` are
 equivalent, and have the same set of properties.
@@ -52,7 +52,7 @@ if a property P is not defined for a specific Internet address I, but P is defin
 block C which prefix-matches I, then the address I inherits the value of
 P defined for block C. If more than one such block defines a value for P, I
 inherits the value of P in the block with the longest prefix. It is important
-to notice that this longest prefix rule will ensure no multiple inheritance,
+to notice that this longest prefix rule will ensure no multiple inheritances,
 and hence no ambiguity.
 
 Address blocks can also inherit properties: if a property P is not defined for

@@ -25,7 +25,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 <rfc category="std"
-     docName="draft-ietf-alto-unified-props-new-09"
+     docName="draft-ietf-alto-unified-props-new-10"
      ipr="trust200902">
 <front>
   <title abbrev="Unified Properties">Unified Properties for the ALTO Protocol</title>
@@ -99,6 +99,19 @@
       </postal>
 
       <email>jingxuan.n.zhang@gmail.com</email>
+    </address>
+  </author>
+
+  <author fullname="Kai Gao" initials="K." surname="Gao">
+    <organization>Sichuan University</organization>
+    <address>
+      <postal>
+        <street></street>
+        <city>Chengdu</city>
+        <code>610000</code>
+        <country>China</country>
+      </postal>
+      <email>kaigao@scu.edu.cn</email>
     </address>
   </author>
 
