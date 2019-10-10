@@ -2,6 +2,32 @@
 
 Before we define the specification of unified properties, there are several basic concepts which we need to introduce.
 
+<!--
+~~~
+                                                          (Define)
+      +----------+                        +----------+   +-------------+
+    ->| Property |<-----------------------| Internal |---| asn  | load |
+   /  |   Map 1  |                        |   Map    |   |-------------|
+  /   +----------+                        +----------+   | 1234 | 95%  |
+ |         ^                                    |        | 5678 | 70%  |
+ |         |                                     \       +-------------+
+ |         |          (Export)                    \       (Extend)
+ |    +---------+    +------------------------+    \     +--------------+
+ |    | Network |----| ipv4           | pid   |     -----| geo-location |
+ |    |  Map 1  |    |------------------------|          +--------------+
+ |    +---------+    | 192.168.0.0/24 | pid1  | - - - -> | New York     |
+ |                   | 192.168.1.0/24 | pid2  | - - - -> | Shanghai     |
+ |                   +------------------------+          +--------------+
+ |                    (Export)
+  \   +---------+    +------------------------+
+   ---| Network |----| ipv4           | pid   |
+      |  Map 2  |    |------------------------|
+      +---------+    | 192.168.0.0/24 | Paris |
+                     | ...            | ...   |
+                     +------------------------+
+~~~
+-->
+
 <!-- Entity -> Property -> Resource -> Entity Domain -> Aggreated Entity Domain -->
 
 ## Entity {#con-entity}
