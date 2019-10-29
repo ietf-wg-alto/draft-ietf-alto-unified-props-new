@@ -1,34 +1,19 @@
 # Overview: Basic Concepts
 
-Before we define the specification of unified properties, there are several basic concepts which we need to introduce.
-
-<!--
-~~~
-                                                          (Define)
-      +----------+                        +----------+   +-------------+
-    ->| Property |<-----------------------| Internal |---| asn  | load |
-   /  |   Map 1  |                        |   Map    |   |-------------|
-  /   +----------+                        +----------+   | 1234 | 95%  |
- |         ^                                    |        | 5678 | 70%  |
- |         |                                     \       +-------------+
- |         |          (Export)                    \       (Extend)
- |    +---------+    +------------------------+    \     +--------------+
- |    | Network |----| ipv4           | pid   |     -----| geo-location |
- |    |  Map 1  |    |------------------------|          +--------------+
- |    +---------+    | 192.168.0.0/24 | pid1  | - - - -> | New York     |
- |                   | 192.168.1.0/24 | pid2  | - - - -> | Shanghai     |
- |                   +------------------------+          +--------------+
- |                    (Export)
-  \   +---------+    +------------------------+
-   ---| Network |----| ipv4           | pid   |
-      |  Map 2  |    |------------------------|
-      +---------+    | 192.168.0.0/24 | Paris |
-                     | ...            | ...   |
-                     +------------------------+
-~~~
--->
+Before we define the specification of unified properties, there are several
+basic concepts which we need to introduce.
 
 <!-- Entity -> Property -> Resource -> Entity Domain -> Aggreated Entity Domain -->
+
+## Information Resource {#con-resource}
+
+This document uses the same definition of the information resource as defined by
+[](#RFC7285). Each information resource usually has a JSON format representation
+following a specific schema defined by its media type.
+
+For example, an ALTO network map resource is represented by a JSON object of type
+InfoResourceNetworkMap defined by the media type
+`application/alto-networkmap+json`.
 
 ## Entity {#con-entity}
 
@@ -93,22 +78,6 @@ For example,
 - a `pid` entity may have a property which indicates the central geographical
   location of endpoints included by it.
 
-## Property Map {#con-propmap}
-
-An ALTO property map provides a set of properties for a set of entities. These
-entities may be in different types. For example, an ALTO property map may define
-the ASN property for both `ipv4` and `ipv6` entities.
-
-## Information Resource {#con-resource}
-
-This document uses the same definition of the information resource as defined by
-[](#RFC7285). Each information resource usually has a JSON format representation
-following a specific schema defined by its media type.
-
-For example, an ALTO network map resource is represented by a JSON object of type
-InfoResourceNetworkMap defined by the media type
-`application/alto-networkmap+json`.
-
 ## Entity Domain {#con-entity-domain}
 
 An entity domain defines a set of entities in the same type. This type is also
@@ -117,7 +86,13 @@ called the type of this entity domain.
 Using entity domains, an ALTO property map can indicate which entities the ALTO
 client can query to get their properties.
 
-### Resource-Specific Entity Domain
+# Property Map {#con-propmap}
+
+An ALTO property map provides a set of properties for a set of entities. These
+entities may be in different types. For example, an ALTO property map may define
+the ASN property for both `ipv4` and `ipv6` entities.
+
+## Resource-Specific Entity Domain
 
 To define an entity domain, one naive solution is to enumerate all entities in
 this entity domain. However, it is inefficient when the size of the entity domain
@@ -134,7 +109,7 @@ are called resource-specific entity domains. An ALTO property map only needs to
 indicate which types of entity domain defined by which information resources can
 be queried, the ALTO client will know which entities are effective to be queried.
 
-### Relationship between Entity and Entity Domain
+## Relationship between Entity and Entity Domain
 
 In this document, an entity is owned by exact one entity domain. It requires
 that when an ALTO client or server references an entity, it must indicate its
@@ -145,7 +120,7 @@ entities.
 Because of this rule, although the resource-specific entity domain approach has
 no ambiguity, it may introduce redundancy.
 
-### Aggregated Entity Domain
+## Aggregated Entity Domain
 
 Two entities in two different resource-specific entity domains may reflect to
 the same physical or logical object. For example, the IPv4 entity `192.0.2.34`
@@ -178,12 +153,22 @@ But the PID `pid1` in `netmap1.pid` and the PID with the same name in
 define an aggregated PID domain between `netmap1.pid` and `netmap2.pid` to
 provide the `propmap1.asn` property because it is ambiguous.
 
-### Resource-Specific Entity Property
+## Resource-Specific Entity Property
 
 According to the example of the aggregated entity domain, an entity may have
 multiple properties in the same type but associated to different information
 resources. To distinguish them, this document uses the same approach proposed by
 Section 10.8.1 of [](#RFC7285), which is called `Resource-Specific Entity Property`.
+
+## Entity Hierarchy and Property Inheritance {#con-hierarchy-and-inheritance}
+
+Enumerating all individual effective entities are inefficient. Some types of
+entities have the hierarchy format, e.g., cidr, which stand for sets of
+individual entities. Many entities in the same hierarchical format entity sets
+may have the same proprety values. To reduce the size of the property map
+representation, this document introduces an approach called `Property
+Inheritance`. Individual entities can inherit the property from its hierarchical
+format entity set.
 
 ## Scope of Property Map
 
@@ -229,12 +214,38 @@ existing ALTO information resource other the resulting property map resource.
   sense that another existing ALTO information resource defines a property for
   this property map resource.
 
-## Entity Hierarchy and Property Inheritance {#con-hierarchy-and-inheritance}
+## Example Property Map
 
-Enumerating all individual effective entities are inefficient. Some types of
-entities have the hierarchy format, e.g., cidr, which stand for sets of
-individual entities. Many entities in the same hierarchical format entity sets
-may have the same proprety values. To reduce the size of the property map
-representation, this document introduces an approach called `Property
-Inheritance`. Individual entities can inherit the property from its hierarchical
-format entity set.
+<!-- FIXME: need more explanations. -->
+
+The following figure shows an example property map which provides three sets of
+mappings by
+
+- exporting a mapping from ipv4 entities to PIDs defined by two different network maps,
+- extending geo-location properties to those ipv4 entities,
+- and defining a new mapping from ASNs to traffic load properties.
+
+~~~
+                                                          (Define)
+      +----------+                        +----------+   +-------------+
+    ->| Property |<-----------------------| Internal |---| asn  | load |
+   /  |   Map 1  |                        |   Map    |   |-------------|
+  /   +----------+                        +----------+   | 1234 | 95%  |
+ |         ^                                    |        | 5678 | 70%  |
+ |         |                                     \       +-------------+
+ |         |          (Export)                    \       (Extend)
+ |    +---------+    +------------------------+    \     +--------------+
+ |    | Network |----| ipv4           | pid   |     -----| geo-location |
+ |    |  Map 1  |    |------------------------|          +--------------+
+ |    +---------+    | 192.168.0.0/24 | pid1  | - - - -> | New York     |
+ |                   | 192.168.1.0/24 | pid2  | - - - -> | Shanghai     |
+ |                   +------------------------+          +--------------+
+ |                    (Export)
+  \   +---------+    +------------------------+
+   ---| Network |----| ipv4           | pid   |
+      |  Map 2  |    |------------------------|
+      +---------+    | 192.168.0.0/24 | Paris |
+                     | ...            | ...   |
+                     +------------------------+
+~~~
+
