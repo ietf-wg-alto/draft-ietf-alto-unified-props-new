@@ -218,19 +218,19 @@ existing ALTO information resource other the resulting property map resource.
 
 <!-- FIXME: need more explanations. -->
 
-The following figure shows an example property map which provides three sets of
-mappings by
+The following figure shows an example property map called Property Map 1, which
+depends on two network maps and provides three sets of mappings by
 
 - exporting a mapping from ipv4 entities to PIDs defined by two different network maps,
-- extending geo-location properties to those ipv4 entities,
+- extending geo-location properties to ipv4 entities defined by Network Map 1,
 - and defining a new mapping from ASNs to traffic load properties.
 
 ~~~
                                                           (Define)
-      +----------+                        +----------+   +-------------+
-    ->| Property |<-----------------------| Internal |---| asn  | load |
-   /  |   Map 1  |                        |   Map    |   |-------------|
-  /   +----------+                        +----------+   | 1234 | 95%  |
+      +----------+                                       +-------------+
+    ->| Property |<-----------------------------|--------| asn  | load |
+   /  |   Map 1  |                              |        |-------------|
+  /   +----------+                              |        | 1234 | 95%  |
  |         ^                                    |        | 5678 | 70%  |
  |         |                                     \       +-------------+
  |         |          (Export)                    \       (Extend)
@@ -249,3 +249,4 @@ mappings by
                      +------------------------+
 ~~~
 
+More detailed examples are shown in [](#examples).

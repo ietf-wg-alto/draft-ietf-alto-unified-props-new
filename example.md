@@ -38,7 +38,7 @@ following values:
 ipv4:192.0.2.0/23:    BitsRus   -      us       -
 ipv4:192.0.2.0/28:       -    12345    -        NJ
 ipv4:192.0.2.16/28:      -    12345    -        CT
-ipv4:192.0.2.0:          -      -      -        PA
+ipv4:192.0.2.1:          -      -      -        PA
 ipv4:192.0.3.0/28:       -    12346    -        TX
 ipv4:192.0.3.16/28:      -    12346    -        MN
 ```
@@ -61,7 +61,7 @@ pid:pid4:           us-north
 
 Note that `-` means the value of the property for the entity is "undefined". So
 the entity would inherit a value for this property by the inheritance rule if
-possible. For example, the value of the `ISP` property for `ipv4:192.0.2.0` is
+possible. For example, the value of the `ISP` property for `ipv4:192.0.2.1` is
 `BitsRus` because of `ipv4:192.0.2.0/24`. But the `region` property for
 `pid:defaultpid` has no value because no entity from which it can inherit.
 
