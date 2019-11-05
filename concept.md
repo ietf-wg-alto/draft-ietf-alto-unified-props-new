@@ -1,10 +1,12 @@
-# Overview: Basic Concepts
+# Basic Features of the Unified Property Extension
 
-Before we define the specification of unified properties, there are several
-basic concepts which we need to introduce.
+The purpose of this extension is to convey properties on objects that extend
+ALTO Endpoints and are called ALTO Entities, entities for short. This section
+introduces the basic features involved in ALTO Entity Property Maps.
 
 <!-- Entity -> Property -> Resource -> Entity Domain -> Aggreated Entity Domain -->
 
+<!--
 ## Information Resource {#con-resource}
 
 This document uses the same definition of the information resource as defined by
@@ -14,6 +16,7 @@ following a specific schema defined by its media type.
 For example, an ALTO network map resource is represented by a JSON object of type
 InfoResourceNetworkMap defined by the media type
 `application/alto-networkmap+json`.
+-->
 
 ## Entity {#con-entity}
 
@@ -27,11 +30,11 @@ For instance:
   nb, Country code have a defined mapping to IP or cellular addresses.
 -->
 
-The entity concept generalizes the concept of the endpoint defined in Section
-2.1 of [](#RFC7285). An entity is an object that can be an endpoint and is
-identified by its network address, but can also be an object that has a defined
-mapping to a set of one or more network addresses or is even not related to any
-network address.
+The concept of ALTO Entity generalizes the concept of an ALTO Endpoint defined
+in Section 2.1 of [](#RFC7285). An entity is an object that can be an endpoint
+and is identified by its network address, but can also be an object that has a
+defined mapping to a set of one or more network addresses or is even not related
+to any network address.
 
 <!-- Examples of entities -->
 
@@ -65,33 +68,122 @@ Each entity MUST be in one and only one domain, such as the IPv4 domain, the
 IPv6 domain or PID domain (defined in this document), and has a unique identifier.
 -->
 
+## Entity Domain {#con-entity-domain}
+
+An entity domain defines a set of entities of same type. This type is also
+called the type of the entity domain. Thus, an entity domain type defines the
+type semantics and the identifier format of its entities. An entity domain also
+has a name. Very often the name and type of an entity domain are the same.
+Example of such entity domains are: "ipv4", "pid", which are defined in
+[](#inet-addr-domain) and [](#pid-domain).
+
+Using entity domains, the ALTO property map capabilities indicate on which
+entity domains an ALTO client can query properties.
+
 ## Entity Property {#con-property}
 
 An entity property defines a property of an entity. It is similar to the
-endpoint property defined by Section 7.1 of [](#RFC7285), but can be general
-besides network-aware.
+endpoint property defined by Section 7.1 of [](#RFC7285). It can be
+network-aware but can also convey network-agnostic information such as
+geographical location.
 
-For example,
+For example:
 
-- an `ipv4` entity may have a property whose value is an Autonomous System (AS)
-  number indicating the AS which this IPv4 address is owned by;
-- a `pid` entity may have a property which indicates the central geographical
-  location of endpoints included by it.
+- an entity in the `ipv4` domain may have a property whose value is an
+  Autonomous System (AS) number indicating the AS that owns this IPv4 address,
 
-## Entity Domain {#con-entity-domain}
+- an entity in the `pid` domain may have a property that indicates the central
+  geographical location of endpoints it includes.
 
-An entity domain defines a set of entities in the same type. This type is also
-called the type of this entity domain.
 
-Using entity domains, an ALTO property map can indicate which entities the ALTO
-client can query to get their properties.
+It should be noted that some objects may be both entities and properties. For
+example, a PID may be both a property of an "ipv4" entity and an entity on which
+a Client may query properties such as geographical location.
 
-# Property Map {#con-propmap}
+## New information resource and media type: ALTO Property Map {#con-propmap}
 
+The Unified Property extension introduces a new ALTO information resource named
+Property Map. An ALTO property map provides a set of properties on a set of
+entities. These entities may be of different types. For example, an ALTO
+property map may define the ASN property for both "ipv4" and "ipv6" type of
+entities.
+
+The present extension also introduces a new media type.
+
+This document uses the same definition of the information resource as defined by
+[](#RFC7285). Each information resource usually has a JSON format
+representation following a specific schema defined by its media type. In the
+present case, an ALTO property map resource is represented by a JSON object of
+type InfoResourcePropertyMap and defined by the media type
+`application/alto-propmap+json`.
+
+A Property Map can be queried as a GET-mode resource, thus conveying values of
+all properties on all entities indicated in its capabilities. It can also be
+queried as a POST-mode resource, thus conveying a selection of properties on a
+selection of entities.
+
+<!--
 An ALTO property map provides a set of properties for a set of entities. These
 entities may be in different types. For example, an ALTO property map may define
 the ASN property for both `ipv4` and `ipv6` entities.
+-->
 
+# Advanced Features of the Unified Property Extension
+
+## Entity Identifier and Entity Domain
+
+In [](#RFC7285), an endpoint has an identifier explicitly
+associated to the "ipv4" or "ipv6" address domain. Examples are
+"ipv4:192.0.2.14" and "ipv6:2001:db8::12". In this extension, an entity domain
+characterizes the type semantics and identifier format of its entities and the
+identifier of an entity is explicitly associated to its entity domain. For
+instance: an entity that is an endpoint with an IPv4 address will have an
+identifier associated with domain "ipv4", like "ipv4:192.0.2.14"; an entity
+which is a PID will have an identifier associated with domain "pid", like
+"pid:mypid10".
+      
+In this document, an entity must be owned by exactly one entity domain. And an
+entity identifier must point to exactly one entity. If two entities in two
+different entity domains refer to the same physical or logical object, they are
+treated as different entities, as it is the case for an endpoint having an IPv4
+and IPv6 address.
+
+## Resource-Specific Entity Domain Name
+
+Some entities are defined and identified in a unique and global way. This is the
+case for instance for entities that are endpoints identified by a routable IPv4
+or IPv6 address. The entity domain for such entities can be globally defined and
+named "ipv4" or "ipv6". Those entity domains are also called resource-agnostic
+entity domains in this document, as they are not associated to any specific ALTO
+information resources.
+
+Some other entities and entity types are only defined relatively to a given
+information resource. This is the case for entities of domain "pid", that can
+only be understood with respect to the network map where they are defined. For
+example: a PID named "mypid10" may be defined by a set S1 of IP adresses, in an
+information resource of type Network Map and named "netmap1". Another Network
+Map "netmap2" may use the same name "mypid10" and define it with another set S2
+of IP addresses. The identifier "pid:mypid10" may thus point to different
+objects because the information on the originating information resource is lost.
+The reason is that "pid" denotes an entity domain type rather than an
+unambiguous identifier.
+
+To solve this ambiguity, the present extension introduces the concept of
+resources-specific entity domain. This concept applies to domains where entities
+are defined relatively to a given information resource. It can also apply to
+domains of entities that are defined locally, such as local networks of objects
+identified with a local IPv4 address.
+
+In such cases, an entity domain name is explicitly associated with an identifier
+of the information resource where these entities are defined. Using a
+resource-specific entity domain name, an ALTO Property Map may unambiguously
+indicate entity domains of the same type, on which entity properties may be
+queried. Example resource-specific entity domain names may look like:
+"netmap1.pid" or "netmap2.pid". This allows to identify two distinct PID
+entities such as "netmap1.pid:mypid10" or "netmap1.pid:mypid10".
+Resource-specific entity domain name will be specified in [](#domain-names).
+
+<!--
 ## Resource-Specific Entity Domain
 
 To define an entity domain, one naive solution is to enumerate all entities in
@@ -108,7 +200,9 @@ domain, an IPv6 domain, and a pid domain. In this document, these entity domains
 are called resource-specific entity domains. An ALTO property map only needs to
 indicate which types of entity domain defined by which information resources can
 be queried, the ALTO client will know which entities are effective to be queried.
+-->
 
+<!--
 ## Relationship between Entity and Entity Domain
 
 In this document, an entity is owned by exact one entity domain. It requires
@@ -119,10 +213,16 @@ entities.
 
 Because of this rule, although the resource-specific entity domain approach has
 no ambiguity, it may introduce redundancy.
+-->
 
-## Aggregated Entity Domain
+<!-- ## Aggregated Entity Domain -->
+<!-- ## Resource-Agnostic Entity Domain Name -->
 
-Two entities in two different resource-specific entity domains may reflect to
+<!-- TODO: Go over the whole document and rename aggregated entity domain to
+resource-agnostic entity domain -->
+
+<!--
+Two entities in two different resource-specific entity domains may refer to
 the same physical or logical object. For example, the IPv4 entity `192.0.2.34`
 in the IPv4 domain of the network map `netmap1` and the IPv4 entity `192.0.2.34`
 in the IPv4 domain of the network map `netmap2` should indicate the same
@@ -152,16 +252,47 @@ But the PID `pid1` in `netmap1.pid` and the PID with the same name in
 `netmap2.pid` have different `asn` property values. It does not make sense to
 define an aggregated PID domain between `netmap1.pid` and `netmap2.pid` to
 provide the `propmap1.asn` property because it is ambiguous.
+-->
 
 ## Resource-Specific Entity Property
 
+<!--
 According to the example of the aggregated entity domain, an entity may have
 multiple properties in the same type but associated to different information
 resources. To distinguish them, this document uses the same approach proposed by
 Section 10.8.1 of [](#RFC7285), which is called `Resource-Specific Entity Property`.
+-->
+
+An entity may have properties of same type, whose values are associated to
+different information resources. For instance, entity "192.0.2.34" defined in
+the "ipv4" domain may have two "pid" properties defined in two different network
+maps "netmap1" and "netmap2". These properties will likely have different values in
+"netmap1" and "netmap2". To distinguish between them, this document uses the
+same approach proposed as in Section 10.8.1 of [](#RFC7285), which is called
+"Resource-Specific Entity Property". When a property value depends on a given
+information resource, the identifier of the property must be explicitly
+associated with the information resource that defines it.
+
+For example, the "pid" property queried on entity "ipv4:192.0.2.34" and defined
+in "netmap1" and "netmap2" respectively, may be named "netmap1.pid" and
+"netmap2.pid". This allows a Client to get a property of the same type but
+defined in different information resources in a single query.
+Specifications are provided in [](#def-property).
 
 ## Entity Hierarchy and Property Inheritance {#con-hierarchy-and-inheritance}
 
+Enumerating all individual entities is inefficient. Some types of entities have
+a hierarchy format, for example CIDRs, which stand for sets of individual
+entities. A property P may not be defined for a specific entity E, but P may be
+defined for a set of entities containing E. In which case, E inherits the value
+of P. For entity domains organized in a hierarchy, this can significantly reduce
+the size of Property Maps and Client query payload. To reduce the size of the
+property map representation, this document introduces, when applicable, an
+approach called "Property Inheritance". Individual entities can inherit property
+values from their upper hierarchical levels. This will be specified in
+[](#def-hierarchy-and-inheritance).
+
+<!--
 Enumerating all individual effective entities are inefficient. Some types of
 entities have the hierarchy format, e.g., cidr, which stand for sets of
 individual entities. Many entities in the same hierarchical format entity sets
@@ -169,84 +300,42 @@ may have the same proprety values. To reduce the size of the property map
 representation, this document introduces an approach called `Property
 Inheritance`. Individual entities can inherit the property from its hierarchical
 format entity set.
+-->
 
-## Scope of Property Map
+## Applicable Entity Domains and Properties in the Property Map Capabilities
 
-Using entity domains to organize entities, an ALTO property map resource
-can be regarded as given sets of properties for given entity domains. If we ignore the
-syntax sugar of the aggregated entity domain, we can regard an ALTO property
-map resource as a set of (ri, di) => (ro, po) mappings, where (ri,
-di) means a resource-specific entity domain of type di defined by the
-information resource ri, and (ro, po) means a resource-specific entity property
-po defined by the information resource ro.
+This section explains how the IRD capabilities of a Property Map unambiguously
+expose what type of properties on what entity domains a Client can query. A
+field called "mapping" enumerates the entity domains supported by the Property
+Map; For each entity domain, a list of applicable properties is provided. An
+example can be found in [](#ird-example). Using resource-agnostic or resource-specific
+entity domains and properties allows to formulate compact an unambiguous
+entity property queries relating to one or more information resources, in
+particular:
 
-For each (ri, di) => (ro, po) mapping, the scope of an ALTO property map
-resource must be one of the cases in the following diagram:
+- avoid a Client to query a property on entity domains on which P is not
+  defined,
+- query for en entity E property values defined in different information
+  resources,
+- query a property P on entities E defined in different information resources.
 
-``` text
-                    domain.resource   domain.resource
-                    (ri) = r          (ri) = this
-                  +-----------------|-----------------+
-    prop.resource | Export          | Non-exist       |
-    (ro) = r      |                 |                 |
-                  +-----------------|-----------------+
-    prop.resource | Extend          | Define          |
-    (ro) = this   |                 |                 |
-                  +-----------------|-----------------+
-```
+Specifications will be provided in [](#FullPropMapCapabilities).
 
-where `this` represents the resulting property map resource, and `r` represents an
-existing ALTO information resource other the resulting property map resource.
+## Connection between Resource-Specific Entity Domain/Entity Property Mapping and Information Resources
 
-- ri = ro = r (`export` mode): the property map resource just transforms the
-  property mapping di => po defined by r into the unified representation format
-  and exports it. For example: r = `netmap1`, di = `ipv4`, po = `pid`. The
-  property map resource exports the `ipv4 => pid` mapping defined by `netmap1`.
-- ri = r, ro = this (`extend` mode): the property map extends properties of
-  entities in the entity domain (r, di) and defines a new property po on them.
-  For example: the property map resource (`this`) defines a `geolocation`
-  property on domain `netmap1.pid`.
-- ri = ro = this (`define` mode): the property map defines a new intrinsic
-  entity domain and defines property po for each entity in this domain. For
-  example: the property map resource (`this`) defines a new entity domain `asn`
-  and defines a property `ipprefixes` on this domain.
-- ri = this, ro = r: in the scope of a property map resource, it does not make
-  sense that another existing ALTO information resource defines a property for
-  this property map resource.
+Although the IRD capabilities of a Property Map can expose the supported mappings in this property map, it may still not be clear to a Client what a resource-specific entity domain is, and what an applicable resource-specific entity property means, as those concepts are not defined in other ALTO information resources. For example, a Client should understand that:
 
-## Example Property Map
+- a local IPv4 entity domain `netmap1.ipv4` includes the IPv4 addresses
+  appearing in the `ipv4` field of the endpoint address group of each PID in the
+  network map `netmap1`;
+- a `netmap1.pid` property of an IPv4 entity `ipv4:192.0.1.1` indicates the PID defined by the network map `netmap1` and including the IPv4 address `ipv4:192.0.1.1` in its endpoint address group.
 
-<!-- FIXME: need more explanations. -->
-
-The following figure shows an example property map called Property Map 1, which
-depends on two network maps and provides three sets of mappings by
-
-- exporting a mapping from ipv4 entities to PIDs defined by two different network maps,
-- extending geo-location properties to ipv4 entities defined by Network Map 1,
-- and defining a new mapping from ASNs to traffic load properties.
-
-~~~
-                                                          (Define)
-      +----------+                                       +-------------+
-    ->| Property |<-----------------------------|--------| asn  | load |
-   /  |   Map 1  |                              |        |-------------|
-  /   +----------+                              |        | 1234 | 95%  |
- |         ^                                    |        | 5678 | 70%  |
- |         |                                     \       +-------------+
- |         |          (Export)                    \       (Extend)
- |    +---------+    +------------------------+    \     +--------------+
- |    | Network |----| ipv4           | pid   |     -----| geo-location |
- |    |  Map 1  |    |------------------------|          +--------------+
- |    +---------+    | 192.168.0.0/24 | pid1  | - - - -> | New York     |
- |                   | 192.168.1.0/24 | pid2  | - - - -> | Shanghai     |
- |                   +------------------------+          +--------------+
- |                    (Export)
-  \   +---------+    +------------------------+
-   ---| Network |----| ipv4           | pid   |
-      |  Map 2  |    |------------------------|
-      +---------+    | 192.168.0.0/24 | Paris |
-                     | ...            | ...   |
-                     +------------------------+
-~~~
-
-More detailed examples are shown in [](#examples).
+To help the client understanding these connections, this document requests two
+new IANA registries for each information resource to define the connection to
+each supported resource-specific entity domain and entity property mapping
+respectively. Such a connection is called `Information Resource Export`, to
+explain what is an resource-specific entity domain or an entity property mapping
+exported by an information resource. Examples of `Information Resource Exports`
+of existing ALTO information resources are provided in [](#ed-pm-export).
+Specifications are provided in [](#def-ire). The details of these new IANA
+registries are provided in [](#IANAResourceEDE) and [](#IANAResourceEPT).

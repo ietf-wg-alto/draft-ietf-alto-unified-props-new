@@ -206,9 +206,50 @@ There is no hierarchy or inheritance for properties associated with ANEs.
 -->
 <!-- End of removing -->
 
-# Entity Domains and Property Mappings in Information Resources
+# Entity Domains and Property Mappings in Information Resources {#ed-pm-export}
 
 <!-- TODO: May need to be moved to behind of property map spec. -->
+
+## Information Resource Export {#def-ire}
+
+Each information resource MAY export a set of entity domains and entity property
+mappings.
+
+### Resource-Specific Entity Domain Export {#def-epe}
+
+Each type of information resource MAY export several types of entity domains.
+For example, a network map resource defines a `pid` domain, a `ipv4` domain and
+a `ipv6` domain (which may be empty).
+
+When a new ALTO information resource type is registered, if this type of
+information resource can export an existing type of entity domain, the
+corresponding document MUST define how to export such type of entity domain from
+such type of information resource.
+
+When a new entity domain type is defined, if an existing type of information
+resource can export an entity domain in this entity domain type, the
+corresponding document MUST define how to export such type of entity domain from
+such type of information resource.
+
+
+### Entity Property Mapping Export {#def-ept}
+
+For each entity domain which could be exported by an information resource, this information resource MAY
+also export some mapping from this entity domain to some
+entity property. For example, a network map resource can map an `ipv4` entity to
+its `pid` property.
+
+When a new ALTO information resource type is registered, if this type of
+information resource can export an entity domain in an existing entity domain
+type, and map entities in this entity domain to an existing type of entity
+property, the corresponding document MUST define how to export such type of an
+entity property.
+
+When a new ALTO entity domain type or a new entity property type is defined, if
+an existing type of resource can export an entity domain in this entity domain
+type, and map entities in this entity domain to this type of entity property,
+the corresponding document MUST define how to export such type of an entity
+property.
 
 ## Network Map Resource
 

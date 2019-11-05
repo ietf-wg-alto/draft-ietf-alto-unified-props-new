@@ -18,6 +18,7 @@
   <!ENTITY specification PUBLIC '' "specification.xml.gen">
   <!ENTITY example PUBLIC '' "example.xml.gen">
   <!ENTITY others PUBLIC '' "others.xml.gen">
+  <!ENTITY appendix PUBLIC '' "appendix.xml.gen">
 ]>
 <?rfc toc="yes"?>
 <?rfc iprnotified="no" ?>
@@ -151,5 +152,7 @@
       &RFC7921;
       <!-- &RFC8008; -->
   </references>
+
+  &appendix;
 </back>
 </rfc>

@@ -30,9 +30,11 @@ defined for new entity domains.
 -->
 
 Second, the EPS only allows endpoints identified by global communication
-addresses. However, many other generic entities like PIDs may not have global
-identifiers. Even for Internet addresses, there may be some local IP addresses
-and anycast IP addresses which are also not globally unique.
+addresses. However, an endpoint address may be a local IP address or an anycast
+IP address which is also not globally unique. Additionally, a generic entity
+such as a PID may have an identifier that is not globally unique. For example, a
+PID identifier may be used in several network maps, where in each network map,
+this PID identifier points to a different set of addresses.
 
 Third, the EPS is only defined as a POST-mode service. Clients must request the
 properties for an explicit set of endpoint addresses. By contrast, [](#RFC7285)
@@ -51,28 +53,27 @@ well allow aggregated representation and hence be enumerable as well.
 
 <!-- FIXME: revise the design overview -->
 
-This document specifies a new approach for defining and retrieving ALTO
-properties to address the three limitations:
+To address the three limitations, this document specifies a protocol extension
+for defining and retrieving ALTO properties:
 
-- This document addresses the first limitation by introducing a generic concept
-  called ALTO Entity which is a generalization of an endpoint to represent a
-  PID, a network element, a cell in a cellular network, or other physical or
-  logical objects used by ALTO. Each entity is included by a collection called
-  ALTO Entity Domain. Also, each entity domain includes only one type of entities.
-  Thus, each entity domain also has a type to indicate the type of entities in
-  it.
+- The first limitation is adressed by introducing a generic concept called ALTO
+  Entity, which generalizes an endpoint and may represent a PID, a network
+  element, a cell in a cellular network, an abstracted network element as
+  defined in [REF path-vector], or other physical or logical objects used by
+  ALTO. Each entity is included in a collection called ALTO Entity Domain. Also,
+  each Entity Domain includes only one type of entities. Thus, each entity
+  domain has a type.
 
-- Additionally, this document addresses the second limitation by using
-  resource-specific entity domains. A resource-specific entity domain is an
-  entity domain exported by an existing ALTO information resource. Also, a
-  resource-specific entity domain is named by its type and the resource id of
-  the ALTO information resource which exports it. As each resource-specific
-  entity domain name is unique, an entity can be uniquely identified by the name
-  of a resource-specific entity domain and its domain-specific identifier.
+- The second limitation is addressed by using resource-specific entity domains.
+  A resource-specific entity domain contains entities defined and identified
+  with respect to a given ALTO information resource. For example, an entity
+  domain containing PIDs is identified w.r.t. the network map in which these
+  PIDs are defined. Likewise an entity domain containing local IP addresses may
+  be defined w.r.t. a local network.
 
-- Finally, this document addresses the third limitation by defining two new
-  types of ALTO information resources, namely Property Map (see [](#prop-map))
-  and Filtered Property Map (see [](#filter-prop-map)). The former is a GET-mode
+- Finally, the third limitation is addressed by defining two new types of ALTO
+  information resources: Property Map, detailed in [](#prop-map) and Filtered
+  Property Map, detailed in [](#filter-prop-map). The former is a GET-mode
   resource which returns the property values for all entities in some entity
   domains, and is analogous to a network map or a cost map in [](#RFC7285). The
   latter is a POST-mode resource which returns the values for a set of

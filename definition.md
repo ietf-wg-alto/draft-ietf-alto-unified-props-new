@@ -1,6 +1,6 @@
 # Protocol Specification: Basic Data Type
 
-## Entity Domain
+## Entity Domain {#def-domain}
 
 ### Entity Domain Type {#domain-types}
 
@@ -29,7 +29,7 @@ EntityDomainName ::= [ [ ResourceID ] '.' ] EntityDomainType
 ```
 
 This document distinguish three types of entity domains: resource-specific
-entity domains, self-defined entity domain and aggregated entity domains. Their
+entity domains, self-defined entity domain and resource-agnostic entity domains. Their
 entity domain names are derived as follows.
 
 Each ALTO information resource MAY define a resource-specific entity domain
@@ -48,10 +48,10 @@ the current information resource itself, this resource-specific entity domain is
 a self-defined entity domain, and its ResourceID SHOULD be ignored from its
 entity domain name.
 
-Given a set of ALTO information resources, there MAY be an aggregated entity
-domain in a given entity domain type amongst them. An aggregated entity domain
+Given a set of ALTO information resources, there MAY be a resource-agnostic entity
+domain in a given entity domain type amongst them. A resource-agnostic entity domain
 is simply identified by its entity domain type. For example, given two network
-maps `net-map-1` and `net-map-2`, `ipv4` and `ipv6` identify two aggregated
+maps `net-map-1` and `net-map-2`, `ipv4` and `ipv6` identify two resource-agnostic
 Internet address entity domains (see [](#inet-addr-domain)) between them.
 
 <!--
@@ -261,47 +261,6 @@ a new resource type SHOULD be defined as well.
 Each resource type MUST be registered with the IANA. The aliased media type MUST
 be specified.
 -->
-
-## Information Resource Export
-
-Each information resource MAY export a set of entity domains and entity property
-mappings.
-
-### Resource-Specific Entity Domain Export {#def-epe}
-
-Each type of information resource MAY export several types of entity domains.
-For example, a network map resource defines a `pid` domain, a `ipv4` domain and
-a `ipv6` domain (which may be empty).
-
-When a new ALTO information resource type is registered, if this type of
-information resource can export an existing type of entity domain, the
-corresponding document MUST define how to export such type of entity domain from
-such type of information resource.
-
-When a new entity domain type is defined, if an existing type of information
-resource can export an entity domain in this entity domain type, the
-corresponding document MUST define how to export such type of entity domain from
-such type of information resource.
-
-
-### Entity Property Mapping Export {#def-ept}
-
-For each entity domain which could be exported by an information resource, this information resource MAY
-also export some mapping from this entity domain to some
-entity property. For example, a network map resource can map an `ipv4` entity to
-its `pid` property.
-
-When a new ALTO information resource type is registered, if this type of
-information resource can export an entity domain in an existing entity domain
-type, and map entities in this entity domain to an existing type of entity
-property, the corresponding document MUST define how to export such type of an
-entity property.
-
-When a new ALTO entity domain type or a new entity property type is defined, if
-an existing type of resource can export an entity domain in this entity domain
-type, and map entities in this entity domain to this type of entity property,
-the corresponding document MUST define how to export such type of an entity
-property.
 
 <!--
 ## Relationship with Other ALTO Resources {#def-relationship-to-other-resources}
