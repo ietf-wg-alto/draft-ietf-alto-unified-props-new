@@ -78,6 +78,31 @@ pid:pid2:         12346
 
 ^[alt-prop-map-values-pid-ex::Example Property Values for Alternative Network Map's PID Domain]
 
+## Properties for Abstract Network Elements
+
+Abstract network elements allow ALTO clients to discover information beyond the
+end-to-end routing costs. Examples of abstract network elements include:
+
+Forwarding elements:
+~ Forwarding elements include optical wires, physical layer links, IP tunnels,
+etc. Forwarding elements share the common property "maxresbw".
+
+Value-added services:
+~ Value-added services include HTTP caches, 5G UPF nodes, mobile edge computing,
+etc. Value-added services share the common property "persistent-entities", which
+contains information that points to the entry point of the service. Different
+value-added services may have specific properties, e.g., an abstract network
+element of a mobile edge may provide a list of flavors to the client.
+
+``` text
+            maxresbw    persistent-entities     mec-flavors
+ane:L001    100 Mbps
+ane:L002    100 Mbps
+ane:CACHE1              http-proxy:192.0.2.1
+ane:MEC01               mec:192.0.2.1         {gpu:2G, ssd:128G}
+ane:MEC02               mec:192.0.2.2         {gpu:1G, ssd:128G}
+```
+
 ## Information Resource Directory (IRD) {#ird-example}
 
 The following IRD defines the relevant resources of the ALTO server. It
@@ -166,13 +191,23 @@ Service for the `pid` property for the default network map.
       }
     },
     "legacy-endpoint-property" : {
-       "uri" : "http://alto.example.com/legacy/eps-pid",
-       "media-type" : "application/alto-endpointprop+json",
-       "accepts" : "application/alto-endpointpropparams+json",
-       "capabilities" : {
-         "properties" : [ "default-network-map.pid",
-                          "alt-network-map.pid" ]
-       }
+      "uri" : "http://alto.example.com/legacy/eps-pid",
+      "media-type" : "application/alto-endpointprop+json",
+      "accepts" : "application/alto-endpointpropparams+json",
+      "capabilities" : {
+        "properties" : [ "default-network-map.pid",
+                         "alt-network-map.pid" ]
+      }
+    },
+    "path-vector-map": {
+      "uri": "http://alto.example.com/costmap/pv",
+      "media-type": "multipart/related;type=applicatoin/alto-costmap+json",
+      "accepts": "applicatoin/alto-costmapfilter+json",
+      "capabilities": {
+        "cost-type-names": ["path-vector"],
+        "ane-properties": ["maxresbw", "persistent-entities", "mec-flavors"]
+      },
+      "uses": [ "default-network-map" ]
     }
   }
 ```
@@ -483,3 +518,88 @@ Content-Type: application/alto-propmap+json
 }
 ```
 -->
+
+## Property Map in Path Vector Example #1 ## {#pv-example}
+
+The following example requests the `maxresbw`, `persistent-entities` and
+`mec-flavors` properties for abstract network elements between "pid1" and
+"pid3" in `default-network-map`.
+
+~~~
+POST /costmap/pv HTTP/1.1
+Host: alto.example.com
+Accept: multipart/related;type=application/alto-costmap+json,
+        application/alto-error+json
+Content-Length: [TBD]
+Content-Type: application/alto-costmapfilter+json
+
+{
+  "cost-type": {
+    "cost-mode": "array",
+    "cost-metric": "ane-path"
+  },
+  "pids": {
+    "srcs": [ "pid1" ],
+    "dsts": [ "pid3" ]
+  },
+  "ane-properties": ["maxresbw", "persistent-entities", "mec-flavors"]
+
+}
+~~~
+
+~~~
+HTTP/1.1 200 OK
+Content-Length: [TBD]
+Content-Type: multipart/related; boundary=example-1;
+              type=application/alto-costmap+json
+
+--example-1
+Resource-Id: costmap
+Content-Type: application/alto-costmap+json
+
+{
+  "meta": {
+    "vtag": {
+      "resource-id": "cost-map-pv.costmap",
+      "tag": "d827f484cb66ce6df6b5077cb8562b0a"
+    },
+    "dependent-vtags": [
+      {
+        "resource-id": "my-default-networkmap",
+        "tag": "75ed013b3cb58f896e839582504f6228"
+      }
+    ],
+    "cost-type": {
+      "cost-mode": "array",
+      "cost-metric": "ane-path"
+    }
+  },
+  "cost-map": {
+    "pid1": {
+      "pid3": [ "ane:L001", "ane:L002", "ane:MEC01", "ane:MEC02" ],
+    }
+  }
+}
+--example-1
+Resource-Id: propmap
+Content-Type: application/alto-propmap+json
+
+{
+  "meta": {
+    "dependent-vtags": [
+      {
+        "resource-id": "cost-map-pv.costmap",
+        "tag": "d827f484cb66ce6df6b5077cb8562b0a"
+      }
+    ]
+  },
+  "property-map": {
+    "ane:L001": { "maxresbw": 100000000 },
+    "ane:L002": { "maxresbw": 100000000 },
+    "ane:MEC01": { "persistent-entities": "mec:192.0.2.1",
+                   "mec-flavors": [ {"gpu": "2G", "ssd": "128G"}]},
+    "ane:MEC02": { "persistent-entities": "mec:192.0.2.2",
+                   "mec-flavors": [ {"gpu": "1G", "ssd": "128G"}]}
+  }
+}
+~~~
