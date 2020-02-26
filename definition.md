@@ -28,8 +28,8 @@ following format:
 EntityDomainName ::= [ [ ResourceID ] '.' ] EntityDomainType
 ```
 
-This document distinguish three types of entity domains: resource-specific
-entity domains, self-defined entity domain and resource-agnostic entity domains. Their
+This document distinguishes three types of entity domains: resource-specific
+entity domains, self-defined entity domains, and resource-agnostic entity domains. Their
 entity domain names are derived as follows.
 
 Each ALTO information resource MAY define a resource-specific entity domain

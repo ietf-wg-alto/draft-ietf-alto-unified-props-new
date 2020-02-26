@@ -2,11 +2,10 @@
 
 # Entity Domain Types
 
-This document defines three entity domain types. The definition of each entity
-domain type below includes the following: (1) entity domain type name, (2)
-entity domain-specific entity identifiers, and (3) hierarchy and inheritance
-semantics. Since a global entity domain type defines a single global entity
-domain, we say entity domain instead of entity domain type.
+This document requires the definition of each entity domain type MUST include
+(1) the entity domain type name and (2) domain-specific entity identifiers, and
+MAY include (3) hierarchy and inheritance semantics optionally. This document
+defines three initial entity domain types as follows.
 
 ## Internet Address Domain Types {#inet-addr-domain}
 
@@ -24,7 +23,7 @@ ipv4
 #### Domain-Specific Entity Identifiers {#ipv4-dsei}
 
 Individual addresses are strings as specified by the IPv4Addresses rule of
-Section 3.2.2 of [](#RFC3986); blocks of addresses are prefix-match strings as
+Section 3.2.2 of [](#RFC3986); Hierarchical addresses are prefix-match strings as
 specified in Section 3.1 of  [](#RFC4632). To define
 properties, an individual Internet address and the corresponding full-length
 prefix are considered aliases for the same entity. Thus `ipv4:192.0.2.0` and
@@ -39,7 +38,7 @@ ipv6
 #### Domain-Specific Entity Identifiers {#ipv6-dsei}
 
 Individual addresses are strings as specified by Section 4 of [](#RFC5952);
-blocks of addresses are prefix-match strings as specified in Section 7 of
+Hierarchical of addresses are prefix-match strings as specified in Section 7 of
 [](#RFC5952). To define properties, an individual Internet
 address and the corresponding 128-bit prefix are considered aliases for the
 same entity. That is, `ipv6:2001:db8::1` and `ipv6:2001:db8::1/128` are
@@ -48,18 +47,19 @@ equivalent, and have the same set of properties.
 ### Hierarchy and Inheritance of Internet Address Domains {#inet-inheritance}
 
 Both Internet address domains allow property values to be inherited. Specifically,
-if a property P is not defined for a specific Internet address I, but P is defined for some
-block C which prefix-matches I, then the address I inherits the value of
-P defined for block C. If more than one such block defines a value for P, I
-inherits the value of P in the block with the longest prefix. It is important
-to notice that this longest prefix rule will ensure no multiple inheritances,
+if a property P is not defined for a specific Internet address I, but P is defined for a
+a hierarchical Internet address C which prefix-matches I, then the address I inherits the value of
+P defined for the hierarchical address C. If more than one such hierarchical addresses define a value for P, I
+inherits the value of P in the hierarchical address with the longest prefix.
+Note that this longest prefix rule ensures no multiple inheritances,
 and hence no ambiguity.
 
-Address blocks can also inherit properties: if a property P is not defined for
-a block C, but is defined for some block C' which covers all IP addresses in C,
-and C' has a shorter mask than C, then block C inherits the property from C'.
-If there are several such blocks C', C inherits from the block with the longest
-prefix.
+Hierarchical addresses can also inherit properties: if a property P is not
+defined for the hierarchical address C, but is defined for another
+hierarchical address C' which covers all IP addresses in C, and C' has a
+shorter prefix length than C, then C MAY inherits the property from C'. If
+there are multiple such hierarchical addresses like C', C MUST inherit from
+the hierarchical address having the longest prefix length.
 
 As an example, suppose that a server defines a property P for the following entities:
 
@@ -170,8 +170,7 @@ for the property `P`, and if they do, it is not necessarily `v1`.
 Because the Internet address and PID domains are completely separate, the
 question may arise as to which entity domain is the best for a property. In general, the
 Internet address domains are RECOMMENDED for properties that are closely related
-to the Internet address, or are associated with, and inherited through, blocks
-of addresses.
+to the Internet address, or are associated with, and inherited through, hierarchical addresses.
 
 The PID domain is RECOMMENDED for properties that arise from the definition of
 the PID, rather than from the Internet address prefixes in that PID.
@@ -179,7 +178,7 @@ the PID, rather than from the Internet address prefixes in that PID.
 For example, because Internet addresses are allocated to service providers by
 blocks of prefixes, an `ISP` property would be best associated with the
 Internet address domain. On the other hand, a property that explains why a PID
-was formed, or how it relates a provider's network, would best be
+was formed, or how it relates to a provider's network, would best be
 associated with the PID domain.
 
 <!-- Begin of removing -->
@@ -218,8 +217,8 @@ mappings.
 ### Resource-Specific Entity Domain Export {#def-epe}
 
 Each type of information resource MAY export several types of entity domains.
-For example, a network map resource defines a `pid` domain, a `ipv4` domain and
-a `ipv6` domain (which may be empty).
+For example, a network map resource defines a `pid` domain, an `ipv4` domain and
+an `ipv6` domain (which may be empty).
 
 When a new ALTO information resource type is registered, if this type of
 information resource can export an existing type of entity domain, the
@@ -675,7 +674,7 @@ The response to a valid request is the same as for the Property Map
   requested resource-specific properties are dependent on.
 - The response only includes the entities and properties requested by the
   client. If an entity in the request is identified by a hierarchical identifier
-  (e.g., an `ipv4` or `ipv6` address block), the response MUST cover properties
+  (e.g., a `ipv4` or `ipv6` prefix), the response MUST cover properties
   for all identifiers in this hierarchical identifier.
 
 <!-- FIXME: do we define the term "block" / "address block"? it seems to be
@@ -845,5 +844,5 @@ to do so, because that map is simply the inverse of the network map.
 
 In general, there should be little or no impact on other previously defined
 properties. The only consideration is that properties can now be defined on
-blocks of entity identifiers, rather than just individual entity identifiers,
+hierarchical entity identifiers, rather than just individual entity identifiers,
 which might change the semantics of a property.

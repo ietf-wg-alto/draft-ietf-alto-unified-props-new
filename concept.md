@@ -2,7 +2,7 @@
 
 The purpose of this extension is to convey properties on objects that extend
 ALTO Endpoints and are called ALTO Entities, entities for short. This section
-introduces the basic features involved in ALTO Entity Property Maps.
+introduces the basic features involved in ALTO Property Maps.
 
 <!-- Entity -> Property -> Resource -> Entity Domain -> Aggreated Entity Domain -->
 
@@ -41,7 +41,7 @@ to any network address.
 Examples of eligible entities are:
 
 - a PID, defined in [](#RFC7285), that has a provider defined human-readable
-  abstract identifier defined by an ALTO network map, which maps a PID to a set
+  abstract identifier specified by an ALTO network map, which maps a PID to a set
   of ipv4 and ipv6 addresses;
 - an autonomous system (AS), that has an AS number (ASN) as its identifier
   and maps to a set of ipv4 and ipv6 addresses;
@@ -53,7 +53,7 @@ Examples of eligible entities are:
 - a routing element, that is specified in [](#RFC7921) and includes routing
   capability information;
 - an abstract network element, that has a server defined identifier and
-  represents a network node, link or their aggregation.
+  represents a routable network node, a link, a network domain or their aggregation.
 
 <!--
 An entity is an object with a (possibly empty) set of properties.
@@ -70,10 +70,10 @@ IPv6 domain or PID domain (defined in this document), and has a unique identifie
 
 ## Entity Domain {#con-entity-domain}
 
-An entity domain defines a set of entities of same type. This type is also
-called the type of the entity domain. Thus, an entity domain type defines the
+An entity domain defines a set of entities of the same type. This type is also
+called the type of this entity domain. Thus, an entity domain type defines the
 type semantics and the identifier format of its entities. An entity domain also
-has a name. Very often the name and type of an entity domain are the same.
+has a name. The name and type of an entity domain could be the same.
 Example of such entity domains are: "ipv4", "pid", which are defined in
 [](#inet-addr-domain) and [](#pid-domain).
 
@@ -83,9 +83,8 @@ entity domains an ALTO client can query properties.
 ## Entity Property {#con-property}
 
 An entity property defines a property of an entity. It is similar to the
-endpoint property defined by Section 7.1 of [](#RFC7285). It can be
-network-aware but can also convey network-agnostic information such as
-geographical location.
+endpoint property defined by Section 7.1 of [](#RFC7285). It can convey
+either network-aware or network-agnostic information.
 
 For example:
 
@@ -102,7 +101,7 @@ a Client may query properties such as geographical location.
 
 ## New information resource and media type: ALTO Property Map {#con-propmap}
 
-The Unified Property extension introduces a new ALTO information resource named
+This document introduces a new ALTO information resource named
 Property Map. An ALTO property map provides a set of properties on a set of
 entities. These entities may be of different types. For example, an ALTO
 property map may define the ASN property for both "ipv4" and "ipv6" type of
@@ -132,20 +131,19 @@ the ASN property for both `ipv4` and `ipv6` entities.
 
 ## Entity Identifier and Entity Domain
 
-In [](#RFC7285), an endpoint has an identifier explicitly
-associated to the "ipv4" or "ipv6" address domain. Examples are
-"ipv4:192.0.2.14" and "ipv6:2001:db8::12". In this extension, an entity domain
-characterizes the type semantics and identifier format of its entities and the
-identifier of an entity is explicitly associated to its entity domain. For
-instance: an entity that is an endpoint with an IPv4 address will have an
-identifier associated with domain "ipv4", like "ipv4:192.0.2.14"; an entity
-which is a PID will have an identifier associated with domain "pid", like
-"pid:mypid10".
+In [](#RFC7285), an endpoint has an identifier explicitly associated with the
+"ipv4" or "ipv6" address domain. Examples are "ipv4:192.0.2.14" and
+"ipv6:2001:db8::12". In this extension, an entity domain characterizes the
+type semantics and identifier format of its entities. And the identifier of
+an entity is explicitly associated with its entity domain. For instance: an
+entity that is an endpoint with an IPv4 address will have an identifier
+associated with the "ipv4" domain, like "ipv4:192.0.2.14"; an entity which is a
+PID will have an identifier associated with a "pid" domain, like "pid:mypid10".
       
 In this document, an entity must be owned by exactly one entity domain. And an
-entity identifier must point to exactly one entity. If two entities in two
+entity identifier must point to exactly one entity. Even if two entities in two
 different entity domains refer to the same physical or logical object, they are
-treated as different entities, as it is the case for an endpoint having an IPv4
+treated as different entities. For example, an IPv4
 and IPv6 address.
 
 ## Resource-Specific Entity Domain Name
@@ -159,14 +157,14 @@ information resources.
 
 Some other entities and entity types are only defined relatively to a given
 information resource. This is the case for entities of domain "pid", that can
-only be understood with respect to the network map where they are defined. For
-example: a PID named "mypid10" may be defined by a set S1 of IP adresses, in an
-information resource of type Network Map and named "netmap1". Another Network
-Map "netmap2" may use the same name "mypid10" and define it with another set S2
-of IP addresses. The identifier "pid:mypid10" may thus point to different
-objects because the information on the originating information resource is lost.
-The reason is that "pid" denotes an entity domain type rather than an
-unambiguous identifier.
+only be understood with respect to the network map where they are defined.
+For example, a PID named "mypid10" may be defined to represent a set S1 of IP
+addresses in an information resource of type Network Map and named "netmap1".
+Another Network Map "netmap2" may use the same name "mypid10" and define it
+to represent another set S2 of IP addresses. The identifier "pid:mypid10" may
+thus point to different objects because the information on the originating
+information resource is lost. The reason is that "pid" denotes an entity
+domain type rather than an unambiguous identifier.
 
 To solve this ambiguity, the present extension introduces the concept of
 resources-specific entity domain. This concept applies to domains where entities
@@ -281,16 +279,40 @@ Specifications are provided in [](#def-property).
 
 ## Entity Hierarchy and Property Inheritance {#con-hierarchy-and-inheritance}
 
-Enumerating all individual entities is inefficient. Some types of entities have
-a hierarchy format, for example CIDRs, which stand for sets of individual
-entities. A property P may not be defined for a specific entity E, but P may be
-defined for a set of entities containing E. In which case, E inherits the value
-of P. For entity domains organized in a hierarchy, this can significantly reduce
-the size of Property Maps and Client query payload. To reduce the size of the
-property map representation, this document introduces, when applicable, an
-approach called "Property Inheritance". Individual entities can inherit property
-values from their upper hierarchical levels. This will be specified in
-[](#def-hierarchy-and-inheritance).
+Enumerating all individual entities is inefficient for both the Client and
+the Server.
+
+- For the Client, even if it only wants to request properties for a "/24"
+ipv4 subnet, using the individual ipv4 entity, it has to enumerate all 256
+entities.
+- For the Server, in some cases, most of the entities may have the same
+properties. Simply enumerating all of them may introduce a lot of reduncency
+in the payload. For example, all the individual ipv4 entities in a "/24" ipv4
+subnet is usually owned by the same AS. When a Client requests the ASN
+property for this ipv4 subnet, using the individual ipv4 address, the Server
+has to repeat the same ASN property for 256 times in the worst case.
+
+To reduce the size of the property map request and response payloads, this
+document introduces, when appicable, an approach called "Property
+Inheritance". This approach consists of two parts: Entity Hierarchy and
+Property Inheritance.
+
+- Entity Hierarchy: This approach allows an entity domain to support using a
+single identifier to identify a set of indivudial entities. For example, a
+CIDR can be used to identify a set of ipv4 or ipv6 entities. Such an
+identifier is called a hierarchical entity identifier, as the set identified
+by it can be hierarachical. For example, the CIDR "ipv4:192.0.1.0/24" covers
+all the individual ipv4 entities identified the CIDR "ipv4:192.0.1.0/26".
+- Property Inheritance: This approach allows a property map to define a
+property for a hierarchical entity identifier. An undefined property of an
+entity may inherit the value of the property defined for a hierarchical
+entity identifier. For example, a property map only defines the ASN property
+for a hierarchical ipv4 entity identifier "ipv4:192.0.1.0/24". When receiving
+this property map, a Client could infer that the ipv4 entity "ipv4:192.0.1.1"
+inherits the same ASN property even if it does not appear in the property
+map.
+
+The detailed specification will be specified in [](#def-hierarchy-and-inheritance).
 
 <!--
 Enumerating all individual effective entities are inefficient. Some types of

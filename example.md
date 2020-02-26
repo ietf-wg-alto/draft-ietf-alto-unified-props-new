@@ -9,7 +9,7 @@ The examples in this section use a very simple default network map:
 ``` text
 defaultpid:  ipv4:0.0.0.0/0  ipv6:::0/0
 pid1:        ipv4:192.0.2.0/25
-pid2:        ipv4:192.0.2.0/28  ipv4:192.0.2.16/28
+pid2:        ipv4:192.0.2.0/27
 pid3:        ipv4:192.0.3.0/28
 pid4:        ipv4:192.0.3.16/28
 ```
@@ -20,8 +20,8 @@ And another simple alternative network map:
 
 ``` text
 defaultpid:  ipv4:0.0.0.0/0  ipv6:::0/0
-pid1:        ipv4:192.0.2.0/28  ipv4:192.0.2.16/28
-pid2:        ipv4:192.0.3.0/28  ipv4:192.0.3.16/28
+pid1:        ipv4:192.0.2.0/27
+pid2:        ipv4:192.0.3.0/27
 ```
 
 ^[alt-net-map-values-ex::Example Alternative Network Map]
@@ -80,8 +80,10 @@ pid:pid2:         12346
 
 ## Properties for Abstract Network Elements
 
-Abstract network elements allow ALTO clients to discover information beyond the
-end-to-end routing costs. Examples of abstract network elements include:
+Additionally, the examples in this section consider a facilitated entity
+domain: `ane` (Abstract Network Element). Abstract network elements allow
+ALTO clients to discover information beyond the end-to-end routing costs.
+Examples of abstract network elements include:
 
 Forwarding elements:
 ~ Forwarding elements include optical wires, physical layer links, IP tunnels,
@@ -102,6 +104,12 @@ ane:CACHE1              http-proxy:192.0.2.1
 ane:MEC01               mec:192.0.2.1         {gpu:2G, ssd:128G}
 ane:MEC02               mec:192.0.2.2         {gpu:1G, ssd:128G}
 ```
+
+The `ane` entities are usually not used alone, but associated with other ALTO
+resources, e.g., cost maps. It means that the ALTO server may not define a
+property map resource to provide properties of `ane` entities. The property
+map payload for `ane` entities may be provided in the response of other ALTO
+resources in some way.
 
 ## Information Resource Directory (IRD) {#ird-example}
 
@@ -125,6 +133,10 @@ values of the `pid` property.
 
 Note that for legacy clients, the ALTO server provides an Endpoint Property
 Service for the `pid` property for the default network map.
+
+The server also provides a facilitated ALTO resource which accepts the
+filtered cost map request but returns a multipart message including a cost
+map and an associated property map for `ane` entities.
 
 ```
   "meta" : {
@@ -376,20 +388,19 @@ Content-Type: application/alto-propmap+json
                            ".state": "TX"},
     "ipv4:192.0.3.16/28": {".ASN": "12345",
                            ".state": "MN"}
- }
+  }
 }
 ```
 
 ## Filtered Property Map Example #3 ## {#filt-prop-map-example-3}
 
 The following example uses the filtered property map resource to request the
-`pid` property for several IPv4 addresses and prefixes.
+`default-network-map.pid` property and the `alt-network-map.pid` property for
+a set of IPv4 addresses and prefixes.
 
-Note that the entity `ipv4:192.0.3.0/27` is redundant in the response. Although
-it can inherit a value of `defaultpid` for the `pid` property from the entity
-`ipv4:0.0.0.0/0`, none of addresses in it is in `defaultpid`. Because blocks
-`ipv4:192.0.3.0/28` and `ipv4:192.0.3.16/28` have already covered all addresses in
-that block. So an ALTO server who wants a compact response can omit this entity.
+Note that the entity `ipv4:192.0.3.0/27` is decomposed into two entities
+`ipv4:192.0.3.0/28` and `ipv4:192.0.3.16/28`, as they have different
+`default-network-map.pid` property values.
 
 <!--
 Note that the value of `pid` for the prefix `ipv4:192.0.2.0/26` is `pid1`, even
@@ -411,8 +422,10 @@ Content-Type: application/alto-propmapparams+json
 {
   "entities" : [
                 "ipv4:192.0.2.128",
+                "ipv4:192.0.2.0/27",
                 "ipv4:192.0.3.0/27" ],
-  "properties" : [ "default-network-map.pid" ]
+  "properties" : [ "default-network-map.pid",
+                   "alt-network-map.pid ]
 }
 ```
 
@@ -431,10 +444,14 @@ Content-Type: application/alto-propmap+json
     ]
   },
   "property-map": {
-    "ipv4:192.0.2.128":   {"default-network-map.pid": "defaultpid"},
-    "ipv4:192.0.2.0/27":  {"default-network-map.pid": "defaultpid"},
-    "ipv4:192.0.3.0/28":  {"default-network-map.pid": "pid3"},
-    "ipv4:192.0.3.16/28": {"default-network-map.pid": "pid4"}
+    "ipv4:192.0.2.128":   {"default-network-map.pid": "defaultpid",
+                           "alt-network-map.pid": "defaultpid"},
+    "ipv4:192.0.2.0/27":  {"default-network-map.pid": "pid2",
+                           "alt-network-map.pid": "pid1"},
+    "ipv4:192.0.3.0/28":  {"default-network-map.pid": "pid3",
+                           "alt-network-map.pid": "pid2"},
+    "ipv4:192.0.3.16/28": {"default-network-map.pid": "pid4",
+                           "alt-network-map.pid": "pid2"}
   }
 }
 ```
@@ -525,7 +542,7 @@ The following example requests the `maxresbw`, `persistent-entities` and
 `mec-flavors` properties for abstract network elements between "pid1" and
 "pid3" in `default-network-map`.
 
-~~~
+```
 POST /costmap/pv HTTP/1.1
 Host: alto.example.com
 Accept: multipart/related;type=application/alto-costmap+json,
@@ -545,16 +562,16 @@ Content-Type: application/alto-costmapfilter+json
   "ane-properties": ["maxresbw", "persistent-entities", "mec-flavors"]
 
 }
-~~~
+```
 
-~~~
+```
 HTTP/1.1 200 OK
 Content-Length: [TBD]
 Content-Type: multipart/related; boundary=example-1;
               type=application/alto-costmap+json
 
 --example-1
-Resource-Id: costmap
+Content-Id: costmap
 Content-Type: application/alto-costmap+json
 
 {
@@ -581,7 +598,7 @@ Content-Type: application/alto-costmap+json
   }
 }
 --example-1
-Resource-Id: propmap
+Content-Id: propmap
 Content-Type: application/alto-propmap+json
 
 {
@@ -602,4 +619,4 @@ Content-Type: application/alto-propmap+json
                    "mec-flavors": [ {"gpu": "1G", "ssd": "128G"}]}
   }
 }
-~~~
+```
