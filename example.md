@@ -213,11 +213,13 @@ map and an associated property map for `ane` entities.
     },
     "path-vector-map": {
       "uri": "http://alto.example.com/costmap/pv",
-      "media-type": "multipart/related;type=applicatoin/alto-costmap+json",
+      "media-type":
+        "multipart/related;type=applicatoin/alto-costmap+json",
       "accepts": "applicatoin/alto-costmapfilter+json",
       "capabilities": {
         "cost-type-names": ["path-vector"],
-        "ane-properties": ["maxresbw", "persistent-entities", "mec-flavors"]
+        "ane-properties": ["maxresbw", "persistent-entities",
+                           "mec-flavors"]
       },
       "uses": [ "default-network-map" ]
     }
