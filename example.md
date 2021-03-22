@@ -1,7 +1,5 @@
 # Examples {#examples}
 
-<!-- FIXME: Examples should be revised -->
-
 ## Network Map {#net-map-example}
 
 The examples in this section use a very simple default network map:
@@ -78,69 +76,48 @@ pid:pid2:         12346
 
 ^[alt-prop-map-values-pid-ex::Example Property Values for Alternative Network Map's PID Domain]
 
-## Properties for Abstract Network Elements
-
-Additionally, the examples in this section consider a facilitated entity
-domain: `ane` (Abstract Network Element). Abstract network elements allow
-ALTO clients to discover information beyond the end-to-end routing costs.
-Examples of abstract network elements include:
-
-Forwarding elements:
-~ Forwarding elements include optical wires, physical layer links, IP tunnels,
-etc. Forwarding elements share the common property "maxresbw".
-
-Value-added services:
-~ Value-added services include HTTP caches, 5G UPF nodes, mobile edge computing,
-etc. Value-added services share the common property "persistent-entities", which
-contains information that points to the entry point of the service. Different
-value-added services may have specific properties, e.g., an abstract network
-element of a mobile edge may provide a list of flavors to the client.
-
-``` text
-            maxresbw    persistent-entities     mec-flavors
-ane:L001    100 Mbps
-ane:L002    100 Mbps
-ane:CACHE1              http-proxy:192.0.2.1
-ane:MEC01               mec:192.0.2.1         {gpu:2G, ssd:128G}
-ane:MEC02               mec:192.0.2.2         {gpu:1G, ssd:128G}
-```
-
-The `ane` entities are usually not used alone, but associated with other ALTO
-resources, e.g., cost maps. It means that the ALTO server may not define a
-property map resource to provide properties of `ane` entities. The property
-map payload for `ane` entities may be provided in the response of other ALTO
-resources in some way.
-
 ## Information Resource Directory (IRD) {#ird-example}
 
-The following IRD defines the relevant resources of the ALTO server. It
-provides two property maps, one for the `ISP` and `ASN` properties,
-and another for the `country` and `state` properties. The server could have
-provided a single property map for all four properties, but did not,
-presumably because the organization that runs the ALTO server believes any
-given client is not interested in all four properties.
+The following IRD defines ALTO Server information resources that are relevant
+to the Entity Property Service. It provides two property maps: one for the
+"ISP" and "ASN" properties, and another one for the "country" and "state"
+properties. The server could have provided a single property map for all four
+properties, but does not, presumably because the organization that runs the
+ALTO server believes that a client is not necessarily interested in getting
+all four properties.
 
-The server provides two filtered property maps. The first returns all four
-properties, and the second just returns the `pid` property for the default
-network map.
+The server provides several filtered property maps. The first returns all
+four properties, and the second returns only the "pid" property for the
+default network map.
 
-The filtered property maps for the `ISP`, `ASN`, `country` and `state`
-properties do not depend on the default network map (it does not have a `uses`
-capability), because the definitions of those properties do not depend on the
-default network map. The Filtered Property Map for the `pid` property does have
-a `uses` capability for the default network map, because that defines the
-values of the `pid` property.
+The filtered property maps for the "ISP", "ASN", "country" and "state"
+properties do not depend on the default network map (it does not have a
+`uses` capability), because the definitions of those properties do not depend
+on the default network map. The Filtered Property Map providing the "pid"
+property does have a `uses` capability for the default network map, because
+the default network map defines the values of the "pid" property.
 
 Note that for legacy clients, the ALTO server provides an Endpoint Property
-Service for the `pid` property for the default network map.
+Service for the "pid" property defined on the endpoints of the default
+network map.
 
-The server also provides a facilitated ALTO resource which accepts the
-filtered cost map request but returns a multipart message including a cost
-map and an associated property map for `ane` entities.
+The server provides another filtered Property map resource, named
+"ane-dc-property-map", that returns a fictitious properties named
+"storage-capacity", "ram" and "cpu" for ANEs that have a persistent
+identifier. The entity domain to which the ANEs belong is "self-defined" and
+valid only within the property map.
 
 ```
+GET /directory HTTP/1.1
+Host: alto.example.com
+Accept: application/alto-directory+json,application/alto-error+json
+
+HTTP/1.1 200 OK
+Content-Length: 2827
+Content-Type: application/alto-directory+json
+
+{
   "meta" : {
-    ...
     "default-alto-network-map" : "default-network-map"
   },
   "resources" : {
@@ -152,7 +129,6 @@ map and an associated property map for `ane` entities.
       "uri" : "http://alto.example.com/networkmap/alt",
       "media-type" : "application/alto-networkmap+json"
     },
-    .... property map resources ....
     "ia-property-map" : {
       "uri" : "http://alto.example.com/propmap/full/inet-ia",
       "media-type" : "application/alto-propmap+json",
@@ -165,7 +141,7 @@ map and an associated property map for `ane` entities.
       }
     },
     "iacs-property-map" : {
-      "uri" : "http://alto.example.com/propmap/full/inet-iacs",
+      "uri" : "http://alto.example.com/propmap/lookup/inet-iacs",
       "media-type" : "application/alto-propmap+json",
       "accepts": "application/alto-propmapparams+json",
       "uses": [ "default-network-map", "alt-network-map" ],
@@ -177,14 +153,14 @@ map and an associated property map for `ane` entities.
       }
     },
     "region-property-map": {
-      "uri": "http://alto.exmaple.com/propmap/region",
+      "uri": "http://alto.example.com/propmap/lookup/region",
       "media-type": "application/alto-propmap+json",
       "accepts": "application/alto-propmapparams+json",
       "uses" : [ "default-network-map", "alt-network-map" ],
       "capabilities": {
         "mappings": {
           "default-network-map.pid": [ ".region" ],
-          "alt-network-map.pid": [ ".ASN" ],
+          "alt-network-map.pid": [ ".ASN" ]
         }
       }
     },
@@ -211,38 +187,38 @@ map and an associated property map for `ane` entities.
                          "alt-network-map.pid" ]
       }
     },
-    "path-vector-map": {
-      "uri": "http://alto.example.com/costmap/pv",
-      "media-type":
-        "multipart/related;type=applicatoin/alto-costmap+json",
-      "accepts": "applicatoin/alto-costmapfilter+json",
+    "ane-dc-property-map": {
+      "uri" : "http://alto.example.com/propmap/lookup/ane-dc",
+      "media-type" : "application/alto-propmap+json",
+      "accepts": "application/alto-propmapparams+json",
       "capabilities": {
-        "cost-type-names": ["path-vector"],
-        "ane-properties": ["maxresbw", "persistent-entities",
-                           "mec-flavors"]
-      },
-      "uses": [ "default-network-map" ]
+        "mappings": {
+          ".ane" : [ "storage-capacity", "ram", "cpu" ]
+        }
+      }
     }
   }
+}
 ```
 ^[example-ird::Example IRD]
 
 
-## Property Map Example {#prop-map-example}
+## Full Property Map Example {#prop-map-example}
 
-The following example uses the properties and IRD defined above to retrieve a
-Property Map for entities with the `ISP` and `ASN` properties.
+The following example uses the properties and IRD defined above in
+[](#ird-example) to retrieve a Property Map for entities with the "ISP" and
+"ASN" properties.
 
 Note that, to be compact, the response does not include the entity
-`ipv4:192.0.2.0`, because values of all those properties for this entity are
+"ipv4:192.0.2.0", because values of all those properties for this entity are
 inherited from other entities.
 
-Also note that the entities `ipv4:192.0.2.0/28` and `ipv4:192.0.2.16/28` are
-merged into `ipv4:192.0.2.0/27`, because they have the same value of the `ASN`
-property. The same rule applies to the entities `ipv4:192.0.3.0/28` and
-`ipv4:192.0.3.0/28`. Both of `ipv4:192.0.2.0/27` and `ipv4:192.0.3.0/27` omit
-the value for the `ISP` property, because it is inherited from
-`ipv4:192.0.2.0/23`.
+Also note that the entities "ipv4:192.0.2.0/28" and "ipv4:192.0.2.16/28" are
+merged into "ipv4:192.0.2.0/27", because they have the same value of the
+"ASN" property. The same rule applies to the entities "ipv4:192.0.3.0/28" and
+"ipv4:192.0.3.0/28". Both of "ipv4:192.0.2.0/27" and "ipv4:192.0.3.0/27" omit
+the value for the "ISP" property, because it is inherited from
+"ipv4:192.0.2.0/23".
 
 ```
 GET /propmap/full/inet-ia HTTP/1.1
@@ -252,7 +228,7 @@ Accept: application/alto-propmap+json,application/alto-error+json
 
 ```
 HTTP/1.1 200 OK
-Content-Length: ###
+Content-Length: 418
 Content-Type: application/alto-propmap+json
 
 {
@@ -275,17 +251,17 @@ Content-Type: application/alto-propmap+json
 ## Filtered Property Map Example #1 ## {#filt-prop-map-example-1}
 
 The following example uses the filtered property map resource to request the
-`ISP`, `ASN` and `state` properties for several IPv4 addresses.
+"ISP", "ASN" and "state" properties for several IPv4 addresses.
 
-Note that the value of `state` for `ipv4:192.0.2.0` is the only explicitly
-defined property; the other values are all derived by the inheritance rules for
-Internet address entities.
+Note that the value of "state" for "ipv4:192.0.2.0" is the only explicitly
+defined property; the other values are all derived by the inheritance rules
+for Internet address entities.
 
 ```
 POST /propmap/lookup/inet-iacs HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
-Content-Length: ###
+Content-Length: 158
 Content-Type: application/alto-propmapparams+json
 
 {
@@ -298,7 +274,7 @@ Content-Type: application/alto-propmapparams+json
 
 ```
 HTTP/1.1 200 OK
-Content-Length: ###
+Content-Length: 540
 Content-Type: application/alto-propmap+json
 
 {
@@ -324,36 +300,26 @@ Content-Type: application/alto-propmap+json
 ## Filtered Property Map Example #2 ## {#filt-prop-map-example-2}
 
 The following example uses the filtered property map resource to request the
-`ASN`, `country` and `state` properties for several IPv4 prefixes.
+"ASN", "country" and "state" properties for several IPv4 prefixes.
 
-Note that the property values for both entities `ipv4:192.0.2.0/26` and
-`ipv4:192.0.3.0/26` are not explicitly defined. They are inherited from the
-entity `ipv4:192.0.2.0/23`.
+Note that the property values for both entities "ipv4:192.0.2.0/26" and
+"ipv4:192.0.3.0/26" are not explicitly defined. They are inherited from the
+entity "ipv4:192.0.2.0/23".
 
-Also note that some entities like `ipv4:192.0.2.0/28` and `ipv4:192.0.2.16/28`
-in the response are not listed in the request explicitly. The response includes
-them because they are refinements of the requested entities and have different
-values for the requested properties.
+Also note that some entities like "ipv4:192.0.2.0/28" and
+"ipv4:192.0.2.16/28" in the response are not explicitly listed in the
+request. The response includes them because they are refinements of the
+requested entities and have different values for the requested properties.
 
-The entity `ipv4:192.0.4.0/26` is not included in the response, because there
-are neither entities which it is inherited from, nor entities inherited from it.
-
-<!--
-Also note the `ASN` property has the value `12345` for both the blocks
-`ipv4:192.0.2.0/28` and `ipv4:192.0.2.16/28`, so every address in the block
-`ipv4:192.0.2.0/27` has that property value. However the block
-`ipv4:192.0.2.0/27` itself does not have a value for `ASN`: address blocks
-cannot inherit properties from blocks with longer prefixes, even if every such
-block has the same value.
--->
-
-<!-- Done: Remove the overlap of requested entities. -->
+The entity "ipv4:192.0.4.0/26" is not included in the response, because there
+are neither entities which it is inherited from, nor entities inherited from
+it.
 
 ```
 POST /propmap/lookup/inet-iacs HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
-Content-Length: ###
+Content-Length: 170
 Content-Type: application/alto-propmapparams+json
 
 {
@@ -366,7 +332,7 @@ Content-Type: application/alto-propmapparams+json
 
 ```
 HTTP/1.1 200 OK
-Content-Length: ###
+Content-Length: 766
 Content-Type: application/alto-propmap+json
 
 {
@@ -397,28 +363,18 @@ Content-Type: application/alto-propmap+json
 ## Filtered Property Map Example #3 ## {#filt-prop-map-example-3}
 
 The following example uses the filtered property map resource to request the
-`default-network-map.pid` property and the `alt-network-map.pid` property for
+"default-network-map.pid" property and the "alt-network-map.pid" property for
 a set of IPv4 addresses and prefixes.
 
-Note that the entity `ipv4:192.0.3.0/27` is decomposed into two entities
-`ipv4:192.0.3.0/28` and `ipv4:192.0.3.16/28`, as they have different
-`default-network-map.pid` property values.
-
-<!--
-Note that the value of `pid` for the prefix `ipv4:192.0.2.0/26` is `pid1`, even
-though all addresses in that block are in `pid2`, because `ipv4:192.0.2.0/25`
-is the longest prefix in the network map which prefix-matches
-`ipv4:192.0.2.0/26`, and that prefix is in `pid1`.
--->
-
-<!-- Done: Remove the overlap of requested entities and show the entity
-addresses decomposition. -->
+Note that the entity "ipv4:192.0.3.0/27" is decomposed into two entities
+"ipv4:192.0.3.0/28" and "ipv4:192.0.3.16/28", as they have different
+"default-network-map.pid" property values.
 
 ```
 POST /propmap/lookup/pid HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
-Content-Length: ###
+Content-Length: 221
 Content-Type: application/alto-propmapparams+json
 
 {
@@ -433,7 +389,7 @@ Content-Type: application/alto-propmapparams+json
 
 ```
 HTTP/1.1 200 OK
-Content-Length: ###
+Content-Length: 774
 Content-Type: application/alto-propmap+json
 
 {
@@ -458,20 +414,18 @@ Content-Type: application/alto-propmap+json
 }
 ```
 
-<!-- TODO: A new example to illustrate decomposition -->
-
 ## Filtered Property Map Example #4 ## {#filt-prop-map-example-4}
 
-The following example uses the filtered property map resource to request the
-`region` property for several PIDs defined in `default-network-map`. The value
-of the `region` property for each PID is not defined by `default-network-map`,
-but the reason why the PID is defined by the network operator.
+Here is an example of using the filtered property map to query the regions
+for several PIDs in "default-network-map". The "region" property is specified
+as a "self-defined" property, i.e., the values of this property are defined
+by this property map resource.
 
 ```
 POST /propmap/lookup/region HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
-Content-Length: ###
+Content-Length: 132
 Content-Type: application/alto-propmapparams+json
 
 {
@@ -483,7 +437,7 @@ Content-Type: application/alto-propmapparams+json
 
 ```
 HTTP/1.1 200 OK
-Content-Length: ###
+Content-Length: 326
 Content-Type: application/alto-propmap+json
 
 {
@@ -504,121 +458,42 @@ Content-Type: application/alto-propmap+json
 }
 ```
 
-<!--
-The following example uses the Filtered Property Map resource to request the
-"availbw" property for several abstract network elements.
+## Filtered Property Map for ANEs Example #5 ## {#ane-example}
+
+The following example uses the filtered property map resource
+"ane-dc-property-map" to request properties "storage-capacity" and "cpu" on
+several ANEs defined in this property map.
 
 ```
-POST /propmap/lookup/availbw HTTP/1.1
+POST /propmap/lookup/ane-dc HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
-Content-Length: ###
+Content-Length: 155
 Content-Type: application/alto-propmapparams+json
 
 {
-  "entities" : [
-                "ane:L001",
-                "ane:Lae0",
-                "ane:L3eb ],
-  "properties" : [ "availbw" ]
-}
-
-
-HTTP/1.1 200 OK
-Content-Length: ###
-Content-Type: application/alto-propmap+json
-
-{
-  "property-map": {
-    "ane:L001":    {"availbw": "55"},
-    "ane:Lae0":    {"availbw": "70"},
-    "ane:L3eb":    {"availbw": "40"}
-  }
-}
-```
--->
-
-## Property Map in Path Vector Example #1 ## {#pv-example}
-
-The following example requests the `maxresbw`, `persistent-entities` and
-`mec-flavors` properties for abstract network elements between "pid1" and
-"pid3" in `default-network-map`.
-
-```
-POST /costmap/pv HTTP/1.1
-Host: alto.example.com
-Accept: multipart/related;type=application/alto-costmap+json,
-        application/alto-error+json
-Content-Length: [TBD]
-Content-Type: application/alto-costmapfilter+json
-
-{
-  "cost-type": {
-    "cost-mode": "array",
-    "cost-metric": "ane-path"
-  },
-  "pids": {
-    "srcs": [ "pid1" ],
-    "dsts": [ "pid3" ]
-  },
-  "ane-properties": ["maxresbw", "persistent-entities", "mec-flavors"]
-
+  "entities" : [".ane:dc21",
+                ".ane:dc45.srv9",
+                ".ane:dc6.srv-cluster8"],
+  "properties" : [ "storage-capacity", "cpu"]
 }
 ```
 
 ```
 HTTP/1.1 200 OK
-Content-Length: [TBD]
-Content-Type: multipart/related; boundary=example-1;
-              type=application/alto-costmap+json
-
---example-1
-Content-Id: costmap
-Content-Type: application/alto-costmap+json
-
-{
-  "meta": {
-    "vtag": {
-      "resource-id": "cost-map-pv.costmap",
-      "tag": "d827f484cb66ce6df6b5077cb8562b0a"
-    },
-    "dependent-vtags": [
-      {
-        "resource-id": "my-default-networkmap",
-        "tag": "75ed013b3cb58f896e839582504f6228"
-      }
-    ],
-    "cost-type": {
-      "cost-mode": "array",
-      "cost-metric": "ane-path"
-    }
-  },
-  "cost-map": {
-    "pid1": {
-      "pid3": [ "ane:L001", "ane:L002", "ane:MEC01", "ane:MEC02" ],
-    }
-  }
-}
---example-1
-Content-Id: propmap
+Content-Length: 295
 Content-Type: application/alto-propmap+json
 
 {
-  "meta": {
-    "dependent-vtags": [
-      {
-        "resource-id": "cost-map-pv.costmap",
-        "tag": "d827f484cb66ce6df6b5077cb8562b0a"
-      }
-    ]
+  "meta" : {
   },
   "property-map": {
-    "ane:L001": { "maxresbw": 100000000 },
-    "ane:L002": { "maxresbw": 100000000 },
-    "ane:MEC01": { "persistent-entities": "mec:192.0.2.1",
-                   "mec-flavors": [ {"gpu": "2G", "ssd": "128G"}]},
-    "ane:MEC02": { "persistent-entities": "mec:192.0.2.2",
-                   "mec-flavors": [ {"gpu": "1G", "ssd": "128G"}]}
+    ".ane:dc21":
+      {"storage-capacity" : 40000 Gbytes, "cpu" : 500 Cores},
+    ".ane:dc45.srv9":
+      {"storage-capacity" : 100 Gbytes, "cpu" : 20 Cores},
+    ".ane:dc6.srv-cluster8":
+      {"storage-capacity" : 6000 Gbytes, "cpu" : 100 Cores}
   }
 }
 ```

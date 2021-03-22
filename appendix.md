@@ -1,3 +1,51 @@
+# Features introduced with the Entity Property Maps extension {#features-introduced-with-epm-extension}
+
+The Entity Property Maps extension described in this document introduces a
+number of features that are summarized in table below. The first column
+provides the name of the feature. The second column provides the section
+number of this document that gives a high level description of the feature.
+The third column provides the section number of this document that gives a
+normative description relating to the feature, when applicable.
+
+-----------------------------------------------------------------------
+Feature            High-level description Related normative description
+------------------ ------------------------------ ---------------------
+Entity             [](#con-entity)                [](#entity-addrs)
+
+Entity domain      [](#con-entity-domain)
+(ED)
+
+Entity domain      [](#con-entity-domain-type)    [](#domain-types)
+type
+
+Entity domain      [](#con-entity-domain-name)    [](#domain-names)
+name
+
+Entity property    [](#con-property)              [](#def-property),
+(EP) type                                         [](#def-property-type),
+                                                  [](#entity-property-name),
+                                                  [](#format-entity-property-value)
+
+Entity property    [](#con-propmap)               [](#prop-map),
+map                                               [](#filter-prop-map)
+
+Resource-specific  [](#rsed-name)                 [](#domain-names),
+ED name                                           [](#resource-specific-ED)
+
+Resource-specific  [](#rsep)                      [](#format-entity-property-value),
+EP value
+
+Entity Hierarchy   [](#con-hni)                   [](#def-hierarchy-and-inheritance)
+and property
+inheritance
+
+Defining           [](#def-ir),                   [](#dom-reg-process),
+information        [](#def-ir-for-irsp)           [](#IANAEntityProp)
+resource
+
+-----------------------------------------------------------------------
+
+<!--
 # Scope of Property Map
 
 Using entity domains to organize entities, an ALTO property map resource can be
@@ -76,3 +124,4 @@ depends on two network maps and provides three sets of mappings by
 ~~~
 
 More detailed examples are shown in [](#examples).
+-->

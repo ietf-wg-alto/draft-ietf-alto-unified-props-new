@@ -1,5 +1,11 @@
 *.bak
 *.gen
-draft-roome-alto-unified-props-new.txt
-draft-ietf-alto-unified-props-new.txt
 tracker.log
+
+# Do not upload the generated file
+draft-*-alto-unified-props-new.txt
+draft-*-alto-unified-props-new.html
+draft-*-alto-unified-props-new.xml
+
+# Temp
+tmp/

@@ -1,67 +1,70 @@
-<!-- FIXME: Make the specification coherent with the definition -->
-
-# Entity Domain Types
+# Entity Domain Types Defined in this Document {#entity-domain-types}
 
 This document requires the definition of each entity domain type MUST include
-(1) the entity domain type name and (2) domain-specific entity identifiers, and
-MAY include (3) hierarchy and inheritance semantics optionally. This document
-defines three initial entity domain types as follows.
+(1) the entity domain type name and (2) domain-specific entity identifiers,
+and MAY include (3) hierarchy and inheritance semantics optionally. This
+document defines three initial entity domain types as follows.
 
 ## Internet Address Domain Types {#inet-addr-domain}
 
-The document defines two entity domain types (IPv4 and IPv6) for Internet addresses. Both
-types are global entity domain types and hence define a corresponding global entity domain as well.
-Since the two domains use the same hierarchy and inheritance semantics, we define the semantics
-together, instead of repeating for each.
+The document defines two entity domain types (IPv4 and IPv6) for Internet
+addresses. Both types are resource-agnostic entity domain types and hence
+define corresponding resource-agnostic entity domains as well. Since the two
+domains use the same hierarchy and inheritance semantics, we define the
+semantics together, instead of repeating for each.
 
-### IPv4 Domain {#ipv4-domain}
+### Entity Domain Type: IPv4 {#ipv4-domain}
 
-#### Entity Domain Type {#ipv4-edt}
+#### Entity Domain Type Identifier {#ipv4-edt}
 
 ipv4
 
 #### Domain-Specific Entity Identifiers {#ipv4-dsei}
 
 Individual addresses are strings as specified by the IPv4Addresses rule of
-Section 3.2.2 of [](#RFC3986); Hierarchical addresses are prefix-match strings as
-specified in Section 3.1 of  [](#RFC4632). To define
-properties, an individual Internet address and the corresponding full-length
-prefix are considered aliases for the same entity. Thus `ipv4:192.0.2.0` and
-`ipv4:192.0.2.0/32` are equivalent.
+Section 3.2.2 of {{RFC3986}}; Hierarchical addresses are prefix-match strings
+as specified in Section 3.1 of {{RFC4632}}. To define properties, an
+individual Internet address and the corresponding full-length prefix are
+considered aliases for the same entity. An individual Internet address and
+the corresponding full-length prefix are considered aliases for the same
+entity on which to define properties. Thus, "ipv4:192.0.2.0" and
+"ipv4:192.0.2.0/32" are equivalent.
 
-### IPv6 Domain {#ipv6-domain}
+### Entity Domain Type: IPv6 {#ipv6-domain}
 
-#### Entity Domain Type {#ipv6-edt}
+#### Entity Domain Type Identifier {#ipv6-edt}
 
 ipv6
 
 #### Domain-Specific Entity Identifiers {#ipv6-dsei}
 
-Individual addresses are strings as specified by Section 4 of [](#RFC5952);
-Hierarchical of addresses are prefix-match strings as specified in Section 7 of
-[](#RFC5952). To define properties, an individual Internet
-address and the corresponding 128-bit prefix are considered aliases for the
-same entity. That is, `ipv6:2001:db8::1` and `ipv6:2001:db8::1/128` are
-equivalent, and have the same set of properties.
+Individual addresses are strings as specified by Section 4 of {{RFC5952}};
+Hierarchical addresses are prefix-match strings as specified in Section 7 of
+{{RFC5952}}. To define properties, an individual Internet address and the
+corresponding 128-bit prefix are considered aliases for the same entity. That
+is, "ipv6:2001:db8::1" and "ipv6:2001:db8::1/128" are equivalent, and have
+the same set of properties.
 
 ### Hierarchy and Inheritance of Internet Address Domains {#inet-inheritance}
 
-Both Internet address domains allow property values to be inherited. Specifically,
-if a property P is not defined for a specific Internet address I, but P is defined for a
-a hierarchical Internet address C which prefix-matches I, then the address I inherits the value of
-P defined for the hierarchical address C. If more than one such hierarchical addresses define a value for P, I
-inherits the value of P in the hierarchical address with the longest prefix.
-Note that this longest prefix rule ensures no multiple inheritances,
-and hence no ambiguity.
+Both Internet address domains allow property values to be inherited.
+Specifically, if a property P is not defined for a specific Internet address
+I, but P is defined for a hierarchical Internet address C which
+prefix-matches I, then the address I inherits the value of P defined for the
+hierarchical address C. If more than one such hierarchical addresses define a
+value for P, I inherits the value of P in the hierarchical address with the
+longest prefix. Note that this longest prefix rule ensures no multiple value
+inheritances, and hence no ambiguity.
 
 Hierarchical addresses can also inherit properties: if a property P is not
 defined for the hierarchical address C, but is defined for another
 hierarchical address C' which covers all IP addresses in C, and C' has a
-shorter prefix length than C, then C MAY inherits the property from C'. If
+shorter prefix length than C, then C MAY inherit the property from C'. If
 there are multiple such hierarchical addresses like C', C MUST inherit from
 the hierarchical address having the longest prefix length.
 
-As an example, suppose that a server defines a property P for the following entities:
+As an example, suppose that a server defines a property P for the following
+entities:
 
 ``` text
        ipv4:192.0.2.0/26: P=v1
@@ -95,11 +98,11 @@ a particular entity. That is, a server MAY say that property P of entity X is
 "defined to have no value", instead of "undefined". To indicate "no value",
 a server MAY perform different behaviours:
 
-- If that entity would inherit a value for that property, then the ALTO server
+* If that entity would inherit a value for that property, then the ALTO server
   MUST return a `null` value for that property. In this case, the ALTO client
   MUST recognize a `null` value as "no value" and "do not apply the inheritance
   rules for this property."
-- If the entity would not inherit a value, then the ALTO server MAY return
+* If the entity would not inherit a value, then the ALTO server MAY return
   `null` or just omit the property. In this case, the ALTO client cannot infer
   the value for this property of this entity from the Inheritance rules. So the
   client MUST interpret that this property has no value.
@@ -107,41 +110,22 @@ a server MAY perform different behaviours:
 If the ALTO server does not define any properties for an entity, then the
 server MAY omit that entity from the response.
 
-<!--
+### Defining Information Resource Media Type for domain types IPv4 and IPv6 {#defining-IR-media-type-ipv4-ipv6}
 
-### Relationship to Network Maps
+Entity domain types "ipv4" and "ipv6" both allow to define resource specific
+entity domains. When resource specific domains are defined with entities of
+domain type "ipv4" or "ipv6", the defining information resource for an entity
+domain of type "ipv4" or "ipv6" MUST be a Network Map. The media type of a
+defining information resource is therefore:
 
-Entities in an Internet address domain MAY be associated with multiple ALTO
-network map resources. But according to
-[](#def-relationship-to-other-resources), in a single property map, an Internet
-address domain MUST be associated with at most one ALTO network map resource. To
-achieve this, if there are n network maps in an ALTO server, the server may
-provide at least n+1 property maps for entities an in Internet address domain.
-i.e., for each network map, the ALTO server may provide an individual property
-map associated with it. And then the ALTO server may provide a property map not
-associated with any network maps.
--->
+application/alto-networkmap+json
 
-<!-- FIXED: (YRY: not fully clear) -->
-<!--
-An Internet address domain MAY be associated with an ALTO network map resource.
-Logically, there is a map of Internet address entities to property values for
-each network map defined by the ALTO server, plus an additional Property Map
-for Internet address entities which are not associated with a network map.
-So, if there are n network maps, the server can provide n+1 maps of Internet
-address entities to property values. These maps are separate from each other.
-The prefixes in the Property Map do not have to correspond to the prefixes
-defining the network map's PIDs. For example, the Property Map for a network
-map MAY assign properties to `ipv4:192.0.2.0/24` even if that prefix is not
-associated with any PID in the network map.
--->
-
-## PID Domain {#pid-domain}
+## Entity Domain Type: PID {#pid-domain}
 
 The PID domain associates property values with the PIDs in a network map.
 Accordingly, this entity domain always depends on a network map.
 
-### Entity Domain Type
+### Entity Domain Type Identifier
 
 pid
 
@@ -153,17 +137,28 @@ The entity identifiers are the PID names of the associated network map.
 
 There is no hierarchy or inheritance for properties associated with PIDs.
 
+### Defining Information Resource Media Type for Domain Type PID {#defining-IR-media-type-pid}
+
+The entity domain type "pid" allows to define resource specific entity
+domains. When resource specific domains are defined with entities of domain
+type "pid", the defining information resource for entity domain type "pid"
+MUST be a Network Map. The media type of a defining information resource is
+therefore:
+
+application/alto-networkmap+json
+
 ### Relationship To Internet Addresses Domains
 
-The PID domain and the Internet address domains are completely independent; the
-properties associated with a PID have no relation to the properties associated
-with the prefixes or endpoint addresses in that PID. An ALTO server MAY choose
-to assign some or all properties of a PID to the prefixes in that PID.
+The PID domain and the Internet address domains are completely independent;
+the properties associated with a PID have no relation to the properties
+associated with the prefixes or endpoint addresses in that PID. An ALTO
+server MAY choose to assign all the properties of a PID to the prefixes in
+that PID or only some of these properties.
 
-For example, suppose `PID1` consists of the prefix `ipv4:192.0.2.0/24`, and has
-the property `P` with value `v1`. The Internet address entities
-`ipv4:192.0.2.0` and `ipv4:192.0.2.0/24`, in the IPv4 domain MAY have a value
-for the property `P`, and if they do, it is not necessarily `v1`.
+For example, suppose "PID1" consists of the prefix "ipv4:192.0.2.0/24", and
+has the property "P" with value "v1". The Internet address entities
+"ipv4:192.0.2.0" and "ipv4:192.0.2.0/24" in the IPv4 domain MAY have a value
+for the property "P", and if they do, it is not necessarily "v1".
 
 ## Internet Address Properties vs. PID Properties
 
@@ -176,158 +171,23 @@ The PID domain is RECOMMENDED for properties that arise from the definition of
 the PID, rather than from the Internet address prefixes in that PID.
 
 For example, because Internet addresses are allocated to service providers by
-blocks of prefixes, an `ISP` property would be best associated with the
-Internet address domain. On the other hand, a property that explains why a PID
+blocks of prefixes, an "ISP" property would be best associated with Internet
+address domain types. On the other hand, a property that explains why a PID
 was formed, or how it relates to a provider's network, would best be
-associated with the PID domain.
-
-<!-- Begin of removing -->
-<!--
-## ANE Domain {#ane-domain}
-
-### Domain Name
-
-ane
-
-### Domain-Specific Entity Addresses
-
-The entity address of ane domain is encoded as a JSON string.  The string MUST
-be no more than 64 characters, and it MUST NOT contain characters other than
-US-ASCII alphanumeric characters (U+0030-U+0039, U+0041-U+005A, and
-U+0061-U+007A), the hyphen ('-', U+002D), the colon (':', U+003A), the at sign
-('@', code point U+0040), the low line ('\_', U+005F), or the '.' separator
-(U+002E). The '.' separator is reserved for future use and MUST NOT be used
-unless specifically indicated in this document, or an extension document.
-
-### Hierarchy and Inheritance
-
-There is no hierarchy or inheritance for properties associated with ANEs.
--->
-<!-- End of removing -->
-
-# Entity Domains and Property Mappings in Information Resources {#ed-pm-export}
-
-<!-- TODO: May need to be moved to behind of property map spec. -->
-
-## Information Resource Export {#def-ire}
-
-Each information resource MAY export a set of entity domains and entity property
-mappings.
-
-### Resource-Specific Entity Domain Export {#def-epe}
-
-Each type of information resource MAY export several types of entity domains.
-For example, a network map resource defines a `pid` domain, an `ipv4` domain and
-an `ipv6` domain (which may be empty).
-
-When a new ALTO information resource type is registered, if this type of
-information resource can export an existing type of entity domain, the
-corresponding document MUST define how to export such type of entity domain from
-such type of information resource.
-
-When a new entity domain type is defined, if an existing type of information
-resource can export an entity domain in this entity domain type, the
-corresponding document MUST define how to export such type of entity domain from
-such type of information resource.
-
-
-### Entity Property Mapping Export {#def-ept}
-
-For each entity domain which could be exported by an information resource, this information resource MAY
-also export some mapping from this entity domain to some
-entity property. For example, a network map resource can map an `ipv4` entity to
-its `pid` property.
-
-When a new ALTO information resource type is registered, if this type of
-information resource can export an entity domain in an existing entity domain
-type, and map entities in this entity domain to an existing type of entity
-property, the corresponding document MUST define how to export such type of an
-entity property.
-
-When a new ALTO entity domain type or a new entity property type is defined, if
-an existing type of resource can export an entity domain in this entity domain
-type, and map entities in this entity domain to this type of entity property,
-the corresponding document MUST define how to export such type of an entity
-property.
-
-## Network Map Resource
-
-The ALTO network map resource defined by the media type
-`application/alto-networkmap+json` exports the following types of entity domains
-and entity property mappings.
-
-### Resource-Specific Entity Domain {#netmap-ede}
-
-An ALTO network map resource defines a `pid` domain, an `ipv4` domain
-and an `ipv6` domain by follows:
-
-- The defined `pid` domain includes all PIDs in keys of the `network-map`
-  object.
-- The defined `ipv4` domain includes all IPv4 addresses appearing in the `ipv4`
-  field of the endpoint address group of each PID.
-- The defined `ipv6` domain includes all IPv6 addresses appearing in the `ipv6`
-  field of the endpoint address group of each PID.
-
-### Entity Property Mapping {#netmap-ept}
-
-For each of the preceding entity domains, an ALTO network map resource provides
-the properties mapping as follows:
-
-`ipv4 -> pid`:
-~ An `networkmap` typed resource can map an `ipv4` entity to a `pid` property
-  whose value is a PID defined by this `networkmap` resource and including the
-  IPv4 address of this entity.
-
-`ipv6 -> pid`:
-~ An `networkmap` typed resource can map an `ipv6` entity to a `pid` property
-  whose value is a PID defined by this `networkmap` resource and including the
-  IPv6 address of this entity.
-  
-## Endpoint Property Resource
-
-The ALTO endpoint property resource defined by the media type
-`application/alto-endpointprop+json` exports the following types of entity
-domains and entity property mappings.
-
-### Resource-Specific Entity Domain {#ep-ede}
-
-An ALTO endpoint property resource defined an `ipv4` domain and an `ipv6` domain by follows:
-
-- The defined `ipv4` domain includes all IPv4 addresses appearing in keys of the
-  `endpoint-properties` object.
-- The defined `ipv6` domain includes all IPv6 addresses appearing in keys of the
-  `endpoint-properties` object.
-
-### Entity Property Mapping {#ep-ept}
-
-For each of the preceding entity domains, an ALTO endpoint property resource
-exports the properties mapping from it to each supported global endpoint
-property. The property value is the corresponding global endpoint property value
-in the `endpiont-properties` object.
-
-## Property Map Resource
-
-To avoid the nested reference and its potential complexity, this document does
-not specify the export rule of resource-specific entity domain and entity
-property mapping for the ALTO property map resource defined by the media type
-`application/alto-propmap+json` (see [](#FullPropMapMediaType)).
+associated with the PID domain type.
 
 # Property Map {#prop-map}
 
 A property map returns the properties defined for all entities in one or more
-domains, e.g., the `location` property of entities in `pid` domain, and the
-`ASN` property of entities in `ipv4` and `ipv6` domains.
-
-<!-- Note that Property Map Resource is not applicable to ANE domain. -->
-<!-- It is not RECOMMENDED. But it depends on the implementation. -->
+domains, e.g., the "location" property of entities in "pid" domain, and the
+"ASN" property of entities in "ipv4" and "ipv6" domains.
 
 [](#prop-map-example) gives an example of a property map request and its
 response.
 
 ## Media Type {#FullPropMapMediaType}
 
-The media type of a property map is
-`application/alto-propmap+json`.
+The media type of a property map is `application/alto-propmap+json`.
 
 ## HTTP Method
 
@@ -357,141 +217,11 @@ mappings:
 ~ A JSON object whose keys are names of entity domains and values are the
 supported entity properties of the corresponding entity domains.
 
-<!-- OLD Design -->
-
-<!--
-The capabilities are defined by an object of type PropertyMapCapabilities:
-
-``` text
-    object {
-      EntityDomainName entity-domains<1..*>;
-      EntityPropertyName properties<1..*>;
-    } PropertyMapCapabilities;
-```
-
-with fields:
-
-entity-domains:
-~ List of entity domain names of entity domains supported by this property map.
-Each entity domain can be either a resource-specific entity domain defined by
-one of dependent resource in the `uses` field, or the shared entity domain
-amongst all dependent resources in the `uses` field. The ALTO client SHOULD
-ignore a resource-specific entity domain if its entity domain type is not
-registered in the ALTO Resource Entity Domain Export Registry of the type of the
-corresponding resource.
-
-properties:
-~ List of entity property names to be returned for each entity in this property
-map.
--->
-
-<!--
-where the value of `entity-domains` is an array of entity domain names specifying the entity domains, and
-the value of `properties` is an array of entity property names specifying the properties returned for entities in
-those domains. The semantics is that this property map provides all property
-types generated by the cross product of `entity-domains` and `properties`. If a
-property in `properties` is NOT supported by a domain in `entity-domains`, the
-server can declare different property maps to conform to the semantics.
-
-For example, the capability {"entity-domains": ["ipv4", "ipv6"], "properties":
-["pid"]} means the property map provides both property types `ipv4:pid` and
-`ipv6:pid`.
--->
-
 ## Uses {#FullPropMapUses}
-
-<!--
-This is similar to how [](#RFC7285)
-handles dependencies between cost maps and network maps. Recall that cost maps
-present the costs between PIDs, and PID names depend on a network map. If an
-ALTO server provides the `routingcost` metric for the network maps `net1` and
-`net2`, then the server defines two separate cost maps, one for `net1` and the
-other for `net2`.-->
 
 The `uses` field of a property map resource in an IRD entry specifies
 dependent resources of this property map. It is an array of the resource ID(s)
 of the resource(s).
-
-<!--
-In a single property map, every property value of every entity depends on the
-same array of resources. Thus, if properties depending on different resources
-arrays would be provided, they MUST be split into different property maps.
--->
-
-<!--
-=== Below TBD: ===
-
-The `uses` field of a property map resource in an IRD entry specifies
-dependencies as discussed in Section 2.7. It is an array of the resource ID(s)
-of the resource(s) that each domain in `entity-domains` depends on, in order to
-provide the properties specified in the `properties` capability.
-
-For example, the `pid` property for an ipv4 entity is a resource-specific
-property depending on a specific network map. Assume that the `entity-domains`
-capability of a property map resource includes `ipv4`, and the `properties`
-capability includes `pid`. Then, the `uses` field MUST include the resource ID
-of the specific network map resource.
-
-In the general case, the `uses` field should not have ambiguity in specifying
-dependencies. To achieve this goal, the ALTO server MUST ensure the ALTO client
-can interpret the resource dependencies by the following `uses` rule:
-
-- For each domain in `entity-domains`, take the full `uses` list, and then,
-    - go over each property in `properties` capability in array order:
-        - If the property is a resource-specific property for the current
-          domain, and it needs a sequence of S resources, then
-            - take the S resource ID(s) at the beginning of `uses` to
-              interpret the property;
-            - and remove the S resource ID(s) from `uses`.
--->
-
-<!--
-  go over each property in `properties` in array order
-    if the property is a resource-specific property
-                       and needs a sequence of S resources,
-      the S resource ID(s) at the beginning of `uses` are used to
-          interpret the property
-      the S resource ID(s) are removed from `uses`
--->
-
-<!--
-In the special case when all entity domains or resource-specific properties
-depend on the same resource, the `uses` list can only include this single
-resource. For example, a property map providing `country` and `state` properties
-for all entities in the `pid` domain can specify the `uses` as [
-`default-networkmap` ], which means both `country` and `state` properties for
-the `pid` domain are associated with the resource `default-networkmap`.
-
-To simplify client verifying the `uses` rule, it is RECOMMENDED that
-a single resource-specific property is specified in `properties` in each property
-map resource.
--->
-
-<!--
-Note that according to [](#RFC7285), a legacy ALTO server with two network maps,
-with resource IDs `net1` and `net2`, could offer a single Endpoint Property Service
-for the two properties `net1.pid` and `net2.pid`. An ALTO server which supports
-the property map resource defined in this document, would, instead, offer two different
-property maps for the `pid` property, one depending on `net1`, and the other on
-`net2`.
--->
-
-<!-- Deprecate this process. See the principles of ALTO Entity Property Type Registry.
-
-To make the client can understand the resource dependencies of a property map
-correctly, the following processes are required:
-
-1. Each combination of "entity-domain" and "property" SHOULD specify its
-   dependent resource type explicitly. For example, "<ipv4, pid>" or "<ipv6, pid>"
-   depends on a network map; <ane, pid> depends on a network map and a cost
-   map.
-2. Each combination of "entity-domain" and "property" SHOULD specify how to use
-   the dependent resources to interpret this combination. For example, for
-   "<pid4, pid>", the dependent network map is used to validate and interpret the
-   pid property values; for "<ane, pid>", the dependent cost map is used to
-   validate and interpret the entities in ane domain, and the dependent network
-   map is used to validate and interpret the pid property values.
--->
 
 ## Response {#FullPropMapResponse}
 
@@ -516,35 +246,26 @@ object of type PropertyMapData, where:
     } EntityProps;
 ```
 
-The ResponseEntityBase type is defined in Section 8.4 of [](#RFC7285).
+The ResponseEntityBase type is defined in Section 8.4 of {{RFC7285}}.
 
 Specifically, a PropertyMapData object has one member for each entity in the
 property map. The entity's properties are encoded in the corresponding
 EntityProps object. EntityProps encodes one name/value pair for each property,
 where the property names are encoded as strings of type PropertyName.
 A protocol implementation SHOULD assume that the property value is either
-a JSONString or a JSON `null` value, and fail to parse if it is not, unless the
+a JSONString or a JSON "null" value, and fail to parse if it is not, unless the
 implementation is using an extension to this document that indicates when and
 how property values of other data types are signaled.
 
-<!--An ALTO Server MAY explicitly define a property as not having a value for
-a particular entity. That is, a server MAY say that a property is "defined to
-have no value", as opposed to the property being "undefined".
-If that entity would inherit a value for that property, then the ALTO server
-MUST return a "null" value for that property, and an ALTO client MUST recognize
-a "null" value means "do not apply the inheritance rules for this property."
-If the entity would not inherit a value, the ALTO server MAY return "null" or
-MAY just omit the property.-->
-
 For each entity in the property map:
 
-- If the entity is in a resource-specific entity domain, the ALTO server SHOULD
+* If the entity is in a resource-specific entity domain, the ALTO server SHOULD
   only return self-defined properties and resource-specific properties which
   depend on the same resource as the entity does. The ALTO client SHOULD ignore
   the resource-specific property in this entity if their mapping is not
   registered in the ALTO Resource Entity Property Transfer Registry of the type
   of the corresponding resource.
-- If the entity is in a shared entity domain, the ALTO server SHOULD return
+* If the entity is in a shared entity domain, the ALTO server SHOULD return
   self-defined properties and all resource-specific properties defined for all
   resource-specific entities which have the same domain-specific entity
   identifier as this entity does.
@@ -634,11 +355,11 @@ defined in Section 8.5 of [](#RFC7285), if the request is invalid.
 
 Specifically, a filtered property map request can be invalid as follows:
 
-- An entity identifier in `entities` in the request is invalid if:
+* An entity identifier in `entities` in the request is invalid if:
 
-    - The domain of this entity is not defined in the `entity-domains`
+    * The domain of this entity is not defined in the `entity-domains`
       capability of this resource in the IRD;
-    - The entity identifier is an invalid identifier in the entity domain.
+    * The entity identifier is an invalid identifier in the entity domain.
 
     A valid entity identifier is never an error, even if this filtered property
     map resource does not define any properties for it.
@@ -648,14 +369,14 @@ Specifically, a filtered property map request can be invalid as follows:
     8.5.2 of [](#RFC7285), and the `value` field of the error message SHOULD
     indicate this entity identifier.
 
-- A property name in `properties` in the request is invalid if this
+* A property name in `properties` in the request is invalid if this
   property name is not defined in the `properties` capability of this
   resource in the IRD.
 
-    It is not an error that a filtered property map
-    resource does not define a requested property's value for a particular
-    entity. In this case, the ALTO server MUST omit that property from the
-    response for that endpoint.
+    When a filtered property map resource does not define a value for a
+    property requested on a particular entity, it is not an error. In this
+    case, the ALTO server MUST omit that property from the response for that
+    endpoint.
 
     If a property name in `properties` in the request is invalid, the ALTO
     server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section
@@ -665,45 +386,37 @@ Specifically, a filtered property map request can be invalid as follows:
 The response to a valid request is the same as for the Property Map
 (see [](#FullPropMapResponse)), except that:
 
-- If the requested entities include entities in the shared entity domain, the
+* If the requested entities include entities in the shared entity domain, the
   `dependent-vtags` field in its `meta` field MUST include version tags of all
   dependent resources appearing in the `uses` field.
-- If the requested entities only include entities in resource-specific entity
+* If the requested entities only include entities in resource-specific entity
   domains, the `dependent-vtags` field in its `meta` field MUST include version
   tags of resources which requested resource-specific entity domains and
   requested resource-specific properties are dependent on.
-- The response only includes the entities and properties requested by the
+* The response only includes the entities and properties requested by the
   client. If an entity in the request is identified by a hierarchical identifier
   (e.g., a `ipv4` or `ipv6` prefix), the response MUST cover properties
   for all identifiers in this hierarchical identifier.
 
-<!-- FIXME: do we define the term "block" / "address block"? it seems to be
-always used to describe an entity from which there are other entities
-inheriting. -->
+The filtered property map response MUST include all the inherited property
+values for the requested entities and all the entities which are able to
+inherit property values from the requested entities. To achieve this goal,
+the ALTO server MAY follow three rules:
 
-It is important that the filtered property map response MUST include all
-inherited property values for the requested entities and all the entities which
-are able to inherit property values from them. To achieve this goal, the ALTO
-server MAY follow three rules:
-
-<!-- NOTE: We use "MAY" here because there may be multiple solutions achieving
-this goal. As long as the ALTO client can interpret all properties for all
-requested singleton entities correctly. -->
-
-- If a property for a requested entity is inherited from another entity not
+* If a property for a requested entity is inherited from another entity not
   included in the request, the response SHOULD include this property for the
   requested entity. For example, A full property map may skip a property P for
   an entity A (e.g., ipv4:192.0.2.0/31) if P can be derived using inheritance
   from another entity B (e.g., ipv4:192.0.2.0/30). A filtered property map
   request may include only A but not B. In such a case, the property P SHOULD be
   included in the response for A.
-- If there are entities covered by a requested entity but having different
+* If there are entities covered by a requested entity but having different
   values for the requested properties, the response SHOULD include all those
   entities and the different property values for them. For example, considering
   a request for property P of entity A (e.g., ipv4:192.0.2.0/31), if P has value
   v1 for A1=ipv4:192.0.2.0/32 and v2 for A2=ipv4:192.0.2.1/32, then, the
   response SHOULD include A1 and A2.
-- If an entity in the response is already covered by some other entities in the
+* If an entity in the response is already covered by some other entities in the
   same response, it SHOULD be removed from the response for compactness. For
   example, in the previous example, the entity A=ipv4:192.0.2.0/31 SHOULD be
   removed because A1 and A2 cover all the addresses in A.
@@ -711,138 +424,55 @@ requested singleton entities correctly. -->
 An ALTO client should be aware that the entities in the response MAY be
 different from the entities in its request.
 
-<!--
-It is possible that the entities in the response are different from the entities
-in the request. Consider a request for property P of entity A (e.g.,
-ipv4:192.0.2.0/31). Assume that P has value v1 for A1=ipv4:192.0.2.0/32 and v2
-for A2=ipv4:192.0.2.1/32. Then, the response will include entities A1 and A2,
-instead of the request entity A.
--->
+## Entity property type defined in this document {#prop-type-pid}
 
-<!--
-An ALTO client should be aware that the entities in the response MAY be
-different from the ones it requests. If entities in the requested domain can be
-inherited, the ALTO server MAY decompose a requested entity address into several
-entities which could inherit it. One example is the Internet Address domains:
-Considering a request for property P of entity A (e.g., ipv4:192.0.2.0/31), if P
-has value v1 for A1=ipv4:192.0.2.0/32 and v2 for A2=ipv4:192.0.2.1/32, then the
-ALTO server could return the response including entities A1 and A2, instead of
-the requested entity A. The ALTO server could also return v1 for A1 and v2 for
-A, and the ALTO client can also deduce v2 for A2 from the inheritance.
--->
+This document defines the entity property type "pid". This property type
+extends the ALTO Endpoint Property Type "pid" defined in section 7.1.1 of
+{{RFC7285}} as follows: the property has the same semantics and applies to
+IPv4 and IPv6 addresses; the difference is that the IPv4 and IPv6 addresses
+have evolved from the status of endpoints to the status of entities.
 
-<!--
-An operator should be aware that if the ALTO server supports the entities
-decomposition, there will be potential security considerations. [](#SecSC)
-discusses the details and potential solutions.
--->
+The defining information resource for property type MUST be a network map.
+This document requests a IANA registration for this property
 
-<!--
-YRY: Need to make a decision. It is possible that the entities in the
-response are different from the entities in the request. Consider
-a request for property P of entity A (e.g., ipv4:192.0.2.0/31). Assume
-that P has value v1 for A1=ipv4:192.0.2.0/32 and v2 for A2=ipv4:192.0.2.1/32.
-Then, the response will include entities A1 and A2, instead of the request
-entity A.
+### Entity Property Type: pid
 
-Jensen: This process looks better. But if accept it, we need to add more
-security considerations, e.g., if a client request a full wildcard 0.0.0.0/0,
-the server has to actually return the full map.
--->
-
-<!-- Errors must follow RFC7285 Section 8.5.2... -->
-<!-- Check Section 11.4.1.6 of RFC7285. We need to make the behavior of UP
-consistent with EPS. -->
-
-<!--Discussion Needed: sometimes the client can compute some inherited property values.
-In this case, can the Filter Property Map response only contain the uncomputable
-inherited property values instead of all of them?-->
+1. Identifier: pid
+2. Semantics: the intended semantics are the same as in {{RFC7285}} for the
+   ALTO Endpoint Property Type "pid"
+3. Media type of defining information resource: application/alto-networkmap+json
+4. Security considerations: for entity property type "pid" are the same as
+   documented in {{RFC7285}} for the ALTO Endpoint Property Type "pid".
 
 # Impact on Legacy ALTO Servers and ALTO Clients {#legacy}
 
 ## Impact on Endpoint Property Service
 
-Since the property map and the filtered property map defined in this document provide the
-functionality of the Endpoint Property Service (EPS) defined in Section 11.4
-of [](#RFC7285), it is RECOMMENDED that the EPS be deprecated in favor of Property
-Map and Filtered Property Map. However, ALTO servers MAY provide an EPS for
-the benefit of legacy clients.
+Since the Property Map and the Filtered Property Map defined in this document
+provide a functionality that covers the Endpoint Property Service (EPS)
+defined in Section 11.4 of {{RFC7285}}, ALTO servers may prefer to provide
+Property Map and Filtered Property Map in place of EPS. However, for the
+legacy endpoint properties, it is recommended that ALTO servers also provide
+EPS so that legacy clients can still be supported.
 
 ## Impact on Resource-Specific Properties
 
-Section 10.8 of [](#RFC7285) defines two categories of endpoint properties:
-`resource-specific` and `global`. Resource-specific property names are prefixed
-with the ID of the resource they depend upon, while global property names have
-no such prefix. The property map and the filtered property map defined in this
-document defines the similar categories for entity properties. The difference is
-that there is no `global` entity properties but the `self-defined` entity
-properties as the special case of the `resource-specific` entity properties
-instead.
-
-<!--
-The property map and the filtered property map defined in this
-document do not distinguish between those two types of properties. Instead, if
-there is a dependency, it is indicated by the `uses` capability of a property
-map, and is shared by all properties and entity domains in that map.
-Accordingly, it is RECOMMENDED that resource-specific endpoint properties be
-deprecated, and no new resource-specific endpoint properties be defined.
--->
-
-<!--
-## Impact on the `pid` Property
-
-Section 7.1.1 of [](#RFC7285) defines the resource-specific endpoint property
-name `pid`, whose value is the name of the PID containing that endpoint. For
-compatibility with legacy clients, an ALTO server which provides the `pid`
-property via the EPS MUST use that definition, and that
-syntax.
-
-However, when used with property maps, this document amends the definition of
-the `pid` property as follows.
-
-First, the name of the property is simply `pid`; the name is not prefixed with
-the resource ID of a network map. The `uses` capability of the property map
-indicates the associated network map. This implies that a property map
-can only return the `pid` property for one network map; if an ALTO server
-provides several network maps, it MUST provide a Property Map for each
-of the network maps.
-
-Second, a client MAY request the `pid` property for a block of
-Internet addresses. An ALTO server determines the value of `pid` for an
-address block C as the rules defined in [](#FilteredPropMapResponse).
--->
-
-<!--
-Let CS be the set of all address blocks
-in the network map. If C is in CS, then the value of `pid` is the
-name of the PID associated with C. Otherwise, find the longest block
-C' in CS such that C' prefix-matches C, but is shorter than C. If
-there is such a block C', the value of `pid` is the name of the PID
-associated with C'.
-YRY: Handle the issue of decomposition.
-If not, the ALTO server has two optional ways to determines the value:
-
-- The ALTO server may just return no value for the `pid` property of block C;
-- Or the ALTO server may find a subset CS' in CS such that C prefix-matches each
-  C' in CS' and is longer than each C'. If CS' can fully cover C, the ALTO
-  server returns `pid` property of each C' in CS' instead of `pid` property of
-  C, and the value of `pid` for each C' is the name of the PID associated with
-  C'; otherwise, the ALTO server returns associated PID name for the `pid`
-  property of each C' in CS' and also the no value for the `pid` property of C.
-  Note that the CS' may not be unique.
-  
-The determination depends on the implementation.
--->
-
-<!--
-Note that although an ALTO server MAY provide a GET-mode property map
-which returns the entire map for the `pid` property, there is no need
-to do so, because that map is simply the inverse of the network map.
--->
+Section 10.8 of {{RFC7285}} defines two categories of endpoint properties:
+"resource-specific" and "global". Resource-specific property names are
+prefixed with the ID of the resource they depend on, while global property
+names have no such prefix. The property map and the filtered property map
+defined in this document define similar categories of entity properties. The
+difference is that entity property maps do not define "global" entity
+properties. Instead, they define "self-defined" entity properties as a
+special case of "resource-specific" entity properties, where the specific
+resource is the property map itself. This means that "self-defined"
+properties are defined within the scope of the property map.
 
 ## Impact on Other Properties
 
-In general, there should be little or no impact on other previously defined
-properties. The only consideration is that properties can now be defined on
-hierarchical entity identifiers, rather than just individual entity identifiers,
-which might change the semantics of a property.
+In the present extension, properties can now be defined on sets of entity
+addresses, rather than just individual endpoint addresses as is is the case
+in RFC7285. This might change the semantics of a property. These sets can be
+for example hierachical IP address blocks. For instance, a property such as
+fictitious "geo-location", defined on a set of IP addresses would have a
+value corresponding to the barycenter of this set of addresses.
