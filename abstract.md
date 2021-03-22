@@ -1,3 +1,4 @@
+
 This document extends the base Application-Layer Traffic Optimization (ALTO)
 Protocol by generalizing the concept of "endpoint properties" as applied to
 endpoints as defined by IP addresses to endpoints defined by a wider set of

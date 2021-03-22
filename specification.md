@@ -1,3 +1,4 @@
+
 # Entity Domain Types Defined in this Document {#entity-domain-types}
 
 This document requires the definition of each entity domain type MUST include
@@ -66,30 +67,29 @@ the hierarchical address having the longest prefix length.
 As an example, suppose that a server defines a property P for the following
 entities:
 
-``` text
-       ipv4:192.0.2.0/26: P=v1
-       ipv4:192.0.2.0/28: P=v2
-       ipv4:192.0.2.0/30: P=v3
-       ipv4:192.0.2.0:    P=v4
-```
-^[fig:def-prop-val::Defined Property Values.]
+~~~
+                          ipv4:192.0.2.0/26: P=v1
+                          ipv4:192.0.2.0/28: P=v2
+                          ipv4:192.0.2.0/30: P=v3
+                          ipv4:192.0.2.0:    P=v4
+~~~
+{: #fig:def-prop-val title="Defined Property Values."}
 
 Then the following entities have the indicated values:
 
-``` text
-       ipv4:192.0.2.0:    P=v4
-       ipv4:192.0.2.1:    P=v3
-       ipv4:192.0.2.16:   P=v1
-       ipv4:192.0.2.32:   P=v1
-       ipv4:192.0.2.64:   (not defined)
-       ipv4:192.0.2.0/32: P=v4
-       ipv4:192.0.2.0/31: P=v3
-       ipv4:192.0.2.0/29: P=v2
-       ipv4:192.0.2.0/27: P=v1
-       ipv4:192.0.2.0/25: (not defined)
-```
-
-^[fig:inh-prop-val::Inherited Property Values.]
+~~~
+                      ipv4:192.0.2.0:    P=v4
+                      ipv4:192.0.2.1:    P=v3
+                      ipv4:192.0.2.16:   P=v1
+                      ipv4:192.0.2.32:   P=v1
+                      ipv4:192.0.2.64:   (not defined)
+                      ipv4:192.0.2.0/32: P=v4
+                      ipv4:192.0.2.0/31: P=v3
+                      ipv4:192.0.2.0/29: P=v2
+                      ipv4:192.0.2.0/27: P=v1
+                      ipv4:192.0.2.0/25: (not defined)
+~~~
+{: #fig:inh-prop-val title="Inherited Property Values."}
 
 <!-- Improve words of this paragraph. (Done, waiting for review) -->
 
@@ -162,12 +162,12 @@ for the property "P", and if they do, it is not necessarily "v1".
 
 ## Internet Address Properties vs. PID Properties
 
-Because the Internet address and PID domains are completely separate, the
-question may arise as to which entity domain is the best for a property. In general, the
-Internet address domains are RECOMMENDED for properties that are closely related
+Because the Internet address and PID domains relate to completely distinct domain types, the
+question may arise as to which entity domain type is the best for a property. In general, the
+Internet address domain types are RECOMMENDED for properties that are closely related
 to the Internet address, or are associated with, and inherited through, hierarchical addresses.
 
-The PID domain is RECOMMENDED for properties that arise from the definition of
+The PID domain type is RECOMMENDED for properties that arise from the definition of
 the PID, rather than from the Internet address prefixes in that PID.
 
 For example, because Internet addresses are allocated to service providers by
@@ -201,7 +201,7 @@ None.
 
 The capabilities are defined by an object of type PropertyMapCapabilities:
 
-``` text
+~~~
     object {
       EntityPropertyMapping mappings;
     } PropertyMapCapabilities;
@@ -209,13 +209,13 @@ The capabilities are defined by an object of type PropertyMapCapabilities:
     object-map {
       EntityDomainName -> EntityPropertyName<1..*>;
     } EntityPropertyMapping
-```
+~~~
 
 with fields:
 
 mappings:
-~ A JSON object whose keys are names of entity domains and values are the
-supported entity properties of the corresponding entity domains.
+: A JSON object whose keys are names of entity domains and values are the
+  supported entity properties of the corresponding entity domains.
 
 ## Uses {#FullPropMapUses}
 
@@ -232,7 +232,7 @@ consistent with the `uses` field of this property map resource. The data
 component of a property map response is named `property-map`, which is a JSON
 object of type PropertyMapData, where:
 
-``` text
+~~~
     object {
       PropertyMapData property-map;
     } InfoResourceProperties : ResponseEntityBase;
@@ -244,7 +244,7 @@ object of type PropertyMapData, where:
     object {
       EntityPropertyName -> JSONValue;
     } EntityProps;
-```
+~~~
 
 The ResponseEntityBase type is defined in Section 8.4 of {{RFC7285}}.
 
@@ -305,29 +305,31 @@ with a data format indicated by the media type
 `application/alto-propmapparams+json`, which is a JSON object of type
 ReqFilteredPropertyMap:
 
-``` text
+~~~
   object {
     EntityID             entities<1..*>;
     EntityPropertyName   properties<1..*>;
   } ReqFilteredPropertyMap;
-```
+~~~
 
 with fields:
 
 entities:
-~ List of entity identifiers for which the specified properties are to be
-returned. The ALTO server MUST interpret entries appearing multiple times as if
-they appeared only once. The domain of each entity MUST be included in the list
-of entity domains in this resource's `capabilities` field
-(see [](#FilteredPropMapCapabilities)).
+: List of entity identifiers for which the specified properties are to be
+  returned. The ALTO server MUST interpret entries appearing multiple times
+  as if they appeared only once. The domain of each entity MUST be included
+  in the list of entity domains in this resource's `capabilities` field (see
+  [](#FilteredPropMapCapabilities)).
 
 properties:
-~ List of properties to be returned for each entity. Each specified property
-MUST be included in the list of properties in this resource's `capabilities`
-field (see [](#FilteredPropMapCapabilities)). The ALTO server MUST interpret
-entries appearing multiple times as if they appeared only once.
-~ Note that the `entities` and `properties` fields MUST have at least one entry
-each.
+: List of properties to be returned for each entity. Each specified property
+  MUST be included in the list of properties in this resource's
+  `capabilities` field (see [](#FilteredPropMapCapabilities)). The ALTO
+  server MUST interpret entries appearing multiple times as if they appeared
+  only once.
+
+  Note that the `entities` and `properties` fields MUST have at least one entry
+  each.
 
 ## Capabilities {#FilteredPropMapCapabilities}
 
@@ -348,28 +350,28 @@ rule as defined by the property map resource applies (see [](#FullPropMapUses)).
 
 <!-- YRY: say refer to the same consistency of uses in Section 4.5. -->
 
-## Response {#FilteredPropMapResponse}
+## Filtered Property Map Response {#FilteredPropMapResponse}
 
 The response MUST indicate an error, using ALTO protocol error handling, as
-defined in Section 8.5 of [](#RFC7285), if the request is invalid.
+defined in Section 8.5 of {{RFC7285}}, if the request is invalid.
 
-Specifically, a filtered property map request can be invalid as follows:
+Specifically, a filtered property map request can be invalid in the following cases:
 
-* An entity identifier in `entities` in the request is invalid if:
+* An entity identifier in the `entities` field of the request is invalid if:
 
     * The domain of this entity is not defined in the `entity-domains`
-      capability of this resource in the IRD;
-    * The entity identifier is an invalid identifier in the entity domain.
+      capability of this resource in the IRD,
+    * The entity identifier is not valid for the entity domain.
 
-    A valid entity identifier is never an error, even if this filtered property
+    A valid entity identifier does never generate an error, even if the filtered property
     map resource does not define any properties for it.
 
-    If an entity identifier in `entities` in the request is invalid, the ALTO
+    If an entity identifier in the `entities` field of the request is invalid, the ALTO
     server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section
-    8.5.2 of [](#RFC7285), and the `value` field of the error message SHOULD
-    indicate this entity identifier.
+    8.5.2 of {{RFC7285}}, and the `value` field of the error message SHOULD
+    indicate the provided invalid entity identifier.
 
-* A property name in `properties` in the request is invalid if this
+* A property name in the `properties` field of the request is invalid if this
   property name is not defined in the `properties` capability of this
   resource in the IRD.
 
@@ -380,7 +382,7 @@ Specifically, a filtered property map request can be invalid as follows:
 
     If a property name in `properties` in the request is invalid, the ALTO
     server MUST return an `E_INVALID_FIELD_VALUE` error defined in Section
-    8.5.2 of [](#RFC7285). The `value` field of the error message SHOULD
+    8.5.2 of {{RFC7285}}. The `value` field of the error message SHOULD
     indicate the property name.
     
 The response to a valid request is the same as for the Property Map
@@ -390,12 +392,12 @@ The response to a valid request is the same as for the Property Map
   `dependent-vtags` field in its `meta` field MUST include version tags of all
   dependent resources appearing in the `uses` field.
 * If the requested entities only include entities in resource-specific entity
-  domains, the `dependent-vtags` field in its `meta` field MUST include version
-  tags of resources which requested resource-specific entity domains and
-  requested resource-specific properties are dependent on.
+  domains, the `dependent-vtags` field in its `meta` field MUST include the version
+  tags of the resources on which the requested resource-specific entity domains and
+  the requested resource-specific properties are dependent on.
 * The response only includes the entities and properties requested by the
   client. If an entity in the request is identified by a hierarchical identifier
-  (e.g., a `ipv4` or `ipv6` prefix), the response MUST cover properties
+  (e.g., a "ipv4" or "ipv6" prefix), the response MUST cover properties
   for all identifiers in this hierarchical identifier.
 
 The filtered property map response MUST include all the inherited property
@@ -416,10 +418,11 @@ the ALTO server MAY follow three rules:
   a request for property P of entity A (e.g., ipv4:192.0.2.0/31), if P has value
   v1 for A1=ipv4:192.0.2.0/32 and v2 for A2=ipv4:192.0.2.1/32, then, the
   response SHOULD include A1 and A2.
-* If an entity in the response is already covered by some other entities in the
-  same response, it SHOULD be removed from the response for compactness. For
-  example, in the previous example, the entity A=ipv4:192.0.2.0/31 SHOULD be
-  removed because A1 and A2 cover all the addresses in A.
+* If an entity identifier in the response is already covered by other
+  entities identifiers in the same response, it SHOULD be removed from the
+  response, for the sake of compactness. In the previous example, the entity
+  A = ipv4:192.0.2.0/31 SHOULD be removed because A1 and A2 cover all the
+  addresses in A.
 
 An ALTO client should be aware that the entities in the response MAY be
 different from the entities in its request.

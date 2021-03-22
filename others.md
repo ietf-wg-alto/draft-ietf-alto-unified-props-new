@@ -1,3 +1,4 @@
+
 # Security Considerations {#SecSC}
 
 Both Property Map and Filtered Property Map defined in this document fit into
@@ -35,92 +36,87 @@ Registry that extends the ALTO endpoint property registry defined in
 This document registers two additional ALTO media types, listed in
 [](#TableMediaTypes).
 
--------------------------------------------------------------
-Type        Subtype                 Specification
------------ ----------------------- -------------------------
-application alto-propmap+json       [](#FullPropMapMediaType)
-
-application alto-propmapparams+json [](#filter-prop-map-params)
-
--------------------------------------------------------------
-
-^[TableMediaTypes::Additional ALTO Media Types.]
+|---
+| Type | Subtype | Specification
+|:-|:-|:-
+| application | alto-propmap+json | [](#FullPropMapMediaType)
+|---
+| application | alto-propmapparams+json | [](#filter-prop-map-params)
+{: #TableMediaTypes title="Additional ALTO Media Types."}
 
 Type name:
-~ application
+: application
 
 Subtype name:
-~ This document registers multiple subtypes, as listed in [](#TableMediaTypes).
+: This document registers multiple subtypes, as listed in [](#TableMediaTypes).
 
 Required parameters:
-~ n/a
+: n/a
 
 Optional parameters:
-~ n/a
+: n/a
 
 Encoding considerations:
-~ Encoding considerations are identical to those specified for the
-`application/json` media type. See {{RFC7159}}.
+: Encoding considerations are identical to those specified for the
+  `application/json` media type. See {{RFC8259}}.
 
 Security considerations:
-~ Security considerations related to the generation and consumption of ALTO
-Protocol messages are discussed in Section 15 of {{RFC7285}}.
+: Security considerations related to the generation and consumption of ALTO
+  Protocol messages are discussed in Section 15 of {{RFC7285}}.
 
 Interoperability considerations:
-~ This document specifies formats of conforming messages and the interpretation
-thereof.
+: This document specifies formats of conforming messages and the interpretation
+  thereof.
 
 Published specification:
-~ This document is the specification for these media types; see
-[](#TableMediaTypes) for the section documenting each media type.
+: This document is the specification for these media types; see
+  [](#TableMediaTypes) for the section documenting each media type.
 
 Applications that use this media type:
-~ ALTO servers and ALTO clients either stand alone or are embedded within other
-applications.
+: ALTO servers and ALTO clients either stand alone or are embedded within other
+  applications.
 
 Additional information:
-~   Magic number(s):
-    ~ n/a
+:
+  Magic number(s):
+  : n/a
 
-    File extension(s):
-    ~ This document uses the mime type to refer to protocol messages and thus does
-    not require a file extension.
+  File extension(s):
+  : This document uses the mime type to refer to protocol messages and thus does
+  not require a file extension.
 
-    Macintosh file type code(s):
-    ~ n/a
+  Macintosh file type code(s):
+  : n/a
 
 Person &amp; email address to contact for further information:
-~ See Authors' Addresses section.
+: See Authors' Addresses section.
 
 Intended usage:
-~ COMMON
+: COMMON
 
 Restrictions on usage:
-~ n/a
+: n/a
 
 Author:
-~ See Authors' Addresses section.
+: See Authors' Addresses section.
 
 Change controller:
-~ Internet Engineering Task Force (mailto:iesg@ietf.org).
+: Internet Engineering Task Force (mailto:iesg@ietf.org).
 
 ## ALTO Entity Domain Type Registry {#IANADomain}
 
 This document requests IANA to create and maintain the "ALTO Entity Domain Type
 Registry", listed in [](#TableEntityDomainNames).
 
--------------------------------------------------------------------------------------------------
-Identifier Entity Identifier Encoding Hierarchy &amp; Inheritance Media Type of Defining Resource
----------- -------------------------- --------------------------- -------------------------------
-ipv4       See [](#ipv4-domain)       See [](#inet-inheritance)   application/alto-networkmap+json
-
-ipv6       See [](#ipv6-domain)       See [](#inet-inheritance)   application/alto-networkmap+json
-
-pid        See [](#pid-domain)        None                        application/alto-networkmap+json
-
--------------------------------------------------------------------------------------------------
-
-^[TableEntityDomainNames::ALTO Entity Domains.]
+|---
+| Identifier | Entity Identifier Encoding | Hierarchy &amp; Inheritance | Media Type of Defining Resource
+|:-|:-|:-|:-
+| ipv4 | See [](#ipv4-domain) | See [](#inet-inheritance) | application/alto-networkmap+json
+|---
+| ipv6 | See [](#ipv6-domain) | See [](#inet-inheritance) | application/alto-networkmap+json
+|---
+| pid | See [](#pid-domain) | None | application/alto-networkmap+json
+{: #TableEntityDomainNames title="ALTO Entity Domain Types"}
 
 This registry serves two purposes. First, it ensures uniqueness of
 identifiers referring to ALTO entity domain types. Second, it states the
@@ -150,15 +146,15 @@ To achieve this consistency, the following items MUST be checked before
 registering a new ALTO entity domain type in a future document:
 
 * Whether the ALTO Address Type Registry contains an address type that can be
-  used as an entity identifier for the candidate domain identifier. This has been
-  done for the identifiers "ipv4" and "ipv6" in [](#TableEntityDomainNames).
+  used as an identifier for the candidate entity domain type identifier. This has been
+  done for the identifiers "ipv4" and "ipv6" of [](#TableEntityDomainNames).
 * Whether the candidate entity domain type identifier can potentially be an
   endpoint address type, as defined in Sections 2.1 and 2.2 of {{RFC7285}}.
 
 When a new ALTO entity domain type is registered, the consistency with the ALTO
 Address Type Registry MUST be ensured by the following procedure:
 
-* Test: Do corresponding entity identifiers match a known "network" address type?
+* Test: Do corresponding entity domain type identifiers match a known "network" address type?
     * If yes (e.g., cell, MAC or socket addresses):
         * Test: Is such an address type present in the ALTO Address Type
           Registry?
@@ -231,13 +227,13 @@ MUST include the following information:
 * Security Considerations: In some usage scenarios, entity identifiers carried in
   ALTO Protocol messages may reveal information about an ALTO client or an ALTO
   service provider. Applications and ALTO service providers using addresses of
-  the registered type should be made aware of how (or if) the addressing scheme
+  the registered type should be cognizant of how (or if) the addressing scheme
   relates to private information and network proximity.
 
 This specification requests registration of the identifiers "ipv4", "ipv6" and
 "pid", as shown in [](#TableEntityDomainNames).
 
-## ALTO Entity Property Type Registry {#IANAEndpointProp}
+## ALTO Entity Property Type Registry {#IANAEntityProp}
 
 This document requests IANA to create and maintain the "ALTO Entity Property
 Type Registry", listed in [](#TablePropertyTypes).
@@ -250,15 +246,11 @@ in this registry is an ALTO entity property type defined in
 identifier MUST conform to the syntactical requirements specified in that
 section.
 
--------------------------------------------------------------
-Identifier Intended Semantics Media Type of Defining Resource
----------- ------------------ -------------------------------
-pid        See Section 7.1.1  application/alto-networkmap+json
-           of [](#RFC7285)
-
--------------------------------------------------------------
-
-^[TablePropertyTypes::ALTO Entity Property Types.]
+|---
+| Identifier | Intended Semantics | Media Type of Defining Resource
+|:-|:-|:-
+| pid | See Section 7.1.1 of [](#RFC7285) | application/alto-networkmap+json
+{: #TablePropertyTypes title="ALTO Entity Property Types."}
 
 Requests to the IANA to add a new value to the registry MUST include the
 following information:
@@ -275,7 +267,7 @@ following information:
 * Media type of defining information resource: when the property type allows
   values to be defined relatively to a given information resource, the latter
   is referred to as the "defining information resource", see also description
-  in [](#type-of-specific-ir-for-ir-specific-property-value). The media type
+  in [](#def-ir-for-irsp). The media type
   of the possibly used defining information resource MUST be indicated.
 * Security Considerations: ALTO entity properties expose information to ALTO
   clients. ALTO service providers should be cognizant of the security
@@ -291,59 +283,6 @@ This document requests registration of the identifier "pid", listed in
 Section 7.1.1 of {{RFC7285}}. No security issues related to the exposure of a
 "pid" identifier are considered, as it is exposed with the Network Map
 Service defined and mandated in {{RFC7285}}.
-
-<!--
-## ALTO Resource-Specific Entity Domain Registries {#IANAResourceEDE}
-
-### Network Map
-
-Media-type: application/alto-networkmap+json
-
---------------------------------------
-Entity Domain Type Intended Semantics
------------------- -------------------
-ipv4               See [](#netmap-ede)
-
-ipv6               See [](#netmap-ede)
-
-pid                See [](#netmap-ede)
-
---------------------------------------
-
-^[TableNetMapEDE::ALTO Network Map Resource-Specific Entity Domain.]
-
-### Endpoint Property
-
-Media-type: application/alto-endpointprop+json
-
---------------------------------------
-Entity Domain Type Intended Semantics
------------------- -------------------
-ipv4               See [](#ep-ede)
-
-ipv6               See [](#ep-ede)
-
---------------------------------------
-
-^[TableEndpointPropEDE::ALTO Endpoint Property Resource-Specific Entity Domain.]
-
-## ALTO Resource Entity Property Mapping Registries {#IANAResourceEPT}
-
-### Network Map
-
-Media-type: application/alto-networkmap+json
-
------------------------------------------------------------------------
-Mapping Descriptor Entity Domain Type Property Type Intended Semantics
------------------- ------------------ ------------- -------------------
-ipv4 -> pid        ipv4               pid           See [](#netmap-ept)
-
-ipv6 -> pid        ipv6               pid           See [](#netmap-ept)
-
------------------------------------------------------------------------
-
-^[TableNetMapEPT::ALTO Network Map Entity Property Mapping.]
--->
 
 # Acknowledgments {#ack}
 

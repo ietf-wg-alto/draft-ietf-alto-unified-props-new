@@ -1,80 +1,76 @@
+
 # Examples {#examples}
 
 ## Network Map {#net-map-example}
 
 The examples in this section use a very simple default network map:
 
-``` text
-defaultpid:  ipv4:0.0.0.0/0  ipv6:::0/0
-pid1:        ipv4:192.0.2.0/25
-pid2:        ipv4:192.0.2.0/27
-pid3:        ipv4:192.0.3.0/28
-pid4:        ipv4:192.0.3.16/28
-```
-
-^[net-map-values-ex::Example Default Network Map]
+~~~
+               defaultpid:  ipv4:0.0.0.0/0  ipv6:::0/0
+               pid1:        ipv4:192.0.2.0/25
+               pid2:        ipv4:192.0.2.0/27
+               pid3:        ipv4:192.0.3.0/28
+               pid4:        ipv4:192.0.3.16/28
+~~~
+{: #net-map-values-ex title="Example Default Network Map"}
 
 And another simple alternative network map:
 
-``` text
-defaultpid:  ipv4:0.0.0.0/0  ipv6:::0/0
-pid1:        ipv4:192.0.2.0/27
-pid2:        ipv4:192.0.3.0/27
-```
-
-^[alt-net-map-values-ex::Example Alternative Network Map]
+~~~
+               defaultpid:  ipv4:0.0.0.0/0  ipv6:::0/0
+               pid1:        ipv4:192.0.2.0/27
+               pid2:        ipv4:192.0.3.0/27
+~~~
+{: #alt-net-map-values-ex title="Example Alternative Network Map"}
 
 
 ## Property Definitions {#inet-prop-example}
 
-Beyond `pid`, the examples in this section use four additional properties for
-Internet address domains, `ISP`, `ASN`, `country` and `state`, with the
+Beyond "pid", the examples in this section use four additional properties for
+Internet address domains, "ISP", "ASN", "country" and "state", with the
 following values:
 
-```
-                        ISP    ASN   country   state
-ipv4:192.0.2.0/23:    BitsRus   -      us       -
-ipv4:192.0.2.0/28:       -    12345    -        NJ
-ipv4:192.0.2.16/28:      -    12345    -        CT
-ipv4:192.0.2.1:          -      -      -        PA
-ipv4:192.0.3.0/28:       -    12346    -        TX
-ipv4:192.0.3.16/28:      -    12346    -        MN
-```
+~~~
+                                ISP    ASN   country   state
+        ipv4:192.0.2.0/23:    BitsRus   -      us       -
+        ipv4:192.0.2.0/28:       -    12345    -        NJ
+        ipv4:192.0.2.16/28:      -    12345    -        CT
+        ipv4:192.0.2.1:          -      -      -        PA
+        ipv4:192.0.3.0/28:       -    12346    -        TX
+        ipv4:192.0.3.16/28:      -    12346    -        MN
+~~~
+{: #prop-map-values-ip-ex title="Example Property Values for Internet Address Domains"}
 
-^[prop-map-values-ip-ex::Example Property Values for Internet Address Domains]
-
-And the examples in this section use the property `region` for the PID domain of
+And the examples in this section use the property "region" for the PID domain of
 the default network map with the following values:
 
-```
-                   region
-pid:defaultpid:     -
-pid:pid1:           us-west
-pid:pid2:           us-east
-pid:pid3:           us-south
-pid:pid4:           us-north
-```
+~~~
+                                      region
+                   pid:defaultpid:     -
+                   pid:pid1:           us-west
+                   pid:pid2:           us-east
+                   pid:pid3:           us-south
+                   pid:pid4:           us-north
+~~~
+{: #prop-map-values-pid-ex title="Example Property Values for Default Network Map's PID Domain"}
 
-^[prop-map-values-pid-ex::Example Property Values for Default Network Map's PID Domain]
-
-Note that `-` means the value of the property for the entity is "undefined". So
+Note that "-" means the value of the property for the entity is "undefined". So
 the entity would inherit a value for this property by the inheritance rule if
-possible. For example, the value of the `ISP` property for `ipv4:192.0.2.1` is
-`BitsRus` because of `ipv4:192.0.2.0/24`. But the `region` property for
-`pid:defaultpid` has no value because no entity from which it can inherit.
+possible. For example, the value of the "ISP" property for "ipv4:192.0.2.1" is
+"BitsRus" because of "ipv4:192.0.2.0/24". But the "region" property for
+"pid:defaultpid" has no value because no entity from which it can inherit.
 
 Similar to the PID domain of the default network map, the examples in this
-section use the property `ASN` for the PID domain of the alternative network map
+section use the property "ASN" for the PID domain of the alternative network map
 with the following values:
 
-```
-                   ASN
-pid:defaultpid:     -
-pid:pid1:         12345
-pid:pid2:         12346
-```
-
-^[alt-prop-map-values-pid-ex::Example Property Values for Alternative Network Map's PID Domain]
+~~~
+                                          ASN
+                       pid:defaultpid:     -
+                       pid:pid1:         12345
+                       pid:pid2:         12346
+~~~
+{: #alt-prop-map-values-pid-ex title="Example Property Values for Alternative Network Map's PID Domain"}
 
 ## Information Resource Directory (IRD) {#ird-example}
 
@@ -107,100 +103,100 @@ The server provides another filtered Property map resource, named
 identifier. The entity domain to which the ANEs belong is "self-defined" and
 valid only within the property map.
 
-```
-GET /directory HTTP/1.1
-Host: alto.example.com
-Accept: application/alto-directory+json,application/alto-error+json
-
-HTTP/1.1 200 OK
-Content-Length: 2827
-Content-Type: application/alto-directory+json
-
-{
-  "meta" : {
-    "default-alto-network-map" : "default-network-map"
-  },
-  "resources" : {
-    "default-network-map" : {
-      "uri" : "http://alto.example.com/networkmap/default",
-      "media-type" : "application/alto-networkmap+json"
-    },
-    "alt-network-map" : {
-      "uri" : "http://alto.example.com/networkmap/alt",
-      "media-type" : "application/alto-networkmap+json"
-    },
-    "ia-property-map" : {
-      "uri" : "http://alto.example.com/propmap/full/inet-ia",
-      "media-type" : "application/alto-propmap+json",
-      "uses": [ "default-network-map", "alt-network-map" ],
-      "capabilities" : {
-        "mappings": {
-          "ipv4": [ ".ISP", ".ASN" ],
-          "ipv6": [ ".ISP", ".ASN" ]
-        }
-      }
-    },
-    "iacs-property-map" : {
-      "uri" : "http://alto.example.com/propmap/lookup/inet-iacs",
-      "media-type" : "application/alto-propmap+json",
-      "accepts": "application/alto-propmapparams+json",
-      "uses": [ "default-network-map", "alt-network-map" ],
-      "capabilities" : {
-        "mappings": {
-          "ipv4": [ ".ISP", ".ASN", ".country", ".state" ],
-          "ipv6": [ ".ISP", ".ASN", ".country", ".state" ]
-        }
-      }
-    },
-    "region-property-map": {
-      "uri": "http://alto.example.com/propmap/lookup/region",
-      "media-type": "application/alto-propmap+json",
-      "accepts": "application/alto-propmapparams+json",
-      "uses" : [ "default-network-map", "alt-network-map" ],
-      "capabilities": {
-        "mappings": {
-          "default-network-map.pid": [ ".region" ],
-          "alt-network-map.pid": [ ".ASN" ]
-        }
-      }
-    },
-    "ip-pid-property-map" : {
-      "uri" : "http://alto.example.com/propmap/lookup/pid",
-      "media-type" : "application/alto-propmap+json",
-      "accepts" : "application/alto-propmapparams+json",
-      "uses" : [ "default-network-map", "alt-network-map" ],
-      "capabilities" : {
-        "mappings": {
-          "ipv4": [ "default-network-map.pid",
-                    "alt-network-map.pid" ],
-          "ipv6": [ "default-network-map.pid",
-                    "alt-network-map.pid" ]
-        }
-      }
-    },
-    "legacy-endpoint-property" : {
-      "uri" : "http://alto.example.com/legacy/eps-pid",
-      "media-type" : "application/alto-endpointprop+json",
-      "accepts" : "application/alto-endpointpropparams+json",
-      "capabilities" : {
-        "properties" : [ "default-network-map.pid",
-                         "alt-network-map.pid" ]
-      }
-    },
-    "ane-dc-property-map": {
-      "uri" : "http://alto.example.com/propmap/lookup/ane-dc",
-      "media-type" : "application/alto-propmap+json",
-      "accepts": "application/alto-propmapparams+json",
-      "capabilities": {
-        "mappings": {
-          ".ane" : [ "storage-capacity", "ram", "cpu" ]
-        }
-      }
-    }
-  }
-}
-```
-^[example-ird::Example IRD]
+~~~
+ GET /directory HTTP/1.1
+ Host: alto.example.com
+ Accept: application/alto-directory+json,application/alto-error+json
+ 
+ HTTP/1.1 200 OK
+ Content-Length: 2827
+ Content-Type: application/alto-directory+json
+ 
+ {
+   "meta" : {
+     "default-alto-network-map" : "default-network-map"
+   },
+   "resources" : {
+     "default-network-map" : {
+       "uri" : "http://alto.example.com/networkmap/default",
+       "media-type" : "application/alto-networkmap+json"
+     },
+     "alt-network-map" : {
+       "uri" : "http://alto.example.com/networkmap/alt",
+       "media-type" : "application/alto-networkmap+json"
+     },
+     "ia-property-map" : {
+       "uri" : "http://alto.example.com/propmap/full/inet-ia",
+       "media-type" : "application/alto-propmap+json",
+       "uses": [ "default-network-map", "alt-network-map" ],
+       "capabilities" : {
+         "mappings": {
+           "ipv4": [ ".ISP", ".ASN" ],
+           "ipv6": [ ".ISP", ".ASN" ]
+         }
+       }
+     },
+     "iacs-property-map" : {
+       "uri" : "http://alto.example.com/propmap/lookup/inet-iacs",
+       "media-type" : "application/alto-propmap+json",
+       "accepts": "application/alto-propmapparams+json",
+       "uses": [ "default-network-map", "alt-network-map" ],
+       "capabilities" : {
+         "mappings": {
+           "ipv4": [ ".ISP", ".ASN", ".country", ".state" ],
+           "ipv6": [ ".ISP", ".ASN", ".country", ".state" ]
+         }
+       }
+     },
+     "region-property-map": {
+       "uri": "http://alto.example.com/propmap/lookup/region",
+       "media-type": "application/alto-propmap+json",
+       "accepts": "application/alto-propmapparams+json",
+       "uses" : [ "default-network-map", "alt-network-map" ],
+       "capabilities": {
+         "mappings": {
+           "default-network-map.pid": [ ".region" ],
+           "alt-network-map.pid": [ ".ASN" ]
+         }
+       }
+     },
+     "ip-pid-property-map" : {
+       "uri" : "http://alto.example.com/propmap/lookup/pid",
+       "media-type" : "application/alto-propmap+json",
+       "accepts" : "application/alto-propmapparams+json",
+       "uses" : [ "default-network-map", "alt-network-map" ],
+       "capabilities" : {
+         "mappings": {
+           "ipv4": [ "default-network-map.pid",
+                     "alt-network-map.pid" ],
+           "ipv6": [ "default-network-map.pid",
+                     "alt-network-map.pid" ]
+         }
+       }
+     },
+     "legacy-endpoint-property" : {
+       "uri" : "http://alto.example.com/legacy/eps-pid",
+       "media-type" : "application/alto-endpointprop+json",
+       "accepts" : "application/alto-endpointpropparams+json",
+       "capabilities" : {
+         "properties" : [ "default-network-map.pid",
+                          "alt-network-map.pid" ]
+       }
+     },
+     "ane-dc-property-map": {
+       "uri" : "http://alto.example.com/propmap/lookup/ane-dc",
+       "media-type" : "application/alto-propmap+json",
+       "accepts": "application/alto-propmapparams+json",
+       "capabilities": {
+         "mappings": {
+           ".ane" : [ "storage-capacity", "ram", "cpu" ]
+         }
+       }
+     }
+   }
+ }
+~~~
+{: #example-ird title="Example IRD"}
 
 
 ## Full Property Map Example {#prop-map-example}
@@ -220,13 +216,13 @@ merged into "ipv4:192.0.2.0/27", because they have the same value of the
 the value for the "ISP" property, because it is inherited from
 "ipv4:192.0.2.0/23".
 
-```
+~~~
 GET /propmap/full/inet-ia HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
-```
+~~~
 
-```
+~~~
 HTTP/1.1 200 OK
 Content-Length: 418
 Content-Type: application/alto-propmap+json
@@ -246,7 +242,7 @@ Content-Type: application/alto-propmap+json
     "ipv4:192.0.3.0/27":   {".ASN": "12346"}
   }
 }
-```
+~~~
 
 ## Filtered Property Map Example #1 ## {#filt-prop-map-example-1}
 
@@ -257,7 +253,7 @@ Note that the value of "state" for "ipv4:192.0.2.0" is the only explicitly
 defined property; the other values are all derived by the inheritance rules
 for Internet address entities.
 
-```
+~~~
 POST /propmap/lookup/inet-iacs HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
@@ -270,9 +266,9 @@ Content-Type: application/alto-propmapparams+json
                  "ipv4:192.0.2.17" ],
   "properties" : [ ".ISP", ".ASN", ".state" ]
 }
-```
+~~~
 
-```
+~~~
 HTTP/1.1 200 OK
 Content-Length: 540
 Content-Type: application/alto-propmap+json
@@ -295,7 +291,7 @@ Content-Type: application/alto-propmap+json
            {".ISP": "BitsRus", ".ASN": "12345", ".state": "CT"}
   }
 }
-```
+~~~
 
 ## Filtered Property Map Example #2 ## {#filt-prop-map-example-2}
 
@@ -315,7 +311,7 @@ The entity "ipv4:192.0.4.0/26" is not included in the response, because there
 are neither entities which it is inherited from, nor entities inherited from
 it.
 
-```
+~~~
 POST /propmap/lookup/inet-iacs HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
@@ -328,9 +324,9 @@ Content-Type: application/alto-propmapparams+json
                  "ipv4:192.0.4.0/26" ],
   "properties" : [ ".ASN", ".country", ".state" ]
 }
-```
+~~~
 
-```
+~~~
 HTTP/1.1 200 OK
 Content-Length: 766
 Content-Type: application/alto-propmap+json
@@ -358,7 +354,7 @@ Content-Type: application/alto-propmap+json
                            ".state": "MN"}
   }
 }
-```
+~~~
 
 ## Filtered Property Map Example #3 ## {#filt-prop-map-example-3}
 
@@ -370,7 +366,7 @@ Note that the entity "ipv4:192.0.3.0/27" is decomposed into two entities
 "ipv4:192.0.3.0/28" and "ipv4:192.0.3.16/28", as they have different
 "default-network-map.pid" property values.
 
-```
+~~~
 POST /propmap/lookup/pid HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
@@ -385,9 +381,9 @@ Content-Type: application/alto-propmapparams+json
   "properties" : [ "default-network-map.pid",
                    "alt-network-map.pid ]
 }
-```
+~~~
 
-```
+~~~
 HTTP/1.1 200 OK
 Content-Length: 774
 Content-Type: application/alto-propmap+json
@@ -412,7 +408,7 @@ Content-Type: application/alto-propmap+json
                            "alt-network-map.pid": "pid2"}
   }
 }
-```
+~~~
 
 ## Filtered Property Map Example #4 ## {#filt-prop-map-example-4}
 
@@ -421,7 +417,7 @@ for several PIDs in "default-network-map". The "region" property is specified
 as a "self-defined" property, i.e., the values of this property are defined
 by this property map resource.
 
-```
+~~~
 POST /propmap/lookup/region HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
@@ -433,9 +429,9 @@ Content-Type: application/alto-propmapparams+json
                 "default-network-map.pid:pid2"],
   "properties" : [ ".region" ]
 }
-```
+~~~
 
-```
+~~~
 HTTP/1.1 200 OK
 Content-Length: 326
 Content-Type: application/alto-propmap+json
@@ -456,7 +452,7 @@ Content-Type: application/alto-propmap+json
     }
   }
 }
-```
+~~~
 
 ## Filtered Property Map for ANEs Example #5 ## {#ane-example}
 
@@ -464,7 +460,7 @@ The following example uses the filtered property map resource
 "ane-dc-property-map" to request properties "storage-capacity" and "cpu" on
 several ANEs defined in this property map.
 
-```
+~~~
 POST /propmap/lookup/ane-dc HTTP/1.1
 Host: alto.example.com
 Accept: application/alto-propmap+json,application/alto-error+json
@@ -477,9 +473,9 @@ Content-Type: application/alto-propmapparams+json
                 ".ane:dc6.srv-cluster8"],
   "properties" : [ "storage-capacity", "cpu"]
 }
-```
+~~~
 
-```
+~~~
 HTTP/1.1 200 OK
 Content-Length: 295
 Content-Type: application/alto-propmap+json
@@ -496,4 +492,4 @@ Content-Type: application/alto-propmap+json
       {"storage-capacity" : 6000 Gbytes, "cpu" : 100 Cores}
   }
 }
-```
+~~~

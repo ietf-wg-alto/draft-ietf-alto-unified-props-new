@@ -24,7 +24,7 @@ author:
   -
     ins: W. Roome
     name: Wendy Roome
-    org: Nokia Bell Labs (Retired)
+    org: Nokia Bell Labs
     street: 124 Burlington Rd
     city: Murray Hill
     region: NJ
@@ -47,8 +47,7 @@ author:
     org: Yale University
     street: 51 Prospect Street
     city: New Haven
-    region: CT
-    code: 06511
+    code: CT 06511
     country: USA
     phone: +1-203-432-6400
     email: yry@cs.yale.edu
@@ -61,15 +60,23 @@ author:
     code: 201804
     country: China
     email: jingxuan.n.zhang@gmail.com
+  -
+    ins: K. Gao
+    name: Kai Gao
+    org: Sichuan University
+    street: No.24 South Section 1, Yihuan Road
+    city: Chengdu
+    code: 610000
+    country: China
+    email: kaigao@scu.edu.cn
 
 normative:
   ISO3166-1:
-    title: "Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes, ISO 3166-1:2013"
+    title: "ISO 3166-1: Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes"
     author:
-      -
-        ins:
-        name: The International Organization for Standardization
-    date: 2013
+      - name: "ISO (International Organization for Standardization)"
+        ins: "ISO (International Organization for Standardization)"
+    date: 2020
   RFC2119:
   RFC3986:
   RFC4632:

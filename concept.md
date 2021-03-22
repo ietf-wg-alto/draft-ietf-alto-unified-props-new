@@ -1,3 +1,4 @@
+
 # Basic Features of the Entity Property Map Extension {#basic-features-of-the-unified-property-extension}
 
 This section gives a high-level overview of the basic features involved in
@@ -31,7 +32,7 @@ endpoints are entities, not all entities are endpoints.
 
 Examples of entities are:
 
-* an ALTO endpoint, defined in {RFC7285}}, that represents an application or
+* an ALTO endpoint, defined in {{RFC7285}}, that represents an application or
   a host identified by a communication address (e.g., an IPv4 or IPv6
   address) in a network,
 * a PID, defined in {{RFC7285}}, that has a provider defined human-readable
@@ -288,7 +289,7 @@ identifier, as it can reflect inclusion relations among entity sets. For
 example, the CIDR "ipv4:192.0.1.0/24" includes all the individual IPv4
 entities identified by the CIDR "ipv4:192.0.1.0/26".
 
-### Property Hierarchy
+### Property Inheritance
 
 A property may be defined for a hierarchical entity identifier, while it may
 be undefined for individual entities covered by this identifier. In this
@@ -405,7 +406,7 @@ network map is qualified in this document as the Defining Information
 Resource for the entity domain of type "pid" and this concept is explained in
 [](#defining-information-resource-and-media-type).
 
-### Defining Information Resource and its Media Type
+### Defining Information Resource and its Media Type {#defining-information-resource-and-media-type}
 
 For the reasons explained in the previous section, this document introduces
 the concept of defining information resource and media type.
@@ -483,7 +484,7 @@ entity domain types and their media type.
 
 ## Defining Information Resource for Resource-Specific Property Values {#def-ir-for-irsp}
 
-As explained in [](#resource-specific-entity-property), a property type may
+As explained in [](#rsep), a property type may
 take values that are resource specific. This is the case for property type
 "pid", whose values are by essence defined relatively to a specific network
 map. The PID value returned for an IPv4 address is specific to the network

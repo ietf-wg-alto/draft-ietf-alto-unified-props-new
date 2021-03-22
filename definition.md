@@ -1,4 +1,5 @@
-# Protocol Specification: Basic Data Type
+
+# Protocol Specification: Basic Data Types
 
 ## Entity Domain {#def-domain}
 
@@ -35,15 +36,15 @@ specified in the following sub-sections.
 Each entity domain is identified by a unique entity domain name which is a
 string of the following format:
 
-``` text
-EntityDomainName ::= [ [ ResourceID ] '.' ] EntityDomainType
-```
+~~~
+    EntityDomainName ::= [ [ ResourceID ] '.' ] EntityDomainType
+~~~
 
 Where the presence and construction of component:
 
-``` text
-"[ [ ResourceID ] '.' ]"
-```
+~~~
+    "[ [ ResourceID ] '.' ]"
+~~~
 
 depends on the category of entity domain.
 
@@ -95,9 +96,9 @@ relevant only to this property map.
 In this case, the entity domain is qualified as "self-defined". The
 identifier of a self-defined entity domain can be of the format:
 
-``` text
-EntityDomainName ::= '.' EntityDomainType
-```
+~~~
+    EntityDomainName ::= '.' EntityDomainType
+~~~
 
 where '.' indicates that the entity domain only exists within the property
 map resource using it.
@@ -115,9 +116,9 @@ domain name.
 Entities in an entity domain are identified by entity identifiers (EntityID) of
 the following format:
 
-``` text
+~~~
 EntityID ::= EntityDomainName ':' DomainTypeSpecificEntityID
-```
+~~~
 
 Examples from the Internet address entity domains include individual IP
 addresses such as `net1.ipv4:192.0.2.14` and `net1.ipv6:2001:db8::12`, as well
@@ -125,10 +126,10 @@ as address blocks such as `net1.ipv4:192.0.2.0/26` and
 `net1.ipv6:2001:db8::1/48`.
 
 The format of the second part of an entity identifier depends on the entity
-domain type, and MUST be specified when registering a new entity domain type.
-Identifiers MAY be hierarchical, and properties MAY be inherited based on that
-hierarchy. Again, the rules defining any hierarchy or inheritance MUST be
-defined when the entity domain type is registered.
+domain type, and MUST be specified when defining a new entity domain type and
+registering it with the IANA. Identifiers MAY be hierarchical, and properties
+MAY be inherited based on that hierarchy. The rules defining any hierarchy or
+inheritance MUST be defined when the entity domain type is registered.
 
 The type EntityID is used in this document to denote a JSON string
 representing an entity identifier in this format.
@@ -190,7 +191,7 @@ the following characteristics:
 * The intended semantics of the value of an entity property may also depend
   on the entity domain type. For example, suppose that a property named
   "geo-location" is defined as the coordinates of a point, encoded as:
-  "latitude longitude [altitude]." When applied to an entity that represents
+  "latitude longitude \[altitude\]." When applied to an entity that represents
   a specific host computer, identified by an address in an entity domain of
   type "ipv4" or "ipv6", the "geo-location" property would define the host's
   location. However, when applied to an entity in a "pid" domain type, the
@@ -202,9 +203,9 @@ the following characteristics:
 Each entity property is identified by an entity property name, which is a
 string of the following format:
 
-``` text
+~~~
 EntityPropertyName ::= [ ResourceID ] '.' EntityPropertyType
-```
+~~~
 
 Similar to the endpoint property type defined in Section 10.8 of {{RFC7285}},
 each entity property may be defined by either the property map itself
@@ -225,7 +226,7 @@ example, the property name ".asn" applied to an entity identitifed by its
 IPv4 address, indicates the AS number of the AS that "owns" the entity, where
 the returned AS number is defined by the property map itself.
 
-### Format for Entity Property Value
+### Format for Entity Property Value {#format-entity-property-value}
 
 {{RFC7285}} in Section 11.4.1.6, specifies that an implementation of the
 Endpoint Property Service specified in {{RFC7285}} SHOULD assume that the
