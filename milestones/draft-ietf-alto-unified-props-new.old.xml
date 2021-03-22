@@ -1,0 +1,158 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<!DOCTYPE rfc SYSTEM "http://http://tools.ietf.org/tools/templates/rfc2629.dtd" [
+  <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+  <!ENTITY RFC3986 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3986.xml">
+  <!ENTITY RFC4632 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4632.xml">
+  <!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
+  <!ENTITY RFC5952 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5952.xml">
+  <!ENTITY RFC7011 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7011.xml">
+  <!ENTITY RFC7159 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7159.xml">
+  <!ENTITY RFC7285 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7285.xml">
+  <!ENTITY RFC7921 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7921.xml">
+  <!ENTITY RFC8008 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8008.xml">
+
+  <!ENTITY abstract PUBLIC '' "abstract.xml.gen">
+  <!ENTITY introduction PUBLIC '' "introduction.xml.gen">
+  <!ENTITY concept PUBLIC '' "concept.xml.gen">
+  <!ENTITY definition PUBLIC '' "definition.xml.gen">
+  <!ENTITY specification PUBLIC '' "specification.xml.gen">
+  <!ENTITY example PUBLIC '' "example.xml.gen">
+  <!ENTITY others PUBLIC '' "others.xml.gen">
+  <!ENTITY appendix PUBLIC '' "appendix.xml.gen">
+]>
+<?rfc toc="yes"?>
+<?rfc iprnotified="no" ?>
+<?rfc symrefs="yes"?>
+<?rfc compact="yes" ?>
+<?rfc subcompact="no" ?>
+<rfc category="std"
+     docName="draft-ietf-alto-unified-props-new-10"
+     ipr="trust200902">
+<front>
+  <title abbrev="Unified Properties">Unified Properties for the ALTO Protocol</title>
+  <author initials="W." surname="Roome" fullname="Wendy Roome">
+    <organization abbrev="Nokia Bell Labs">Nokia Bell Labs (Retired)</organization>
+    <address>
+      <postal>
+        <street>124 Burlington Rd</street>
+        <city>Murray Hill</city>
+        <region>NJ</region>
+        <code>07974</code>
+        <country>USA</country>
+      </postal>
+      <phone>+1-908-464-6975</phone>
+      <email>wendy@wdroome.com</email>
+    </address>
+  </author>
+
+<!--
+  <author fullname="Shiwei Dawn Chen" initials="S. D." surname="Chen">
+    <organization>Tongji University</organization>
+    <address>
+      <postal>
+        <street>4800 Caoan Road</street>
+        <city>Shanghai</city>
+        <code>201804</code>
+        <country>China</country>
+      </postal>
+      <email>dawn_chen_f@hotmail.com</email>
+    </address>
+  </author>
+-->
+
+  <author fullname="Sabine Randriamasy" initials="S." surname="Randriamasy">
+    <organization>Nokia Bell Labs</organization>
+    <address>
+      <postal>
+        <street>Route de Villejust</street>
+        <city>NOZAY</city>
+        <code>91460</code>
+        <country>FRANCE</country>
+      </postal>
+      <email>Sabine.Randriamasy@nokia-bell-labs.com</email>
+    </address>
+  </author>
+
+  <author initials="Y." surname="Yang" fullname="Y. Richard Yang">
+    <organization abbrev="Yale University">Yale University</organization>
+    <address>
+      <postal>
+        <street>51 Prospect Street</street>
+        <city>New Haven</city>
+        <region>CT</region>
+        <code>06511</code>
+        <country>USA</country>
+      </postal>
+      <phone>+1-203-432-6400</phone>
+      <email>yry@cs.yale.edu</email>
+    </address>
+  </author>
+
+  <author fullname="Jingxuan Jensen Zhang" initials="J. J." surname="Zhang">
+    <organization>Tongji University</organization>
+
+    <address>
+      <postal>
+        <street>4800 Caoan Road</street>
+        <city>Shanghai</city>
+        <code>201804</code>
+        <country>China</country>
+      </postal>
+
+      <email>jingxuan.n.zhang@gmail.com</email>
+    </address>
+  </author>
+
+  <author fullname="Kai Gao" initials="K." surname="Gao">
+    <organization>Sichuan University</organization>
+    <address>
+      <postal>
+        <street></street>
+        <city>Chengdu</city>
+        <code>610000</code>
+        <country>China</country>
+      </postal>
+      <email>kaigao@scu.edu.cn</email>
+    </address>
+  </author>
+
+  <date />
+  <area>Networks</area>
+  <workgroup>ALTO WG</workgroup>
+  <keyword>ALTO</keyword>
+  <abstract>
+    &abstract;
+  </abstract>
+  <note title="Requirements Language">
+    <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+    document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.</t>
+  </note>
+</front>
+
+<middle>
+  &introduction;
+  &concept;
+  &definition;
+  &specification;
+  &example;
+  &others;
+</middle>
+
+<back>
+  <references title="Normative References">
+      &RFC2119;
+      &RFC3986;
+      &RFC4632;
+      &RFC5226;
+      &RFC5952;
+      &RFC7011;
+      &RFC7159;
+      &RFC7285;
+      &RFC7921;
+      <!-- &RFC8008; -->
+  </references>
+
+  &appendix;
+</back>
+</rfc>

@@ -1,0 +1,3718 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent" [
+<!ENTITY RFC2119 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC3986 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml">
+<!ENTITY RFC4632 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4632.xml">
+<!ENTITY RFC5952 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5952.xml">
+<!ENTITY RFC7011 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7011.xml">
+<!ENTITY RFC7285 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7285.xml">
+<!ENTITY RFC7921 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7921.xml">
+<!ENTITY RFC8126 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8126.xml">
+<!ENTITY RFC8174 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml">
+<!ENTITY RFC8259 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8259.xml">
+<!ENTITY I-D.gao-alto-fcs SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.draft-gao-alto-fcs-07.xml">
+<!ENTITY I-D.ietf-alto-cdni-request-routing-alto SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-alto-cdni-request-routing-alto-16.xml">
+<!ENTITY I-D.ietf-alto-path-vector SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-alto-path-vector-13.xml">
+]>
+<?rfc toc="yes"?>
+<?rfc iprnotified="no" ?>
+<?rfc symrefs="yes"?>
+<?rfc compact="yes" ?>
+<?rfc subcompact="no" ?>
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" submissionType="IETF" category="std" consensus="true" docName="draft-ietf-alto-unified-props-new-16" ipr="trust200902" tocInclude="true" tocDepth="3" sortRefs="true" symRefs="true" obsoletes="" updates="" xml:lang="en" version="3">
+  <!-- xml2rfc v2v3 conversion 2.40.0 -->
+  <front>
+    <title abbrev="Entity Property Maps"> ALTO extension: Entity Property Maps </title>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-alto-unified-props-new-16"/>
+    <author initials="W." surname="Roome" fullname="Wendy Roome">
+      <organization abbrev="Nokia Bell Labs">Nokia Bell Labs (Retired)</organization>
+      <address>
+        <postal>
+          <street>124 Burlington Rd</street>
+          <city>Murray Hill</city>
+          <region>NJ</region>
+          <code>07974</code>
+          <country>USA</country>
+        </postal>
+        <phone>+1-908-464-6975</phone>
+        <email>wendy@wdroome.com</email>
+      </address>
+    </author>
+    <!--
+  <author fullname="Shiwei Dawn Chen" initials="S. D." surname="Chen">
+    <organization>Tongji University</organization>
+    <address>
+      <postal>
+        <street>4800 Caoan Road</street>
+        <city>Shanghai</city>
+        <code>201804</code>
+        <country>China</country>
+      </postal>
+      <email>dawn_chen_f@hotmail.com</email>
+    </address>
+  </author>
+-->
+
+  <author fullname="Sabine Randriamasy" initials="S." surname="Randriamasy">
+      <organization>Nokia Bell Labs</organization>
+      <address>
+        <postal>
+          <street>Route de Villejust</street>
+          <city>NOZAY</city>
+          <code>91460</code>
+          <country>FRANCE</country>
+        </postal>
+        <email>Sabine.Randriamasy@nokia-bell-labs.com</email>
+      </address>
+    </author>
+    <author initials="Y." surname="Yang" fullname="Y. Richard Yang">
+      <organization abbrev="Yale University">Yale University</organization>
+      <address>
+        <postal>
+          <street>51 Prospect Street</street>
+          <city>New Haven</city>
+          <region>CT</region>
+          <code>06511</code>
+          <country>USA</country>
+        </postal>
+        <phone>+1-203-432-6400</phone>
+        <email>yry@cs.yale.edu</email>
+      </address>
+    </author>
+    <author fullname="Jingxuan Jensen Zhang" initials="J." surname="Zhang">
+      <organization>Tongji University</organization>
+      <address>
+        <postal>
+          <street>4800 Caoan Road</street>
+          <city>Shanghai</city>
+          <code>201804</code>
+          <country>China</country>
+        </postal>
+        <email>jingxuan.n.zhang@gmail.com</email>
+      </address>
+    </author>
+    <author fullname="Kai Gao" initials="K." surname="Gao">
+      <organization>Sichuan University</organization>
+      <address>
+        <postal>
+          <street>No.24 South Section 1, Yihuan Road</street>
+          <city>Chengdu</city>
+          <code>610000</code>
+          <country>China</country>
+        </postal>
+        <email>kaigao@scu.edu.cn</email>
+      </address>
+    </author>
+    <date/>
+    <area>Networks</area>
+    <workgroup>ALTO WG</workgroup>
+    <keyword>ALTO</keyword>
+    <abstract>
+      <!-- This document was prepared using Pandoc2rfc, https://github.com/miekg/pandoc2rfc -->
+<t>
+  This document extends the base Application-Layer Traffic Optimization
+  (ALTO) Protocol by generalizing the concept of "endpoint properties" as
+  applied to endpoints as defined by IP addresses to endpoints defined by a
+  wider set of objects. Further, these properties are presented as maps,
+  similar to the network and cost maps in the base ALTO protocol.
+  The protocol is extended in two major directions. First, from endpoints restricted to
+  IP addresses to entities covering a wider and extensible set of objects;
+  second, from properties on specific endpoints to entire entity property maps.
+  These extensions introduce additional features allowing entities and property
+  values to be specific to a given information resource. This is made possible by
+  a generic and flexible design of entity and property types.
+</t>
+    </abstract>
+    <!-- This document was prepared using Pandoc2rfc, https://github.com/miekg/pandoc2rfc
+  <note title="Requirements Language">
+    <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+    document are to be interpreted as described in <xref target="RFC2119"></xref>
+    when, and only when, they appear in all capitals, as shown here. </t>
+    <t>When the words appear in lower case, they are to be interpreted with
+    their natural language meanings.</t>
+  </note>-->
+</front>
+  <middle>
+    <!-- This document was prepared using Pandoc2rfc, https://github.com/miekg/pandoc2rfc -->
+
+
+<section anchor="introduction" numbered="true" toc="default">
+      <name>Introduction</name>
+      <t>
+    The ALTO protocol <xref target="RFC7285" format="default"/> introduces the
+    concept of "properties" attached to
+    "endpoint addresses", and defines the Endpoint
+    Property Service (EPS) to allow ALTO clients to retrieve those
+    properties. While useful, the EPS, as defined in
+    <xref target="RFC7285" format="default"/>, has at least three limitations.
+      </t>
+      <t>
+    First, the EPS allows properties to be associated with only
+    endpoints that are identified by individual communication addresses
+    like IPv4 and IPv6 addresses. It is reasonable to think that
+    collections of endpoints, as defined by CIDRs
+    <xref target="RFC4632" format="default"/> or PIDs, may also have properties.
+    Furthermore, recent ALTO use cases show that properties of
+    entities such as network flows <xref target="RFC7011" format="default"/>
+    and routing elements <xref target="RFC7921" format="default"/> are also useful.
+    Such cases are documented in <xref target="I-D.gao-alto-fcs" format="default"/>.
+    <!-- commented text new services, with new
+    request and response messages, need to be defined for them.-->
+    The current EPS however is restricted to individual endpoints and
+    cannot be applied to those entities.
+      </t>
+      <t>
+    Second, the EPS only allows endpoints identified by global
+    communication addresses. However, an endpoint address may be a local
+    IP address or an anycast IP address that may not be globally
+    unique. Additionally, an entity such as a PID may have an
+    identifier that is not globally unique. That is, a same PID
+    identifier may be used in multiple network maps, while in each
+    network map, this PID identifier points to a different set of
+    addresses. For example, PID "mypid10" may be defined in "netmap1"
+    and "netmap2" while in each network map, "mypid10" covers a different
+    set of addresses.
+      </t>
+      <t>
+    Third, the EPS is only defined as a POST-mode service. Clients must
+    request the properties for an explicit set of endpoint addresses. By
+    contrast, <xref target="RFC7285" format="default"/> defines a GET-mode cost
+    map resource which returns all available costs, so a client can get
+    a full set of costs once, and then process cost lookups without
+    querying the ALTO server. <xref target="RFC7285" format="default"/> does not
+    define a similar service for endpoint properties. At first, a map of
+    endpoint properties might seem impractical, because it could require
+    enumerating the property value for every possible endpoint. However,
+    in practice, it is highly unlikely that properties will be defined
+    for every endpoint address. It is much more likely that properties
+    may be defined for only a subset of endpoint addresses, and the
+    specification of properties uses an aggregation representation to
+    allow enumeration. This is particularly true if blocks of endpoint
+    addresses with a common prefix (e.g., a CIDR) have the same value
+    for a property. Entities in other domains may very well allow
+    aggregated representation and hence be enumerable as well.
+      </t>
+      <t>
+    To address the three limitations, this document specifies a protocol
+    extension for defining and retrieving ALTO properties:
+      </t>
+      <ul spacing="normal">
+        <li>
+        The first limitation is addressed by introducing a generic
+        concept called ALTO Entity, which generalizes an endpoint and
+        may represent a PID, a network element, a cell in a cellular
+        network, an abstracted network element as defined in
+        <xref target="I-D.ietf-alto-path-vector" format="default"/>,
+        or other physical or logical objects involved in a network topology.
+        Each entity is included in a collection called an ALTO Entity
+        Domain. Since each ALTO Entity Domain includes only one type of
+        entities, each Entity Domain can be classified by the type of
+        entities in it.
+    </li>
+        <li>
+        The second limitation is addressed by using resource-specific
+        entity domains. A resource-specific entity domain contains
+        entities that are defined and identified with respect to a given
+        ALTO information resource, which provides scoping. For example,
+        an entity domain containing PIDs is identified with respect to
+        the network map in which these PIDs are defined.
+        Likewise, an entity domain containing local IP addresses may be
+        defined with respect to a local network map.
+    </li>
+        <li>
+        The third limitation is addressed by defining two new types of
+        ALTO information resources: Property Map, detailed in
+        <xref target="prop-map" format="default"/> and Filtered Property Map,
+        detailed in <xref target="filter-prop-map" format="default"/>. The former
+        is a GET-mode resource that returns the property values for all
+        entities in one or more entity domains, and is analogous to a
+        network map or a cost map in <xref target="RFC7285" format="default"/>.
+        The latter is a POST-mode resource that returns the values for
+        sets of properties and entities requested by the client, and is
+        analogous to a filtered network map or a filtered cost map.
+    </li>
+      </ul>
+      <t>
+    The protocol extension defined in this document is augmentable.
+    New entity domain types can be defined without revising the
+    specification defined in this document. Similarly,
+    new cost metrics and new endpoint properties can be defined
+    in other documents without
+    revising the protocol specification defined in
+    <xref target="RFC7285" format="default"/>.
+      </t>
+      <!-- commented text
+  <t>
+    This document subsumes the Endpoint Property Service defined in
+    <xref target="RFC7285"/>, although that service may be
+    retained for legacy clients (see <xref target="legacy"/>).
+  </t>
+
+  <t>
+    This document assumes the reader is familiar with the base ALTO
+    protocol defined in <xref target="RFC7285"/>.
+  </t>-->
+
+  <section anchor="terminology" numbered="true" toc="default">
+        <name>Terminology</name>
+        <t>This document uses the following terms and abbreviations, that will be further defined in the document.
+  While this document introduces the feature "entity property map", it will use both the term "property map"  
+  and "entity property map" to refer to this feature. </t>
+        <ul spacing="normal">
+          <li>Transaction: A request/response exchange between an ALTO Client and an ALTO Server.</li>
+          <li>Client: When used with a capital "C", this term refers to an ALTO Client.</li>
+          <li>Server: When used with a capital "S", this term refers to an ALTO Server.</li>
+          <li>EPM: An abbreviation for entity property map</li>
+          <li>FPM: An abbreviation for filtered property map.</li>
+          <li>EPS: An abbreviation for Endpoint Property Service.</li>
+        </ul>
+      </section>
+    </section>
+    <!-- This document was prepared using Pandoc2rfc, https://github.com/miekg/pandoc2rfc -->
+<section anchor="requirement-language" numbered="true" toc="default">
+      <name>Requirements Language</name>
+      <t>
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in BCP
+14 <xref target="RFC2119" format="default"/> <xref target="RFC8174" format="default"/> when, and only when,
+they appear in all capitals, as shown here.
+When the words appear in lower case, they are to be interpreted with
+their natural language meanings.
+</t>
+    </section>
+    <section anchor="basic-features-of-the-unified-property-extension" numbered="true" toc="default">
+      <name>Basic Features of the Entity Property Map Extension</name>
+      <t>
+    This section gives a high-level overview of the basic features involved in
+    ALTO Entity Property Maps. It assumes
+    the reader is familiar with the ALTO protocol <xref target="RFC7285" format="default"/>.
+    The purpose of this extension is to allow conveying properties on objects
+    that extend ALTO Endpoints and are called ALTO Entities, or entities
+    for short.
+      </t>
+      <t>The features introduced in this section can be used as standalone.
+  However, in some cases, these features may depend on particular information
+  resources and need to be defined with respect to them.
+  To this end, <xref target="advanced-features-of-the-unified-property-extension" format="default"/>
+  introduces additional features that extend the ones
+  presented in the present section.</t>
+      <t>
+   The Entity Property Maps extension described in this document
+   introduces a number of features that are summarized in
+   <xref target="features-introduced-with-epm-extension" format="default"/>, where
+   <xref target="TableUPFeatures" format="default"/> lists the features and references
+   the sections in this document that give a high-level and normative
+   description thereof.
+      </t>
+      <section anchor="con-entity" numbered="true" toc="default">
+        <name>Entity</name>
+        <t>
+      The concept of an ALTO Entity generalizes the concept of an ALTO
+      Endpoint defined in Section 2.1 of
+      <xref target="RFC7285" format="default"/>. An entity is an object that can
+      be an endpoint that is defined by its network address, but can
+      also be an object that has a defined mapping to a set of one or
+      more network addresses or an object that is not even related to any network
+      address. Thus, whereas all endpoints are entities, not all entities are endpoints.
+        </t>
+        <t>
+      Examples of entities are:
+      <!-- (yry: why introduces the maps to part?)
+      (SR: if you mean each example should provide a mapping with network adresses,
+      I don't think so, given the slightly reworded definition above.) -->
+        </t>
+        <ul spacing="normal">
+          <li>
+          an ALTO endpoint, defined in <xref target="RFC7285" format="default"/>, that
+          represents an application or a host identified by a communication
+          address (e.g., an IPv4 or IPv6 address) in a network,
+      </li>
+          <li>
+          a PID, defined in <xref target="RFC7285" format="default"/>, that has a
+          provider defined human-readable identifier specified
+          by an ALTO network map, which maps a PID to a set of IPv4 and
+          IPv6 addresses,
+      </li>
+          <li>
+          an autonomous system (AS), that has an AS number (ASN) as its
+          identifier and maps to a set of IPv4 and IPv6 addresses,
+      </li>
+          <li>
+          a country with a code as specified in <xref target="ISO3166-1" format="default"/>,
+          to which applications such as CDN providers associate properties and capabilities,
+      </li>
+          <li>
+          a TCP/IP network flow, that is identified by
+          a TCP/IP 5-Tuple specifying its source and destination addresses and
+          port numbers and the utilized protocol,
+      </li>
+          <li>
+          a routing element, that is specified in
+          <xref target="RFC7921" format="default"/> and is associated with
+          routing capabilities information,
+      </li>
+          <li>
+          an abstract network element, that represents an abstraction of a network part
+          such as a router, one or more links, a
+          network domain or their aggregation.
+      </li>
+        </ul>
+      </section>
+      <section anchor="con-entity-domain" numbered="true" toc="default">
+        <name>Entity Domain</name>
+        <t>An entity domain defines a set of entities of the same semantic type.
+    An entity domain is characterized by its type and identified by its name.</t>
+        <t>
+      In this document, an entity must be owned by exactly one entity
+      domain name. An entity identifier must point to exactly one entity.
+      If two entities in two different entity domains refer to the
+      same physical or logical object, they are treated as different
+      entities. For example, if an object has both an IPv4 and an IPv6 address, these two
+      addresses will be treated as two entities, defined respectively in the "ipv4"
+      and "ipv6" entity domains.
+        </t>
+        <section anchor="con-entity-domain-type" numbered="true" toc="default">
+          <name>Entity Domain Type</name>
+          <t> The type of an entity domain type defines the semantics of a type of entity.
+      Entity domain types can be defined in different documents.
+
+      For example: the present document defines entity domain types "ipv4", "ipv6"
+      and "pid" in sections <xref target="inet-addr-domain" format="default"/> and <xref target="pid-domain" format="default"/>.
+      The entity domain type "ane", that defines Abstract Network Elements (ANEs),
+      is introduced in <xref target="I-D.ietf-alto-path-vector" format="default"/>. The entity domain
+      type that defines country codes is introduced in
+      <xref target="I-D.ietf-alto-cdni-request-routing-alto" format="default"/>.
+      An entity domain type MUST be registered at the IANA, as specified in section
+      <xref target="dom-reg-process" format="default"/> and similarly to an ALTO address type.
+          </t>
+        </section>
+        <section anchor="con-entity-domain-name" numbered="true" toc="default">
+          <name>Entity Domain Name</name>
+          <t>
+      The name of an entity domain is defined in the scope of an ALTO server.
+      An entity domain name can sometimes be identical to the name of
+      its relevant entity domain type. This is the case when the entities of a
+      domain have an identifier that points to the same object throughout all the
+      information resources of the Server that provide entity properties for this domain.
+      For example, a domain of type "ipv4"
+      containing entities identified by a public IPv4 address can be named "ipv4"
+      because its entities are uniquely identified by all the Server resources.</t>
+      
+          <t>In some cases, a domain type and domain name must be different.
+      Indeed, for some domain types, entities are defined relative to
+      a given information resource. 
+      <!-- commented text 
+      As a consequence, entities in such domains
+      may be defined in a resource handling this domain type
+      but not in other resources handling this same domain type.
+      Moreover, across different ALTO information resources handling a domain type,
+      an entity identifier may point to different objects.-->
+
+      This is the case for entities of domain type "pid".
+      A PID is defined relative to a network map.
+      For example: an entity "mypid10" of domain type "pid" may be defined in a given network map
+      and be undefined in other network maps. 
+      Or "mypid10" may even be defined in two different network maps 
+      and map, in each of these network maps, to a different set of endpoint addresses. 
+      In this case, naming an entity domain
+      only by its type "pid" does not guarantee that its set of entities is owned
+      by exactly one entity domain. 
+      </t> 
+      <t>
+      <xref target="resource-specific-entity-domain-name" format="default"/>
+      and <xref target="domain-names" format="default"/> of this document describe how a domain 
+      is uniquely identified, across the ALTO Server, by a
+      name that associates the domain type and the related information resource.
+
+
+      <!-- An entity domain also has a name. The name and type of an entity domain can be the same.
+      This is the case for the abovementionned types "ipv4", "ipv6" and "pid".
+      The name of an entity domain may however be different from its type, in particular
+      when the identifier of its entities cannot be recognized outside this domain.
+      For example: an entity "mypid10" of domain type "pid" is only recognized with respect
+      to a given network map resource and may be undefined in other network maps, or
+      may even map to a different set of addresses.
+      This document addresses this case
+      in <xref target="resource-specific-entity-domain-name"/> and related.   -->
+
+      <!-- (yry: what is identifier, not introduced before)
+
+      (yry: not sure what is name, what is type?)
+
+      (yry: not clear what it meant)  -->
+          </t>
+        </section>
+      </section>
+      <section anchor="con-property" numbered="true" toc="default">
+        <name>Entity Property Type</name>
+        <t>
+      An entity property defines a property of an entity. This is similar
+      to the endpoint property defined in Section 7.1 of
+      <xref target="RFC7285" format="default"/>. An entity property can convey either
+      network-aware or network-agnostic information.
+      Similarly to an entity domain, an entity property is characterized by its type
+      and identified by its name.
+      An entity property type MUST be registered at the IANA, as specified in section
+      <xref target="IANAEntityProp" format="default"/>.
+        </t>
+        <t>
+      Below are some examples with real and fictitious entity domain and property names:
+        </t>
+        <ul spacing="normal">
+          <li>
+          an entity in the "ipv4" domain type may have a
+          property whose value is an Autonomous System (AS) number
+          indicating the AS that owns this IPv4 address and another property
+          named "countrycode" indicating a country code mapping to this address,
+      </li>
+          <li> an entity identified by its country code in the entity domain type "countrycode",
+      defined in <xref target="I-D.ietf-alto-cdni-request-routing-alto" format="default"/> may have
+      a property indicating what delivery protocol is used by a CDN,</li>
+          <li>
+          an entity in the "netmap1.pid" domain may have a
+          property that indicates the central geographical location of
+          the endpoints it includes.
+      </li>
+        </ul>
+        <t>
+      It should be noted that some identifiers may be used for both an entity domain type and
+      a property type. For example:
+        </t>
+        <ul spacing="normal">
+          <li>the identifier "countrycode" may point to both
+      the entity domain type "countrycode" and the fictitious property type "countrycode". </li>
+          <li>the identifier "pid" may point to both the entity domain type "pid"
+    and the property type "pid". </li>
+        </ul>
+        <t>
+      Likewise, a same identifier may point to both a domain name and a property name.
+      For example: the identifier "netmap10.pid" may point to either
+      the domain defined by the PIDs of network map "netmap10" or to a property that returns,
+      for an entity defined by its IPv4 address, the PID of netmap10 that contains this entity.
+      Such cases will be further explained in
+      <xref target="advanced-features-of-the-unified-property-extension" format="default"/>.
+      <!-- text pointing of an
+      "ipv4" entity and an entity on which a Client may
+      query properties such as geographical location. -->
+
+        </t>
+      </section>
+      <section anchor="con-propmap" numbered="true" toc="default">
+        <name>New information resource and media type: ALTO Property Map</name>
+        <t>
+      This document introduces a new ALTO information resource named
+      Property Map. An ALTO property map provides a set of properties on
+      one or more sets of entities. A property may apply to different entity domain types
+      and names.
+      For example, an ALTO property map may define the "ASN" property for both
+      "ipv4" and "ipv6" entity domains.
+        </t>
+        <t>
+      The present extension also introduces a new media type.
+        </t>
+        <t>
+      This document uses the same definition of an information resource
+      as Section 9.1 of <xref target="RFC7285" format="default"/>.
+      ALTO uses media types to uniquely indicate the data format
+      used to encode the content to be transmitted between an ALTO server
+      and an ALTO client in the HTTP entity body.
+
+      In the present case, an
+      ALTO property map resource is
+      <!-- represented by a JSON object of type
+      InfoResourcePropertyMap and -->
+      defined by the media type "application/alto-propmap+json".
+        </t>
+        <t>
+      A Property Map can be queried as a GET-mode resource, thus
+      conveying all properties on all entities indicated in
+      its capabilities. It can also be queried as a POST-mode resource,
+      thus conveying a selection of properties on a selection of
+      entities.
+        </t>
+      </section>
+    </section>
+    <section anchor="advanced-features-of-the-unified-property-extension" numbered="true" toc="default">
+      <name>Advanced Features of the Entity Property Map Extension</name>
+      <section anchor="entity-identifier-and-entity-domain" numbered="true" toc="default">
+        <name>Entity Identifier and Entity Domain Name</name>
+        <t>
+      In <xref target="RFC7285" format="default"/>, an endpoint has an identifier that is
+      explicitly associated with the "ipv4" or "ipv6" address domain.
+      Examples are "ipv4:192.0.2.14" and "ipv6:2001:db8::12".
+        </t>
+        <t>
+      In this document, an entity must be owned by exactly one entity
+      domain name and an entity identifier must point to exactly one entity.
+      To ensure this, an entity identifier is explicitly attached to the name of
+      its entity domain and an entity domain type characterizes the semantics
+      and identifier format of its entities. </t>
+        <t>The encoding format of an entity identifier is further specified in
+      <xref target="entity-addrs" format="default"/> of this document.
+        </t>
+        <t>For instance:
+
+        </t>
+        <ul spacing="normal">
+          <li>if an entity is an endpoint with example routable IPv4 address "192.0.2.14", its identifier
+      is associated with domain name "ipv4" and is "ipv4:192.0.2.14", </li>
+          <li>if an entity is a PID named "mypid10" in network map resource "netmap2", its identifier is
+       associated with domain name "netmap2.pid" and is "netmap2.pid:mypid10". </li>
+        </ul>
+      </section>
+      <section anchor="resource-specific-entity-domain-name" numbered="true" toc="default">
+        <name>Resource-Specific Entity Domain Name</name>
+        <t>
+      Some entities are defined and identified uniquely and globally.
+      This is the case for instance when entities are endpoints
+      that are identified by a routable IPv4 or IPv6 address.
+      The entity domain for such entities can be globally defined
+      and named "ipv4" or "ipv6". Those entity domains
+      are called resource-agnostic entity domains in this document,
+      as they are not associated with any specific ALTO information
+      resources.
+        </t>
+        <t>
+      Some other entities and entity types are only defined relatively
+      to a given information resource. This is the case for entities of
+      domain type "pid", that can only be understood with
+      respect to the network map where they are defined. For example, a
+      PID named "mypid10" may be defined to represent a set
+      S1 of IP addresses in a network map resource named "netmap1".
+      Another network map
+      "netmap2" may use the same name "mypid10" and define it to represent
+      another set S2 of IP addresses.
+      The identifier "pid:mypid10" may
+      thus point to different objects because the information on the
+      originating information resource is lost.
+        </t>
+        <t>
+      To solve this ambiguity, the present extension introduces the
+      concept of resources-specific entity domain. This concept applies
+      to domain types where entities are defined relatively to a given
+      information resource. It can also apply to entity domains
+      that are defined locally, such as local networks of objects
+      identified with a local IPv4 address.
+        </t>
+        <t>
+      In such cases, an entity domain type is explicitly associated with
+      an identifier of the information resource where these entities are
+      defined. Such an information resource is referred to as the
+      "specific information resource".
+      Using a resource-aware entity domain name, an ALTO
+      property map can unambiguously identify distinct entity domains of the same
+      type, on which entity properties may be queried.
+      Examples of resource-specific entity domain names may look like:
+      "netmap1.pid" or "netmap2.pid".
+      Thus, a name association such as "netmap1.pid:mypid10" and
+      "netmap2.pid:mypid10" allows to distinguish the two abovementioned
+      PIDs that are both named "mypid10" but in two different resources,
+      "netmap1" and "netmap2".
+        </t>
+        <t>
+      An information resource is defined in the scope of an ALTO Server and so is
+      an entity domain name. The format of a resource-specific entity
+      domain name is further specified in <xref target="domain-names" format="default"/>.
+        </t>
+      </section>
+      <section anchor="resource-specific-entity-property" numbered="true" toc="default">
+        <name>Resource-Specific Entity Property Value</name>
+        <t>
+      Like entity domains, some types of properties are defined relatively to
+      an information resource.
+      That is, an entity may have a property of a given type, whose values are
+      associated to different information resources. </t>
+        <t>For example, suppose entity "192.0.2.34" defined in the
+      "ipv4" domain has a property of type "pid", whose value is the PID
+      to which address "192.0.2.34" is attached in a network map.
+      The mapping of network addresses to PIDs is specific to a network map
+      and probably different from one network map resource to another one.
+      Thus, if a property "pid" is defined for entity "192.0.2.34" in two
+      different network maps "netmap1" and "netmap2", the value for this
+      property will likely be a different value in "netmap1" and "netmap2".</t>
+        <t>To support information resource dependent property values,
+      this document uses the same approach as in
+      Section 10.8.1 of <xref target="RFC7285" format="default"/> entitled
+      "Resource-Specific Endpoint Properties". When a property
+      value depends on a given information resource, the name of
+      this property must be explicitly associated with the information
+      resource that defines it.</t>
+        <t>
+      For example, the property "pid" queried on entity
+      "ipv4:192.0.2.34" and defined in both "netmap1" and "netmap2",
+      can be named "netmap1.pid" and "netmap2.pid".
+      This allows a Client to get a property
+      of the same type but defined in different information resources with
+      a single query.
+      Specifications on the property name format are provided in <xref target="def-property" format="default"/>.
+        </t>
+      </section>
+      <section anchor="con-hierarchy-and-inheritance" numbered="true" toc="default">
+        <name>Entity Hierarchy and Property Inheritance</name>
+        <t>For some domain types, entities can be grouped in a set and be defined
+    by the identifier of this set. This is the case for domain types "ipv4" and "ipv6",
+    where individual Internet addresses can be grouped in blocks.
+    When a same property value applies to a whole set,
+    a Server can define a property for the identifier of this set instead of enumerating
+    all the entities and their properties. This allows a substantial reduction
+    of transmission payload both for the Server and the Client.
+    For example, all the entities included in the set defined by the address
+    block "ipv6:2001:db8::1/64" share the same properties and values defined for this block.
+        </t>
+        <t> Additionally, entity sets sometimes are related by inclusion, hierarchy or other relations.
+    This allows defining inheritance rules for entity properties
+    that propagate properties among related entity sets.
+    The Server and the Client can use these inheritance rules for further payload savings.
+    Entity hierarchy and property inheritance rules are specified
+    in the documents that define the applicable domain types.
+    The present document defines these rules for the "ipv4" and "ipv6" domain types.</t>
+        <!-- text
+    <t>
+      Enumerating all individual entities is inefficient for both the
+      Client and the Server.
+    </t>
+    <t><list style="symbols">
+      <t>
+          For the Client, even if it only wants to request properties
+          for a "/24" ipv4 subnet, using the individual
+          ipv4 entity, it has to enumerate all 256 entities.
+      </t>
+      <t>
+          For the Server, in some cases, most of the entities may have
+          the same properties. Simply enumerating all of them may
+          introduce a lot of reduncency in the payload. For example, all
+          the individual ipv4 entities in a "/24" ipv4
+          subnet is usually owned by the same AS. When a Client requests
+          the ASN property for this ipv4 subnet, using the individual
+          ipv4 address, the Server has to repeat the same ASN property
+          for 256 times in the worst case.
+      </t>
+    </list></t>
+    -->
+    <t>
+      This document introduces, for applicable domain types, "Entity Property Inheritance rules",
+      with the following concepts: Entity Hierarchy, Property Inheritance and Property Value Unicity.
+      A detailed specification of entity hierarchy and property inheritance rules is provided in
+      <xref target="def-hierarchy-and-inheritance" format="default"/>.
+        </t>
+        <section numbered="true" toc="default">
+          <name>Entity Hierarchy</name>
+          <t>
+          An entity domain may allow using a single identifier to identify a set of
+          individual entities. For example, a CIDR block can be used to
+          identify a set of IPv4 or IPv6 entities. A CIDR block is
+          called a hierarchical entity identifier, as it can reflect inclusion relations
+          among entity sets. For example, the CIDR "ipv4:192.0.1.0/24" includes all the individual
+          IPv4 entities identified by the CIDR "ipv4:192.0.1.0/26".
+          </t>
+        </section>
+        <section numbered="true" toc="default">
+          <name>Property Inheritance</name>
+          <t>A property may be defined for a hierarchical entity identifier, while it
+      may be undefined for individual entities covered by this identifier.
+      In this case, these individual entities inherit the property value defined
+      for the identifier that covers them.
+      For example, suppose a property map defines a property P for which it assigns
+      value V1 only for the
+      hierarchical entity identifier "ipv4:192.0.1.0/24" but not for individual
+      entities in this block. Suppose also that
+      inheritance rules are specified for CIDR blocks in the "ipv4" domain type.
+      When receiving this property map, a Client can infer that entity "ipv4:192.0.1.1"
+      inherits the property value V1 of block "ipv4:192.0.1.0/24" because
+      the address "ipv4:192.0.1.1" is included by the CIDR block "ipv4:192.0.1.0/24".</t>
+          <t>
+      Property value inheritance rules also apply among entity sets. A property map may define
+      values for an entity set belonging to a hierarchy but not for "sub" sets
+      that are covered by this set identifier. In this case, inheritance rules must
+      specify how entities in "sub" sets inherit property values from their
+      "super" set. For instance, if a property P is defined only for
+      the entity set identified by address block "ipv4:192.0.1.0/24", the entity set identified by
+      "ipv4:192.0.1.0/30" and thus included in the former set, may inherit the 
+      property P value from set "ipv4:192.0.1.0/24".
+          </t>
+        </section>
+        <section numbered="true" toc="default">
+          <name>Property Value Unicity</name>
+          <t>The inheritance rules must ensure that an entity belonging
+      to a hierarchical set of entities inherits no more than one property value,
+      for the sake of consistency.
+
+      Indeed, a property map may define a property on
+         a hierarchy of entity sets that inherit property values from one
+         or more subsets (upper levels). On the other hand,
+         a property value, defined on a superset (lower level) may
+         be different from the value defined in a subset.
+         In such a case, supersets
+         may potentially end up with different property values. This may be the
+         case for address blocs with increasing prefix length, on which a property value
+         gets increasingly accurate and thus may differ.
+         For example, a fictitious property such as "geo-location" or "average transfer volume"
+         may be defined at a progressively finer grain for entity sets defined with
+         progressively longer CIDR prefixes. It seems more interesting to have property values
+         of progressively higher accuracy.
+         A unicity rule, applied to the entity domain type must specify an arbitration rule
+         among the different property values for an entity.
+         An example illustrating the need for such rules is provided in
+         <xref target="inet-inheritance" format="default"/>.
+          </t>
+        </section>
+      </section>
+      <section anchor="applicable-entity-domains-and-properties-in-the-property-map-capabilities" numbered="true" toc="default">
+        <name>Supported Properties on Entity Domains in Property Map Capabilities</name>
+        <t>
+      A property type is not necessarily applicable to any domain type, or an ALTO Server
+      may choose not to provide a property on all applicable domains. For instance, a property type
+      reflecting link bandwidth is likely not defined on entities of a domain of
+      type "country-code". Therefore an ALTO server providing Property Maps  needs to specify
+      the properties that can be queried on the different entity domains
+      it supports. </t>
+        <t>  <!-- commented text  <xref target="ed-pm-export"/> and related, -->
+      This document explains how the Information Resources Directory (IRD) capabilities
+      of a Property Map resource
+      unambiguously expose what properties a Client can query on a given entity
+      domain.
+        </t>
+        <ul spacing="normal">
+          <li>a field named "mappings" lists the names of the entity domains supported by
+      the Property Map,</li>
+          <li>for each listed entity domain, a list of the names of the applicable properties is provided.</li>
+        </ul>
+        <t>
+      An example is provided in <xref target="ird-example" format="default"/>.
+      The "mappings" field associates entity domains and properties that can be resource-agnostic or
+      resource-specific.
+      This allows a Client to formulate compact and unambiguous entity
+      property queries, possibly relating to one or more information resources. In
+      particular:
+        </t>
+        <ul spacing="normal">
+          <li>
+          it avoids a Client to query a property on entity domains on which
+          it is not defined,
+      </li>
+          <li>
+          it allows a Client to query, for an entity E, values for a property P
+          that are defined in several information resources,
+      </li>
+          <li>
+          it allows a Client to query a property P on entities
+          that are defined in several information resources.
+      </li>
+        </ul>
+        <t>
+      Further specifications are provided in <xref target="FullPropMapCapabilities" format="default"/>.
+        </t>
+      </section>
+      <section anchor="defining-information-resource" numbered="true" toc="default">
+        <name>Defining Information Resource for Resource-Specific Entity Domains</name>
+        <t>
+    <!-- commented text
+      Although the IRD capabilities of a Property Map can expose the
+      supported mappings between entity domains and entity properties,
+      it may still not be clear to a Client what a resource-specific
+      entity domain is, and what a resource-specific entity property means,
+      as those concepts are not defined in other ALTO information resources.
+      For example, a Client should understand that:-->
+      A Client willing to query properties on entities belonging to a
+     domain needs to know how to retrieve these entities.
+     To this end, the Client can look up the "mappings" field exposed
+     in IRD capabilities of a property map,
+     see <xref target="applicable-entity-domains-and-properties-in-the-property-map-capabilities" format="default"/>.
+
+    This field, in its keys, exposes
+    all the entity domains supported by the property map. The syntax of the entity
+    domain identifier specified in <xref target="domain-names" format="default"/> allows the client
+    to infer whether the entity domain is resource-specific or not.
+    The Client can extract,
+    if applicable, the identifier of the specific resource,
+    query the resource and retrieve the entities.
+    For example:
+        </t>
+        <ul spacing="normal">
+          <li> an entity domain named "netmap1.ipv4"
+          includes the IPv4 addresses that appear in the
+          "ipv4" field of the endpoint address group of
+          each PID in the network map "netmap1", and that
+          cannot be recognized outside "netmap1"
+          because, for instance, these are local non-routable addresses,
+      </li>
+          <li> an entity domain named "netmap1.pid"
+          includes the PIDs listed in network map "netmap1".
+      </li>
+          <li>an entity domain named "ipv4" is resource-agnostic and covers
+      all the routable IPv4 addresses.</li>
+          <!-- commented text <t>
+          a property named "netmap1.pid" defined on example entity
+          "ipv4:192.0.1.1", provides the PID, defined
+          in network map "netmap1", that includes the
+          IPv4 address "ipv4:192.0.1.1" in its endpoint
+          address group.
+      </t>-->
+    </ul>
+        <t>
+    Besides, it is also necessary to inform a Client about which associations of
+    specific resources and entity domain types are allowed,
+    because it is not possible to prevent a Server from exposing inappropriate associations.
+    An informed Client will just ignore inappropriate associations exposed by a Server and
+    avoid error-prone transactions with the Server.</t>
+        <t>For example, the association "costmap3.pid" is not allowed for the following reason:
+    although a cost map exposes PID identifiers, it does not define the set
+    of addresses included in this PID.
+    Neither does a cost map list all the PIDs on which properties can be queried,
+    because a cost map only exposes PID pairs on which a queried cost type is defined.
+    Therefore, the resource "costmap3" does not enable a Client to extract information on the
+    existing PID entities or on the addresses they contain. </t>
+        <t>
+    Instead, the cost map uses a network map, where all the PIDs used in a
+    cost map are defined together with the addresses contained by the PIDs.
+    This network map is qualified in this document as the Defining Information
+    Resource for the entity domain of type "pid" and this concept is explained in
+    <xref target="defining-information-resource-and-media-type" format="default"/>.</t>
+        <section anchor="defining-information-resource-and-media-type" numbered="true" toc="default">
+          <name>Defining Information Resource and its Media Type</name>
+          <t>For the reasons explained in the previous section, this document
+    introduces the concept of defining information resource and media type.</t>
+          <t>
+    <!-- When a Client uses a property map to query properties on entities belonging to a
+    resource-specific entity domain, it needs to be informed on the type
+    of information resource that:  -->
+    A defining information resource for an entity domain D is the information resource
+    where entities of D are defined. That is, all the information on the entities of D
+    can be retrieved in this resource. This concept applies to resource-specific domains.
+    This is useful for entity domain types that are by essence domain-specific,
+    such as "pid" and "ane" domain types. It is also useful for resource-specific
+    entity domains constructed from resource-agnostic domain types, such as
+    network map specific domains of local IPv4 addresses.</t>
+          <t> The defining information resource of an entity domain D has the
+    following specificities:
+          </t>
+          <ul spacing="normal">
+            <li>it has an entry in the IRD,</li>
+            <li>it defines the entities of D,</li>
+            <li>it does not use another information resource that defines these entities, </li>
+            <li>it defines and exposes entity identifiers that are all persistent.</li>
+            <li>its media type is unique and equal to the one that is specified for the defining information
+  resource of an entity domain type.</li>
+          </ul>
+          <t>
+  A fundamental attribute of a defining information resource is its media type.
+  There is a unique association between an entity domain type and the media type of
+  its defining information resource.
+  When an entity domain type allows associations with defining information resources,
+  the document that defines this entity domain type specifies the media type of the potential
+  defining information resource.
+  Likewise, the IANA registration of an entity domain type also specifies the media type
+  of potential defining information resources.
+          </t>
+          <t>
+  When the Client wants to use a resource-specific entity domain, it needs
+     to be cognizant of the media-type of its defining information resource.
+     If the Server exposes resources a resource specific entity domain with a
+     non-compliant media type for the domain type, the Client can avoid
+     transaction errors by ignoring them.
+          </t>
+          <t> 
+          The same holds for property types whose values are defined relatively to an information resource. 
+          Similarly to resource specific entity domains, the Client needs
+          to be cognizant of appropriate associations of information resource
+          and property types. 
+          Therefore, when specifying and registering a property type whose values are resource-specific,
+          it is necessary to specify the media type of its defining information resource.
+          For example: the defining information resource for property type "pid" is
+          a network map; the defining information resource for property type "cdnifci-
+          capab", defined in [draft-ietf-alto-cdni-request-routing-alto] is 
+          a "cdnifci-map" information resource, defined in that same document. 
+          </t>
+        </section>
+        <section anchor="example-specific-ir-mediatype" numbered="true" toc="default">
+          <name>Examples of defining information resources media-types</name>
+          <t>Here are some examples of specific information resource types
+  associated to entity domain types and their media type.
+          </t>
+          <ul spacing="normal">
+            <li>For entity domain type "pid": the media type of the specific resource
+    is "application/alto-networkmap+json", because PIDs are defined in network map resources.</li>
+            <li>For entity domain types "ipv4" and "ipv6": the media type of the specific resource
+    is "application/alto-networkmap+json", because IPv4 and IPv6 addresses covered by the
+       Server are defined in network map resources.</li>
+            <li>For entities of domain type "ane":
+          <xref target="I-D.ietf-alto-path-vector" format="default"/> 
+          defines entities named "ANE", where ANE
+          stands for Abstracted Network Element, and the entity domain type "ane".
+    An ANE may have a persistent identifier, say, "entity-4", that is
+    provided by the Server as a value of the "persistent-entity-id" property
+    of this ANE.
+    Further properties may then be queried on an ANE by using its persistent entity ID.
+    These properties are available from a persistent property map, that defines
+    properties on a specific "ane" domain.
+    Together with the persistent identifier, the Server also provides
+    the property map resource identifier where the "ane" domain
+    containing "entity-4" is defined. The definition of the
+    "ane" entity domain containing "entity-4" is thus specific to the property map.
+    Therefore, for entities of domain type "ane" that have a persitent identifier,
+    the media type of the specific information resource is
+    "application/alto-propmap+json". </li>
+          </ul>
+          <!-- commented-text
+   requests two new IANA registries for each information resource to
+   define the connection to each supported resource-specific entity
+   domain and entity property mapping respectively. Such a connection
+   is called "Information Resource Export", to
+   explain what a resource-specific entity domain is, or what an entity
+   property mapping exported by an information resource is. Examples of
+   "Information Resource Exports" of existing ALTO
+   information resources are provided in
+   <xref target="ed-pm-export"/>. Specifications are provided
+   in <xref target="def-ire"/>. The details of these new IANA
+   registries are provided in <xref target="IANAResourceEDE"/>
+   and <xref target="IANAResourceEPT"/>.  -->
+    </section>
+      </section>
+     
+<!-- commented text -->
+<section anchor="type-of-specific-ir-for-ir-specific-property-value" numbered="true" toc="default">
+        <name>Defining Information Resource for Resource-Specific Property Values</name>
+        <t>
+As explained in <xref target="resource-specific-entity-property" format="default"/>,
+a property type may take values that are resource specific.
+This is the case for property type "pid", whose values are
+by essence defined relatively to a specific network map.
+The PID value returned for an IPv4 address is specific to the network map
+defining the PID and may differ from one network map to another one.
+Property values may be specific to different types of information resources.
+For example: the value for property "pid" is specific to a network map.
+The value for property type "cdnifci-capab" is specific to the
+information resource "cdnifci-map", defined in
+[draft-ietf-alto-cdni-request-routing-alto], while network maps do not define
+property "fci-capability" for IPv4 addresses and a
+cdnifci-map does not define "pid" values for IPv4 addresses. </t>
+        <t>
+Thus, similarly to resource specific entity domains, the Client needs
+to be cognizant of appropriate associations of information resource and property types.
+</t>
+
+        <section anchor="example-specific-ir-mediatype-prop" numbered="true" toc="default">
+          <name>Examples of defining resources media-types for properties</name>
+          <t>Here are some examples of specific information resources types
+  associated to entity property types and their media type.
+          </t>
+          <ul spacing="normal">
+            <li>For property type "pid": the media type of the specific resource
+    is "application/alto-networkmap+json", because PIDs are defined in network map resources.</li>
+            <li>For property type "cdni-fci-capability": the media type of the specific resource
+    is "application/alto-cdnifci+json"</li>
+          </ul>
+        </section>
+        <!-- commented text -->
+      </section>
+      
+    </section>
+    <!-- This document was prepared using Pandoc2rfc, https://github.com/miekg/pandoc2rfc -->
+
+
+<section anchor="protocol-specification-basic-data-type" numbered="true" toc="default">
+      <name>Protocol Specification: Basic Data Types</name>
+      <section anchor="def-domain" numbered="true" toc="default">
+        <name>Entity Domain</name>
+        <section anchor="domain-types" numbered="true" toc="default">
+          <name>Entity Domain Type</name>
+          <t>
+        An entity domain has a type, which is uniquely identified by a string
+        that MUST be no more than 64 characters, and MUST NOT contain
+        characters other than US-ASCII alphanumeric characters
+        (U+0030-U+0039, U+0041-U+005A, and U+0061-U+007A), the hyphen ('-',
+        U+002D), or the low line ('_', U+005F).
+          </t>
+          <t>
+        For example, the strings "ipv4", "ipv6", and "pid" are valid entity domain types.
+        "ipv4.anycast" and "pid.local" are invalid.
+          </t>
+          <t>
+        The type EntityDomainType is used in this document to denote a
+        JSON string meeting the preceding requirements.
+          </t>
+          <t>
+        An entity domain type defines the semantics of a type of entity,
+        independently of any specifying resource.
+        Each entity domain type MUST be registered with the
+        IANA. The format of the entity identifiers (see
+        <xref target="entity-addrs" format="default"/>) in that type of entity
+        domain, as well as any hierarchical or inheritance rules (see
+        <xref target="def-hierarchy-and-inheritance" format="default"/>) for those
+        entities, MUST be specified at the same time.
+          </t>
+        </section>
+        <section anchor="domain-names" numbered="true" toc="default">
+          <name>Entity Domain Name</name>
+          <t>As said in <xref target="con-entity-domain" format="default"/> when introducing entity domains,
+    an entity domain is characterized by its type and identified by its name. </t>
+          <t>
+        This document distinguishes three categories of entity domains:
+        resource-specific entity domains,
+        resource-agnostic entity domains and self-defined entity domains.
+        Their entity domain names
+        are constructed as specified in the following sub-sections.
+          </t>
+          <t>
+     Each entity domain is identified by a unique entity domain name which is a
+     string of the following format:</t>
+          <artwork name="" type="" align="left" alt=""><![CDATA[
+    EntityDomainName ::= [ [ ResourceID ] '.' ] EntityDomainType
+  ]]></artwork>
+          <t>Where the presence and construction of component: </t>
+          <artwork name="" type="" align="left" alt=""><![CDATA[
+    "[ [ ResourceID ] '.' ]"
+     ]]></artwork>
+          <t>depends on the category of entity domain.</t>
+          <t>
+        Note that the '.' separator is not allowed in
+        EntityDomainType and hence there is no ambiguity on whether an
+        entity domain name refers to a resource-agnostic entity domain or a
+        resource-specific entity domain.
+          </t>
+          <t>
+        Note also that Section 10.1 of <xref target="RFC7285" format="default"/> specifies the
+        format of the PID Name which is the format of the resource ID
+        including the following specification: "the '.' separator is reserved
+        for future use and MUST NOT be used unless specifically indicated in
+        this document, or an extension document". The present extension keeps
+        the format specification of <xref target="RFC7285" format="default"/>, hence the '.'
+        separator MUST NOT be used in an information resource ID.
+          </t>
+          <section anchor="resource-specific-ED" numbered="true" toc="default">
+            <name>Resource-specific Entity Domain</name>
+            <t>A resource-specific entity domain is identified by an
+        entity domain name constructed as follows. It MUST start with a
+        resource ID using the ResourceID type defined in Section 10.2 of
+        <xref target="RFC7285" format="default"/>, followed by the '.' separator (U+002E),
+        followed by a string of the type EntityDomainType specified in
+        <xref target="domain-types" format="default"/>.</t>
+            <t>For example, if an ALTO server provides two network maps
+        "netmap-1" and "netmap-2", these network maps can define two
+        resource-specific domains of type "pid", respectively identified
+        by "netmap-1.pid" and "netmap-2.pid". </t>
+          </section>
+          <section anchor="resource-agnostic-ED" numbered="true" toc="default">
+            <name>Resource-agnostic Entity Domain</name>
+            <t>A resource-agnostic entity domain contains entities that are identified
+        independently of any information resource. Hence, the identifier of
+        a resource-agnostic entity domain is simply the identifier of its entity domain type.
+        For example, "ipv4" and "ipv6" identify the two resource-agnostic
+        Internet address entity domains defined in <xref target="inet-addr-domain" format="default"/>.</t>
+          </section>
+          <section anchor="self-defined-ED" numbered="true" toc="default">
+            <name>Self-defined Entity Domain</name>
+            <t>A property map can define properties on entities that are
+  <!-- commented text neither resource-specific nor resource-agnostic but are instead defined
+  within the property map itself. -->
+  specific to a unique information resource, which is the property map itself.
+  <!-- commented text This may be the case when an ALTO Server provides information on
+  a set of entities that is specific to
+  this property map would not be relevant for another
+  one and that does not depend on a specific resource. -->
+  This may be the case when an ALTO Server provides properties on
+  a set of entities that are defined only in
+  this property map, are not relevant to another
+  one and do not depend on another specific resource. </t>
+            <t>For example: a specialised property map may define a domain of type "ane",
+  defined in <xref target="I-D.ietf-alto-path-vector" format="default"/>, that contains
+  a set of ANEs representing data centers, that each have a persistent identifier
+  and are relevant only to this property map.</t>
+            <t>
+  In this case, the entity domain is qualified as "self-defined".
+     The identifier of a self-defined entity domain can be of the format:</t>
+            <artwork name="" type="" align="left" alt=""><![CDATA[
+    EntityDomainName ::= .EntityDomainType
+  ]]></artwork>
+            <t>where '.' indicates that the entity domain only exists
+        within the property map resource using it. </t>
+            <!-- commented text
+        in the scope of a specific information resource, the
+        resource-specific entity domain defined by itself can be
+        identified by the '.' EntityDomainType without the
+        ResourceID.</t>-->
+        <t>A self-defined entity domain can be viewed as a particular
+        case of resource-specific entity domain, where the specific resource
+        is the current resource that uses this entity domain. In that case,
+        for the sake of simplification, the component "ResourceID" SHOULD
+        be omitted in its entity domain name.
+            </t>
+          </section>
+          <!-- commented text
+        <t>Following <xref target="resource-specific-entity-domain-name"/>,
+        an ALTO information resource MAY define a resource-specific
+        entity domain for a given entity domain type. </t> -->
+    </section>
+        <section anchor="entity-addrs" numbered="true" toc="default">
+          <name>Entity Identifier</name>
+          <t>
+        Entities in an entity domain are identified by entity
+        identifiers (EntityID) of the following format:
+          </t>
+          <artwork name="" type="" align="left" alt=""><![CDATA[
+EntityID ::= EntityDomainName ':' DomainTypeSpecificEntityID
+]]></artwork>
+          <t>
+        Examples from the Internet address entity domains include
+        individual IP addresses such as
+        "net1.ipv4:192.0.2.14" and
+        "net1.ipv6:2001:db8::12", as well as address
+        blocks such as "net1.ipv4:192.0.2.0/26" and
+        "net1.ipv6:2001:db8::1/48".
+          </t>
+          <t>
+        The format of the second part of an entity identifier depends on
+        the entity domain type, and MUST be specified when defining a
+        new entity domain type and registering it with the IANA.
+        Identifiers MAY be hierarchical, and
+        properties MAY be inherited based on that hierarchy. The
+        rules defining any hierarchy or inheritance MUST be defined when
+        the entity domain type is registered.
+          </t>
+          <t>
+        The type EntityID is used in this document to denote a JSON
+        string representing an entity identifier in this format.
+          </t>
+          <t>
+        Note that two entity identifiers with different valid textual
+        representations may refer to the same entity, for a given entity
+        domain.
+        For example, the strings
+        "net1.ipv6:2001:db8::1" and
+        "net1.ipv6:2001:db8:0:0:0:0:0:1" refer to the
+        same entity in the "ipv6" entity domain.
+        Such equivalences should be established by the object represented by
+        DomainTypeSpecificEntityID, for example, <xref target="RFC5952" format="default"/>
+        establishes equivalence for IPv6 addresses, while <xref target="RFC4632" format="default"/> does so for IPv4 addresses.
+          </t>
+        </section>
+        <section anchor="def-hierarchy-and-inheritance" numbered="true" toc="default">
+          <name>Hierarchy and Inheritance</name>
+          <t>
+        To simplify the representation, some types of entity
+        domains allow the ALTO Client and Server to use a hierarchical
+        entity identifier format to represent a block of individual
+        entities. For instance, in an IPv4 domain "net1.ipv4",
+        a CIDR "net1.ipv4:192.0.2.0/26" covers 64
+        individual IPv4 entities. In this case, the corresponding
+        property inheritance rule MUST be defined for the entity domain
+        type. The hierarchy and inheritance rule MUST have no ambiguity.
+          </t>
+        </section>
+      </section>
+      <section anchor="def-property" numbered="true" toc="default">
+        <name>Entity Property</name>
+        <t>
+      Each entity property has a type to indicate the encoding and the
+      semantics of the value of this entity property, and has a name to identify it.
+      <!-- text  One entity MAY have multiple properties in the same type.-->
+        </t>
+        <section anchor="def-property-type" numbered="true" toc="default">
+          <name>Entity Property Type</name>
+          <t>
+        The type EntityPropertyType is used in this document to indicate
+        a string denoting an entity property type. The string MUST be no
+        more than 32 characters, and it MUST NOT contain characters
+        other than US-ASCII alphanumeric characters (U+0030-U+0039,
+        U+0041-U+005A, and U+0061-U+007A), the hyphen ('-',
+        U+002D), the colon (':', U+003A), or the low line
+        ('_', U+005F).
+        Note that the '.' separator is not allowed because it is reserved to
+        separate an entity property type and an information resource identifier
+        when an entity property is resource-specific.
+          </t>
+          <t>
+        Each entity property type MUST be registered with the IANA. The
+        intended semantics of the entity property type MUST be specified
+        at the same time.
+          </t>
+          <t>Identifiers prefixed with "priv:" are reserved for Private Use
+      <xref target="RFC8126"/> without a need to register with IANA. All other
+       identifiers for entity property types appearing in an HTTP request or
+       response with an "application/alto-*" media type MUST be registered
+       in the "ALTO Entity Property Type Registry", defined in
+       <xref target="IANAEntityProp" format="default"/>. For an
+       entity property identifier with the "priv:" prefix, an additional
+       string (e.g., company identifier or random string) MUST follow the prefix to reduce
+       potential collisions, that is, the string "priv:" alone is not a valid endpoint
+       property identifier.</t>
+          <t>
+        To distinguish from the endpoint property type, the entity
+        property type has the following characteristics:
+          </t>
+          <ul spacing="normal">
+            <li>
+            Some entity property types are applicable to entities in
+            particular entity domain types only. For
+            example, the property type "pid" is applicable to entities
+            in the entity domain types "ipv4" or "ipv6" while is not
+            applicable to entities in an entity domain of type "pid".
+        </li>
+            <li>
+            The intended semantics of the value of an entity property
+            may also depend on the entity domain type.
+            For example, suppose that a property named
+            "geo-location" is defined as the
+            coordinates of a point, encoded as: "latitude
+            longitude [altitude]." When applied to an entity that
+            represents a specific host computer, identified by an
+            address in an entity domain of type "ipv4" or
+            "ipv6", the "geo-location" property would define
+            the host's location. However, when applied to an entity in a
+            "pid" domain type, the property would indicate
+            the location of the center of all hosts in this
+            "pid" entity.
+        </li>
+          </ul>
+        </section>
+        <section anchor="entity-property-name" numbered="true" toc="default">
+          <name>Entity Property Name</name>
+          <t>
+        Each entity property is identified by an entity property name,
+        which is a string of the following format:
+          </t>
+          <artwork name="" type="" align="left" alt=""><![CDATA[
+EntityPropertyName ::= [ ResourceID ] '.' EntityPropertyType
+]]></artwork>
+          <t>
+        Similar to the endpoint property type defined in Section 10.8 of
+        <xref target="RFC7285" format="default"/>, each entity property may be
+        defined by either the property map itself (self-defined) or some
+        other specific information resource (resource-specific).
+          </t>
+          <t>
+        The entity property name of a resource-specific entity property
+        starts with a string of the type ResourceID defined in
+        <xref target="RFC7285" format="default"/>, followed by the
+        '.' separator (U+002E) and a EntityDomainType typed
+        string. For example, the "pid" properties of an
+        "ipv4" entity defined by two different maps
+        "net-map-1" and "net-map-2"
+        are identified by "net-map-1.pid" and
+        "net-map-2.pid" respectively.
+          </t>
+          <t>
+        The specific information resource of an entity property
+        may be the current information resource itself, that is, the property map
+        defining the property. In that case,
+        the ResourceID in the property name SHOULD be ignored. For example, the
+        property name ".asn" applied to an entity identitifed by its IPv4 address,
+        indicates the AS number of the AS that "owns" the entity, where the returned
+        AS number is defined by the property map itself.
+          </t>
+        </section>
+        <section anchor="format-entity-property-value" numbered="true" toc="default">
+          <name>Format for Entity Property Value</name>
+          <t> <xref target="RFC7285" format="default"/> in Section 11.4.1.6, specifies that an implementation of
+    the Endpoint Property Service specified in <xref target="RFC7285" format="default"/> SHOULD assume
+    that the property value is a JSONString and fail to parse if it is not.
+    <!-- commented text
+    The present document first, extends the property service to Entities. -->
+    This document extends the format of a property value by allowing it to be a JSONValue
+    instead of just a JSONString.</t>
+        </section>
+      </section>
+    </section>
+    <!-- This document was prepared using Pandoc2rfc, https://github.com/miekg/pandoc2rfc -->
+
+
+<section anchor="entity-domain-types" numbered="true" toc="default">
+      <name>Entity Domain Types Defined in this Document</name>
+      <t>
+    This document requires the definition of each entity domain type
+    MUST include (1) the entity domain type name and (2) domain-specific
+    entity identifiers, and MAY include (3) hierarchy and inheritance
+    semantics optionally. This document defines three initial entity
+    domain types as follows.
+      </t>
+      <section anchor="inet-addr-domain" numbered="true" toc="default">
+        <name>Internet Address Domain Types</name>
+        <t>
+      The document defines two entity domain types (IPv4 and IPv6) for
+      Internet addresses. Both types are resource-agnostic entity domain types and
+      hence define corresponding resource-agnostic entity domains as well. Since
+      the two domains use the same hierarchy and inheritance semantics,
+      we define the semantics together, instead of repeating for each.
+        </t>
+        <section anchor="ipv4-domain" numbered="true" toc="default">
+          <name>Entity Domain Type: IPv4</name>
+          <section anchor="ipv4-edt" numbered="true" toc="default">
+            <name>Entity Domain Type Identifier</name>
+            <t>
+          ipv4
+            </t>
+          </section>
+          <section anchor="ipv4-dsei" numbered="true" toc="default">
+            <name>Domain-Specific Entity Identifiers</name>
+            <t>
+          Individual addresses are strings as specified by the
+          IPv4Addresses rule of Section 3.2.2 of
+          <xref target="RFC3986" format="default"/>; Hierarchical addresses are
+          prefix-match strings as specified in Section 3.1 of
+          <xref target="RFC4632" format="default"/>. To define properties, an
+          individual Internet address and the corresponding full-length
+          prefix are considered aliases for the same entity.
+          An individual Internet address and the corresponding full-length
+          prefix are considered aliases for the same entity on which to define properties.
+          Thus, "ipv4:192.0.2.0" and "ipv4:192.0.2.0/32" are equivalent.
+            </t>
+          </section>
+        </section>
+        <section anchor="ipv6-domain" numbered="true" toc="default">
+          <name>Entity Domain Type: IPv6</name>
+          <section anchor="ipv6-edt" numbered="true" toc="default">
+            <name>Entity Domain Type Identifier</name>
+            <t>
+          ipv6
+            </t>
+          </section>
+          <section anchor="ipv6-dsei" numbered="true" toc="default">
+            <name>Domain-Specific Entity Identifiers</name>
+            <t>
+          Individual addresses are strings as specified by Section 4 of
+          <xref target="RFC5952" format="default"/>; Hierarchical addresses are
+          prefix-match strings as specified in Section 7 of
+          <xref target="RFC5952" format="default"/>. To define properties, an
+          individual Internet address and the corresponding 128-bit
+          prefix are considered aliases for the same entity. That is,
+          "ipv6:2001:db8::1" and
+          "ipv6:2001:db8::1/128" are equivalent, and
+          have the same set of properties.
+            </t>
+          </section>
+        </section>
+        <section anchor="inet-inheritance" numbered="true" toc="default">
+          <name>Hierarchy and Inheritance of Internet Address Domains</name>
+          <t>
+        Both Internet address domains allow property values to be
+        inherited. Specifically, if a property P is not defined for a
+        specific Internet address I, but P is defined for a
+        hierarchical Internet address C which prefix-matches I, then the
+        address I inherits the value of P defined for the hierarchical
+        address C. If more than one such hierarchical addresses define a
+        value for P, I inherits the value of P in the hierarchical
+        address with the longest prefix. Note that this longest prefix
+        rule ensures no multiple value inheritances, and hence no ambiguity.
+          </t>
+          <t>
+        Hierarchical addresses can also inherit properties: if a
+        property P is not defined for the hierarchical address C, but is
+        defined for another hierarchical address C' which covers all IP
+        addresses in C, and C' has a shorter prefix length than C, then
+        C MAY inherit the property from C'. If there are multiple such
+        hierarchical addresses like C', C MUST inherit from the
+        hierarchical address having the longest prefix length.
+          </t>
+          <t>
+        As an example, suppose that a server defines a property P for
+        the following entities:
+          </t>
+          <figure anchor="fig_def-prop-val">
+            <name>Defined Property Values.</name>
+            <artwork align="center" name="" type="" alt=""><![CDATA[
+       ipv4:192.0.2.0/26: P=v1
+       ipv4:192.0.2.0/28: P=v2
+       ipv4:192.0.2.0/30: P=v3
+       ipv4:192.0.2.0:    P=v4
+  ]]></artwork>
+          </figure>
+          <t>
+
+          </t>
+          <t>
+        Then the following entities have the indicated values:
+          </t>
+          <figure anchor="fig_inh-prop-val">
+            <name>Inherited Property Values.</name>
+            <artwork align="center" name="" type="" alt=""><![CDATA[
+       ipv4:192.0.2.0:    P=v4
+       ipv4:192.0.2.1:    P=v3
+       ipv4:192.0.2.16:   P=v1
+       ipv4:192.0.2.32:   P=v1
+       ipv4:192.0.2.64:   (not defined)
+       ipv4:192.0.2.0/32: P=v4
+       ipv4:192.0.2.0/31: P=v3
+       ipv4:192.0.2.0/29: P=v2
+       ipv4:192.0.2.0/27: P=v1
+       ipv4:192.0.2.0/25: (not defined)
+]]></artwork>
+          </figure>
+          <t>
+          </t>
+          <t>
+        An ALTO server MAY explicitly indicate a property as not having
+        a value for a particular entity. That is, a server MAY say that
+        property P of entity X is "defined to have no
+        value", instead of "undefined". To indicate
+        "no value", a server MAY perform different
+        behaviours:
+          </t>
+          <ul spacing="normal">
+            <li>
+            If that entity would inherit a value for that property, then
+            the ALTO server MUST return a "null" value
+            for that property. In this case, the ALTO client MUST
+            recognize a "null" value as "no
+            value" and "do not apply the inheritance rules
+            for this property."
+        </li>
+            <li>
+            If the entity would not inherit a value, then the ALTO
+            server MAY return "null" or just omit the
+            property. In this case, the ALTO client cannot infer the
+            value for this property of this entity from the Inheritance
+            rules. So the client MUST interpret that this property has
+            no value.
+        </li>
+          </ul>
+          <t>
+        If the ALTO server does not define any properties for an entity,
+        then the server MAY omit that entity from the response.
+          </t>
+        </section>
+        <section anchor="defining-IR-media-type-ipv4-ipv6" numbered="true" toc="default">
+          <name>Defining Information Resource Media Type for domain types IPv4 and IPv6</name>
+          <t>
+  Entity domain types "ipv4" and "ipv6" both allow to define resource specific entity domains.
+  When resource specific domains are defined with entities of domain type "ipv4" or "ipv6",
+  the defining information resource for an entity domain of type "ipv4" or "ipv6" MUST be a Network Map.
+  The media type of a defining information resource is therefore: </t>
+          <t>application/alto-networkmap+json </t>
+        </section>
+      </section>
+      <section anchor="pid-domain" numbered="true" toc="default">
+        <name>Entity Domain Type: PID</name>
+        <t>
+      The PID domain associates property values with the PIDs in a
+      network map. Accordingly, this entity domain always depends on a
+      network map.
+        </t>
+        <section anchor="entity-domain-type" numbered="true" toc="default">
+          <name>Entity Domain Type Identifier</name>
+          <t>
+        pid
+          </t>
+        </section>
+        <section anchor="domain-specific-entity-identifiers" numbered="true" toc="default">
+          <name>Domain-Specific Entity Identifiers</name>
+          <t>
+        The entity identifiers are the PID names of the associated
+        network map.
+          </t>
+        </section>
+        <section anchor="hierarchy-and-inheritance" numbered="true" toc="default">
+          <name>Hierarchy and Inheritance</name>
+          <t>
+        There is no hierarchy or inheritance for properties associated
+        with PIDs.
+          </t>
+        </section>
+        <section anchor="defining-IR-media-type-pid" numbered="true" toc="default">
+          <name>Defining Information Resource Media Type for Domain Type PID</name>
+          <t>The entity domain type "pid" allows to define resource specific
+  entity domains.
+  When resource specific domains are defined with entities of domain type "pid",
+  the defining information resource for entity domain type "pid" MUST be a Network Map.
+  The media type of a defining information resource is therefore: </t>
+          <t>application/alto-networkmap+json </t>
+        </section>
+        <section anchor="relationship-to-internet-addresses-domains" numbered="true" toc="default">
+          <name>Relationship To Internet Addresses Domains</name>
+          <t>
+        The PID domain and the Internet address domains are completely
+        independent; the properties associated with a PID have no
+        relation to the properties associated with the prefixes or
+        endpoint addresses in that PID. An ALTO server MAY choose to
+        assign all the properties of a PID to the prefixes in that
+        PID or only some of these properties.
+          </t>
+          <t>
+        For example, suppose "PID1" consists of the
+        prefix "ipv4:192.0.2.0/24", and has the
+        property "P" with value "v1".
+        The Internet address entities "ipv4:192.0.2.0"
+        and "ipv4:192.0.2.0/24" in the IPv4 domain MAY
+        have a value for the property "P", and if they
+        do, it is not necessarily "v1".
+          </t>
+        </section>
+      </section>
+      <section anchor="internet-address-properties-vs.pid-properties" numbered="true" toc="default">
+        <name>Internet Address Properties vs.&nbsp;PID Properties</name>
+        <t>
+      Because the Internet address and PID domains relate to completely
+      distinct domain types, the question may arise as to which entity domain type is the
+      best for a property. In general, the Internet address domain types are
+      RECOMMENDED for properties that are closely related to the
+      Internet address, or are associated with, and inherited through,
+      hierarchical addresses.
+        </t>
+        <t>
+      The PID domain type is RECOMMENDED for properties that arise from the
+      definition of the PID, rather than from the Internet address
+      prefixes in that PID.
+        </t>
+        <t>
+      For example, because Internet addresses are allocated to service
+      providers by blocks of prefixes, an "ISP"
+      property would be best associated with Internet address
+      domain types. On the other hand, a property that explains why a PID was
+      formed, or how it relates to a provider's network, would best be
+      associated with the PID domain type.
+        </t>
+      </section>
+    </section>
+    <!-- commented text
+<section title="Entity Domains and Property Mappings in Information Resources" anchor="ed-pm-export">
+  <section title="Information Resource Export" anchor="def-ire">
+    <t>
+      Each information resource MUST export a set of entity domains and
+      entity property mappings (which can be empty).
+    </t>
+    <section title="Resource-Specific Entity Domain Export" anchor="def-epe">
+
+      <t>
+        Each type of information resource MAY export different types of
+        entity domains. For example, a network map resource MUST export
+        a "pid" domain, an "ipv4"
+        domain and an "ipv6" domain (which may be
+        empty); if a facilitated endpoint type "ecgi"
+        and its corresponding entity domain type defined for cellular
+        network addresses are supported in a future ALTO extension, a
+        network map supporting the "ecgi" endpoint type
+        MUST also export an "ecgi" domain.
+      </t>
+      <t>
+        When a new ALTO information resource type is registered, if this
+        type of information resource MAY export an existing type of
+        entity domain, the corresponding document MUST define how to
+        export such type of entity domain from such type of information
+        resource.
+      </t>
+      <t>
+        When a new entity domain type is registered, if an existing type
+        of information resource MAY export an entity domain in this
+        entity domain type, the corresponding document MUST define how
+        to export such type of entity domain from such type of
+        information resource.
+      </t>
+    </section>
+    <section title="Entity Property Mapping Export" anchor="def-ept">
+
+      <t>
+        For each entity domain which MAY be exported by an information
+        resource, this information resource MAY also export mappings
+        from this entity domain to some entity property. For example, a
+        network map resource MUST map an "ipv4" entity
+        to its "pid" property; if a facilitated ALTO
+        CDNI FCI information resource including "capabilities with
+        footprint restrictions" <xref target="RFC8008"/>
+        supporting ALTO PIDs as a new footprint type, this information
+        ressource MUST map a "pid" entity to its
+        corresponding "cdni-fci-capabilities" property.
+      </t>
+      <t>
+        When a new ALTO information resource type is registered, if this
+        type of information resource MAY export an entity domain in an
+        existing entity domain type, and map entities in this entity
+        domain to an existing type of entity property, the corresponding
+        document MUST define how to export such type of an entity
+        property.
+      </t>
+      <t>
+        When a new ALTO entity domain type or a new entity property type
+        is defined, if an existing type of resource MAY export an entity
+        domain in this entity domain type, and map entities in this
+        entity domain to this type of entity property, the corresponding
+        document MUST define how to export such type of an entity
+        property.
+      </t>
+    </section>
+  </section>
+  <section title="Network Map Resource" anchor="network-map-resource">
+
+    <t>
+      The ALTO network map resource defined by the media type
+      "application/alto-networkmap+json" exports the
+      following types of entity domains and entity property mappings.
+    </t>
+    <section title="Resource-Specific Entity Domain" anchor="netmap-ede">
+
+      <t>
+        An ALTO network map resource defines a "pid"
+        domain, an "ipv4" domain and an
+        "ipv6" domain by follows:
+      </t>
+      <t><list style="symbols">
+        <t>
+            The defined "pid" domain includes all PIDs
+            in keys of the "network-map" object.
+        </t>
+        <t>
+            The defined "ipv4" domain includes all IPv4
+            addresses appearing in the "ipv4" field of
+            the endpoint address group of each PID.
+        </t>
+        <t>
+            The defined "ipv6" domain includes all IPv6
+            addresses appearing in the "ipv6" field of
+            the endpoint address group of each PID.
+        </t>
+      </list></t>
+    </section>
+
+    <section title="Entity Property Mapping" anchor="netmap-ept">
+      <t>
+        For each of the preceding entity domains, an ALTO network map
+        resource provides the properties mapping as follows:
+      </t>
+      <t><list style="hanging">
+        <t hangText="ipv4 -&gt; pid:">
+              An "networkmap" typed resource can map an
+              "ipv4" entity to a "pid"
+              property whose value is a PID defined by this
+              "networkmap" resource and including the
+              IPv4 address of this entity.
+          </t>
+        <t hangText="ipv6 -&gt; pid:">
+              An "networkmap" typed resource can map an
+              "ipv6" entity to a "pid"
+              property whose value is a PID defined by this
+              "networkmap" resource and including the
+              IPv6 address of this entity.
+          </t>
+      </list></t>
+    </section>
+  </section>
+
+  <section title="Endpoint Property Resource" anchor="endpoint-property-resource">
+    <t>
+      The ALTO endpoint property resource defined by the media type
+      "application/alto-endpointprop+json" exports the
+      following types of entity domains and entity property mappings.
+    </t>
+    <section title="Resource-Specific Entity Domain" anchor="ep-ede">
+      <t>
+        An ALTO endpoint property resource defined an
+        "ipv4" domain and an "ipv6"
+        domain by follows:
+      </t>
+      <t><list style="symbols">
+        <t>
+            The defined "ipv4" domain includes all IPv4
+            addresses appearing in keys of the
+            "endpoint-properties" object.
+        </t>
+        <t>
+            The defined "ipv6" domain includes all IPv6
+            addresses appearing in keys of the
+            "endpoint-properties" object.
+        </t>
+      </list></t>
+    </section>
+
+    <section title="Entity Property Mapping" anchor="ep-ept">
+      <t>
+        For each of the preceding entity domains, an ALTO endpoint
+        property resource exports the properties mapping from it to each
+        supported global endpoint property. The property value is the
+        corresponding global endpoint property value in the
+        "endpiont-properties" object.
+      </t>
+    </section>
+  </section>
+
+  <section title="Property Map Resource" anchor="property-map-resource">
+    <t>
+      To avoid the nested reference and its potential complexity, this
+      document does not specify the export rule of resource-specific
+      entity domain and entity property mapping for the ALTO property
+      map resource defined by the media type
+      "application/alto-propmap+json" (see
+      <xref target="FullPropMapMediaType"/>).
+    </t>
+  </section>
+</section>
+-->
+
+<section anchor="prop-map" numbered="true" toc="default">
+      <name>Property Map</name>
+      <t>
+    A property map returns the properties defined for all entities in
+    one or more domains, e.g., the "location" property
+    of entities in "pid" domain, and the
+    "ASN" property of entities in
+    "ipv4" and "ipv6" domains.
+      </t>
+      <t>
+    <xref target="prop-map-example" format="default"/> gives an example of a
+    property map request and its response.
+      </t>
+      <section anchor="FullPropMapMediaType" numbered="true" toc="default">
+        <name>Media Type</name>
+        <t>
+      The media type of a property map is
+      "application/alto-propmap+json".
+        </t>
+      </section>
+      <section anchor="http-method" numbered="true" toc="default">
+        <name>HTTP Method</name>
+        <t>
+      The property map is requested using the HTTP GET method.
+        </t>
+      </section>
+      <section anchor="accept-input-parameters" numbered="true" toc="default">
+        <name>Accept Input Parameters</name>
+        <t>
+      None.
+        </t>
+      </section>
+      <section anchor="FullPropMapCapabilities" numbered="true" toc="default">
+        <name>Capabilities</name>
+        <t>
+      The capabilities are defined by an object of type
+      PropertyMapCapabilities:
+        </t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+    object {
+      EntityPropertyMapping mappings;
+    } PropertyMapCapabilities;
+
+    object-map {
+      EntityDomainName -> EntityPropertyName<1..*>;
+    } EntityPropertyMapping
+]]></artwork>
+        <t>
+      with fields:
+        </t>
+        <dl newline="false" spacing="normal">
+          <dt>mappings:</dt>
+          <dd>
+            A JSON object whose keys are names of entity domains and
+            values are the supported entity properties of the
+            corresponding entity domains.
+        </dd>
+        </dl>
+      </section>
+      <section anchor="FullPropMapUses" numbered="true" toc="default">
+        <name>Uses</name>
+        <t>
+      The "uses" field of a property map resource in an
+      IRD entry specifies dependent resources of this property map. It
+      is an array of the resource ID(s) of the resource(s).
+        </t>
+      </section>
+      <section anchor="FullPropMapResponse" numbered="true" toc="default">
+        <name>Response</name>
+        <t>
+      If the entity domains in this property map depend on other
+      resources, the "dependent-vtags" field in the
+      "meta" field of the response MUST be an array
+      that includes the version tags of those resources, and the order
+      MUST be consistent with the "uses" field of this
+      property map resource. The data component of a property map
+      response is named "property-map", which is a JSON
+      object of type PropertyMapData, where:
+        </t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+    object {
+      PropertyMapData property-map;
+    } InfoResourceProperties : ResponseEntityBase;
+
+    object-map {
+      EntityID -> EntityProps;
+    } PropertyMapData;
+
+    object {
+      EntityPropertyName -> JSONValue;
+    } EntityProps;
+]]></artwork>
+        <t>
+      The ResponseEntityBase type is defined in Section 8.4 of
+      <xref target="RFC7285" format="default"/>.
+        </t>
+        <t>
+      Specifically, a PropertyMapData object has one member for each
+      entity in the property map. The entity's properties are encoded in
+      the corresponding EntityProps object. EntityProps encodes one
+      name/value pair for each property, where the property names are
+      encoded as strings of type PropertyName. A protocol implementation
+      SHOULD assume that the property value is either a JSONString or a
+      JSON "null" value, and fail to parse if it is
+      not, unless the implementation is using an extension to this
+      document that indicates when and how property values of other data
+      types are signaled.
+        </t>
+        <t>
+      For each entity in the property map:
+        </t>
+        <ul spacing="normal">
+          <li>
+          If the entity is in a resource-specific entity domain, the
+          ALTO server SHOULD only return self-defined properties and
+          resource-specific properties which depend on the same resource
+          as the entity does. The ALTO client SHOULD ignore the
+          resource-specific property in this entity if their mapping is
+          not registered in the ALTO Resource Entity Property Transfer
+          Registry of the type of the corresponding resource.
+      </li>
+          <li>
+          If the entity is in a shared entity domain, the ALTO server
+          SHOULD return self-defined properties and all
+          resource-specific properties defined for all resource-specific
+          entities which have the same domain-specific entity identifier
+          as this entity does.
+      </li>
+        </ul>
+        <t>
+      For efficiency, the ALTO server SHOULD omit property values that
+      are inherited rather than explicitly defined; if a client needs
+      inherited values, the client SHOULD use the entity domain's
+      inheritance rules to deduce those values.
+        </t>
+      </section>
+    </section>
+    <section anchor="filter-prop-map" numbered="true" toc="default">
+      <name>Filtered Property Map</name>
+      <t>
+    A filtered property map returns the values of a set of properties
+    for a set of entities selected by the client.
+      </t>
+      <t>
+    <xref target="filt-prop-map-example-1" format="default"/>,
+    <xref target="filt-prop-map-example-2" format="default"/>,
+    <xref target="filt-prop-map-example-3" format="default"/> and
+    <xref target="filt-prop-map-example-4" format="default"/> give examples of
+    filtered property map requests and responses.
+      </t>
+      <section anchor="FilterPropMapMediaType" numbered="true" toc="default">
+        <name>Media Type</name>
+        <t>
+      The media type of a property map resource is
+      "application/alto-propmap+json".
+        </t>
+      </section>
+      <section anchor="http-method-1" numbered="true" toc="default">
+        <name>HTTP Method</name>
+        <t>
+      The filtered property map is requested using the HTTP POST method.
+        </t>
+      </section>
+      <section anchor="filter-prop-map-params" numbered="true" toc="default">
+        <name>Accept Input Parameters</name>
+        <t>
+      The input parameters for a filtered property map request are
+      supplied in the body of the POST request.
+      This document
+      specifies the input parameters with a data format indicated by the
+      media type "application/alto-propmapparams+json",
+      which is a JSON object of type ReqFilteredPropertyMap:
+        </t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+  object {
+    EntityID             entities<1..*>;
+    EntityPropertyName   properties<1..*>;
+  } ReqFilteredPropertyMap;
+]]></artwork>
+        <t>
+      with fields:
+        </t>
+        <dl newline="false" spacing="normal">
+          <dt>entities:</dt>
+          <dd>
+            List of entity identifiers for which the specified
+            properties are to be returned. The ALTO server MUST
+            interpret entries appearing multiple times as if they
+            appeared only once. The domain of each entity MUST be
+            included in the list of entity domains in this resource's
+            "capabilities" field (see
+            <xref target="FilteredPropMapCapabilities" format="default"/>).
+        </dd>
+          <dt>properties:</dt>
+          <dd>
+            <t>
+            List of properties to be returned for each entity. Each
+            specified property MUST be included in the list of
+            properties in this resource's
+            "capabilities" field (see
+            <xref target="FilteredPropMapCapabilities" format="default"/>). The
+            ALTO server MUST interpret entries appearing multiple times
+            as if they appeared only once.
+
+            </t>
+            <t>
+            Note that the "entities" and
+            "properties" fields MUST have at least one
+            entry each.
+            </t>
+          </dd>
+        </dl>
+      </section>
+      <section anchor="FilteredPropMapCapabilities" numbered="true" toc="default">
+        <name>Capabilities</name>
+        <t>
+      The capabilities are defined by an object of type
+      PropertyMapCapabilities, as defined in
+      <xref target="FullPropMapCapabilities" format="default"/>.
+        </t>
+      </section>
+      <section anchor="uses" numbered="true" toc="default">
+        <name>Uses</name>
+        <t>
+      Same to the "uses" field of the Property Map
+      resource (see <xref target="FullPropMapUses" format="default"/>).
+        </t>
+      </section>
+      <section anchor="FilteredPropMapResponse" numbered="true" toc="default">
+        <name>Filtered Property Map Response</name>
+        <t>
+      The response MUST indicate an error, using ALTO protocol error
+      handling, as defined in Section 8.5 of
+      <xref target="RFC7285" format="default"/>, if the request is invalid.
+        </t>
+        <t>
+      Specifically, a filtered property map request can be invalid in the following cases:
+        </t>
+        <ul spacing="normal">
+          <li>
+            <t>
+          An entity identifier in the "entities" field of the
+          request is invalid if:
+            </t>
+            <ul spacing="normal">
+              <li>
+              The domain of this entity is not defined in the
+              "entity-domains" capability of this
+              resource in the IRD,
+          </li>
+              <li>
+              The entity identifier is <!-- commented text an invalid identifier i n-->
+              not valid for the entity domain.
+          </li>
+            </ul>
+            <t>
+          A valid entity identifier does never generate an error, even if the
+          filtered property map resource does not define any properties
+          for it.
+
+            </t>
+            <t>
+          If an entity identifier in the "entities" field of the
+          request is invalid, the ALTO server MUST return an
+          "E_INVALID_FIELD_VALUE" error defined in
+          Section 8.5.2 of <xref target="RFC7285" format="default"/>, and the
+          "value" field of the error message SHOULD
+          indicate the provided invalid entity identifier.
+            </t>
+          </li>
+          <li>
+            <t>
+          A property name in the "properties" field of the
+          request is invalid if this property name is not defined in the
+          "properties" capability of this resource in
+          the IRD.
+
+            </t>
+            <t>
+          When a filtered property map resource does
+          not define a value for a property requested on a particular
+          entity, it is not an error. In this case, the ALTO server MUST omit that property
+          from the response for that endpoint.
+
+            </t>
+            <t>
+          If a property name in "properties" in the
+          request is invalid, the ALTO server MUST return an
+          "E_INVALID_FIELD_VALUE" error defined in
+          Section 8.5.2 of <xref target="RFC7285" format="default"/>. The
+          "value" field of the error message SHOULD
+          indicate the property name.
+            </t>
+          </li>
+        </ul>
+        <t>
+      The response to a valid request is the same as for the Property
+      Map (see <xref target="FullPropMapResponse" format="default"/>), except
+      that:
+        </t>
+        <ul spacing="normal">
+          <li>
+          If the requested entities include entities in the shared
+          entity domain, the "dependent-vtags" field in
+          its "meta" field MUST include version tags of
+          all dependent resources appearing in the
+          "uses" field.
+      </li>
+          <li>
+          If the requested entities only include entities in
+          resource-specific entity domains, the
+          "dependent-vtags" field in its
+          "meta" field MUST include the version tags of the
+          resources on which the requested resource-specific entity domains and
+          the requested resource-specific properties are dependent on.
+      </li>
+          <li>
+          The response only includes the entities and properties
+          requested by the client. If an entity in the request is
+          identified by a hierarchical identifier (e.g., a
+          "ipv4" or "ipv6" prefix),
+          the response MUST cover properties for all identifiers in this
+          hierarchical identifier.
+      </li>
+        </ul>
+        <t>
+      The filtered property map response MUST
+      include all the inherited property values for the requested entities
+      and all the entities which are able to inherit property values
+      from the requested entities.
+      To achieve this goal, the ALTO server MAY follow three rules:
+        </t>
+        <ul spacing="normal">
+          <li>
+          If a property for a requested entity is inherited from another
+          entity not included in the request, the response SHOULD
+          include this property for the requested entity. For example, A
+          full property map may skip a property P for an entity A (e.g.,
+          ipv4:192.0.2.0/31) if P can be derived using inheritance from
+          another entity B (e.g., ipv4:192.0.2.0/30). A filtered
+          property map request may include only A but not B. In such a
+          case, the property P SHOULD be included in the response for A.
+      </li>
+          <li>
+          If there are entities covered by a requested entity but having
+          different values for the requested properties, the response
+          SHOULD include all those entities and the different property
+          values for them. For example, considering a request for
+          property P of entity A (e.g., ipv4:192.0.2.0/31), if P has
+          value v1 for A1=ipv4:192.0.2.0/32 and v2 for
+          A2=ipv4:192.0.2.1/32, then, the response SHOULD include A1 and
+          A2.
+      </li>
+          <li>
+          If an entity address in the response is already covered by other
+          entities addresses in the same response, it SHOULD be removed from the
+          response, for the sake of compactness. In the previous
+          example, the entity A = ipv4:192.0.2.0/31 SHOULD be removed
+          because A1 and A2 cover all the addresses in A.
+      </li>
+        </ul>
+        <t>
+      An ALTO client should be aware that the entities in the response
+      MAY be different from the entities in its request.
+        </t>
+      </section>
+      <section anchor="prop-type-pid" numbered="true" toc="default">
+        <name>Entity property type defined in this document</name>
+        <t>This document defines the entity property type "pid". This property type extends the
+ALTO Endpoint Property Type "pid" defined in section 7.1.1 of <xref target="RFC7285" format="default"/>
+as follows: the property has the same semantics and applies to IPv4 and IPv6 addresses;
+the difference is that the IPv4 and IPv6 addresses have evolved from the status
+of endpoints to the status of entities.  </t>
+        <t>The defining information resource for property type MUST be a network map.
+This document requests a IANA registration for this property</t>
+        <section numbered="true" toc="default">
+          <name>Entity Property Type: pid</name>
+          <ol spacing="normal" type="1">
+            <li>Identifier: pid</li>
+            <li>Semantics: the intended semantics are the same as in <xref target="RFC7285" format="default"/>
+for the ALTO Endpoint Property Type "pid"</li>
+            <li>Media type of defining information resource: application/alto-networkmap+json </li>
+            <li>Security considerations: for entity property type "pid" are the same as
+documented in <xref target="RFC7285" format="default"/> for the ALTO Endpoint Property Type "pid". </li>
+          </ol>
+        </section>
+      </section>
+    </section>
+    <section anchor="legacy" numbered="true" toc="default">
+      <name>Impact on Legacy ALTO Servers and ALTO Clients</name>
+      <section anchor="impact-on-endpoint-property-service" numbered="true" toc="default">
+        <name>Impact on Endpoint Property Service</name>
+        <t>
+      Since the Property Map and the Filtered Property Map defined in this
+      document provide a functionality that covers the Endpoint Property Service
+      (EPS) defined in Section 11.4 of [RFC7285], ALTO servers may prefer to
+      provide Property Map and Filtered Property Map in place of EPS.
+      However, for the legacy endpoint properties, it is recommended that
+      ALTO servers also provide EPS so that legacy clients can still be
+      supported.
+        </t>
+      </section>
+      <section anchor="impact-on-resource-specific-properties" numbered="true" toc="default">
+        <name>Impact on Resource-Specific Properties</name>
+        <t>
+      Section 10.8 of <xref target="RFC7285" format="default"/> defines two
+      categories of endpoint properties:
+      "resource-specific" and
+      "global". Resource-specific property names are
+      prefixed with the ID of the resource they depend on, while
+      global property names have no such prefix. The property map and
+      the filtered property map defined in this document define
+      similar categories of entity properties.
+      The difference is that entity property maps do not define "global" entity properties.
+      Instead, they define "self-defined" entity properties as a special
+      case of "resource-specific" entity properties, where the specific resource
+      is the property map itself.
+      This means that "self-defined" properties are defined within the scope of the property map.
+        </t>
+      </section>
+      <section anchor="impact-on-other-properties" numbered="true" toc="default">
+        <name>Impact on Other Properties</name>
+        <t>
+        <!-- commented text 
+      In general, there should be little or no impact on other
+      previously defined properties. The only consideration is that
+      properties can now be defined on hierarchical entity identifiers,
+      rather than just individual entity identifiers, which might change
+      the semantics of a property.-->
+      In the present extension, properties can
+	now be defined on sets of entity addresses, rather than just
+	individual endpoint addresses as is is the case in RFC7285. 
+	This might change the semantics of a property. These sets can be for example 
+	hierachical IP address blocs. 
+     For instance, a property such as fictitious "geo-location", defined on a 
+     set of IP addresses would have a value 
+     corresponding to the barycenter of this set of addresses.  
+        </t>
+      </section>
+    </section>
+    <!-- This document was prepared using Pandoc2rfc, https://github.com/miekg/pandoc2rfc -->
+
+<section anchor="examples" numbered="true" toc="default">
+      <name>Examples</name>
+      <section anchor="net-map-example" numbered="true" toc="default">
+        <name>Network Map</name>
+        <t>
+      The examples in this section use a very simple default network
+      map:
+        </t>
+        <figure anchor="net-map-values-ex">
+          <name>Example Default Network Map</name>
+          <artwork align="center" name="" type="" alt=""><![CDATA[
+defaultpid:  ipv4:0.0.0.0/0  ipv6:::0/0
+pid1:        ipv4:192.0.2.0/25
+pid2:        ipv4:192.0.2.0/27
+pid3:        ipv4:192.0.3.0/28
+pid4:        ipv4:192.0.3.16/28
+]]></artwork>
+        </figure>
+        <t>
+
+        </t>
+        <t>
+      And another simple alternative network map:
+        </t>
+        <figure anchor="alt-net-map-values-ex">
+          <name>Example Alternative Network Map</name>
+          <artwork align="center" name="" type="" alt=""><![CDATA[
+defaultpid:  ipv4:0.0.0.0/0  ipv6:::0/0
+pid1:        ipv4:192.0.2.0/27
+pid2:        ipv4:192.0.3.0/27
+]]></artwork>
+        </figure>
+        <t>
+
+        </t>
+      </section>
+      <section anchor="inet-prop-example" numbered="true" toc="default">
+        <name>Property Definitions</name>
+        <t>
+      Beyond "pid", the examples in this section use
+      four additional properties for Internet address domains,
+      "ISP", "ASN",
+      "country" and "state", with the
+      following values:
+        </t>
+        <figure anchor="prop-map-values-ip-ex">
+          <name>Example Property Values for Internet Address Domains</name>
+          <artwork align="center" name="" type="" alt=""><![CDATA[
+                        ISP    ASN   country   state
+ipv4:192.0.2.0/23:    BitsRus   -      us       -
+ipv4:192.0.2.0/28:       -    12345    -        NJ
+ipv4:192.0.2.16/28:      -    12345    -        CT
+ipv4:192.0.2.1:          -      -      -        PA
+ipv4:192.0.3.0/28:       -    12346    -        TX
+ipv4:192.0.3.16/28:      -    12346    -        MN
+]]></artwork>
+        </figure>
+        <t>
+
+        </t>
+        <t>
+      And the examples in this section use the property
+      "region" for the PID domain of the default
+      network map with the following values:
+        </t>
+        <figure anchor="prop-map-values-pid-ex">
+          <name>Example Property Values for Default Network Map's PID Domain</name>
+          <artwork align="center" name="" type="" alt=""><![CDATA[
+                   region
+pid:defaultpid:     -
+pid:pid1:           us-west
+pid:pid2:           us-east
+pid:pid3:           us-south
+pid:pid4:           us-north
+]]></artwork>
+        </figure>
+        <t>
+
+        </t>
+        <t>
+      Note that "-" means the value of the property for
+      the entity is "undefined". So the entity would
+      inherit a value for this property by the inheritance rule if
+      possible. For example, the value of the "ISP"
+      property for "ipv4:192.0.2.1" is
+      "BitsRus" because of
+      "ipv4:192.0.2.0/24". But the
+      "region" property for
+      "pid:defaultpid" has no value because no entity
+      from which it can inherit.
+        </t>
+        <t>
+      Similar to the PID domain of the default network map, the examples
+      in this section use the property "ASN" for the
+      PID domain of the alternative network map with the following
+      values:
+        </t>
+        <figure anchor="alt-prop-map-values-pid-ex">
+          <name>Example Property Values for Alternative Network Map's PID Domain</name>
+          <artwork align="center" name="" type="" alt=""><![CDATA[
+                   ASN
+pid:defaultpid:     -
+pid:pid1:         12345
+pid:pid2:         12346
+]]></artwork>
+        </figure>
+        <t>
+
+        </t>
+      </section>
+      <!-- commented text
+  <section title="Properties for Abstract Network Elements"
+  anchor="properties-for-abstract-network-elements">
+
+    <t>
+      Additionally, the examples in this section consider a facilitated
+      entity domain: "ane" (Abstract Network Element).
+      Abstract network elements allow ALTO clients to discover
+      information beyond the end-to-end routing costs. Examples of
+      abstract network elements include:
+    </t>
+    <t><list style="hanging">
+      <t hangText="Forwarding elements:">
+
+            Forwarding elements include optical wires, physical layer
+            links, IP tunnels, etc. Forwarding elements share the common
+            property "maxresbw".
+
+        </t>
+      <t hangText="Value-added services:">
+
+            Value-added services include HTTP caches, 5G UPF nodes,
+            mobile edge computing, etc. Value-added services share the
+            common property "persistent-entities", which
+            contains information that points to the entry point of the
+            service. Different value-added services may have specific
+            properties, e.g., an abstract network element of a mobile
+            edge may provide a list of flavors to the client.
+
+        </t>
+    </list></t>
+    <figure><artwork>
+            maxresbw    persistent-entities     mec-flavors
+ane:L001    100 Mbps
+ane:L002    100 Mbps
+ane:CACHE1              http-proxy:192.0.2.1
+ane:MEC01               mec:192.0.2.1         {gpu:2G, ssd:128G}
+ane:MEC02               mec:192.0.2.2         {gpu:1G, ssd:128G}
+</artwork></figure>
+    <t>
+      The "ane" entities are usually not used alone,
+      but associated with other ALTO resources, e.g., cost maps. It
+      means that the ALTO server may not define a property map resource
+      to provide properties of "ane" entities. The
+      property map payload for "ane" entities may be
+      provided in the response of other ALTO resources in some way.
+    </t>
+  </section>
+   -->
+
+  <section anchor="ird-example" numbered="true" toc="default">
+        <name>Information Resource Directory (IRD)</name>
+        <t>
+      The following IRD defines ALTO Server information resources
+      that are relevant to the Entity Property Service.
+      It provides two property maps: one for the
+      "ISP" and "ASN" properties, and
+      another one for the "country" and
+      "state" properties. The server could have
+      provided a single property map for all four properties, but does
+      not, presumably because the organization that runs the ALTO server
+      believes that a client is not necessarily interested in getting all four
+      properties.
+        </t>
+        <t>
+      The server provides several filtered property maps. The first returns
+      all four properties, and the second returns only the
+      "pid" property for the default network map.
+        </t>
+        <t>
+      The filtered property maps for the "ISP",
+      "ASN", "country" and
+      "state" properties do not depend on the default
+      network map (it does not have a "uses"
+      capability), because the definitions of those properties do not
+      depend on the default network map. The Filtered Property Map providing
+      the "pid" property does have a
+      "uses" capability for the default network map,
+      because the default network map defines the values of the "pid" property.
+        </t>
+        <t>
+      Note that for legacy clients, the ALTO server provides an Endpoint
+      Property Service for the "pid" property defined on the endpoints of the
+      default network map.
+        </t>
+        <t>
+     The server provides another filtered Property map resource, named "ane-dc-property-map",
+     that returns a fictitious properties named "storage-capacity", "ram" and "cpu" for ANEs
+     that have a persistent identifier. The entity domain to which the ANEs belong
+     is "self-defined" and valid only within the property map.
+    <!-- commented text
+      The server also provides a facilitated ALTO information resource that accepts
+      the filtered cost map request but returns a multipart message
+      including a cost map and an associated property map for
+      "ane" entities.-->
+        </t>
+        <figure anchor="example-ird">
+          <name>Example IRD</name>
+          <artwork align="center" name="" type="" alt=""><![CDATA[
+GET /directory HTTP/1.1
+Host: alto.example.com
+Accept: application/alto-directory+json,application/alto-error+json
+
+HTTP/1.1 200 OK
+Content-Length: 2827
+Content-Type: application/alto-directory+json
+
+{
+  "meta" : {
+    "default-alto-network-map" : "default-network-map"
+  },
+  "resources" : {
+    "default-network-map" : {
+      "uri" : "http://alto.example.com/networkmap/default",
+      "media-type" : "application/alto-networkmap+json"
+    },
+    "alt-network-map" : {
+      "uri" : "http://alto.example.com/networkmap/alt",
+      "media-type" : "application/alto-networkmap+json"
+    },
+    "ia-property-map" : {
+      "uri" : "http://alto.example.com/propmap/full/inet-ia",
+      "media-type" : "application/alto-propmap+json",
+      "uses": [ "default-network-map", "alt-network-map" ],
+      "capabilities" : {
+        "mappings": {
+          "ipv4": [ ".ISP", ".ASN" ],
+          "ipv6": [ ".ISP", ".ASN" ]
+        }
+      }
+    },
+    "iacs-property-map" : {
+      "uri" : "http://alto.example.com/propmap/lookup/inet-iacs",
+      "media-type" : "application/alto-propmap+json",
+      "accepts": "application/alto-propmapparams+json",
+      "uses": [ "default-network-map", "alt-network-map" ],
+      "capabilities" : {
+        "mappings": {
+          "ipv4": [ ".ISP", ".ASN", ".country", ".state" ],
+          "ipv6": [ ".ISP", ".ASN", ".country", ".state" ]
+        }
+      }
+    },
+    "region-property-map": {
+      "uri": "http://alto.example.com/propmap/lookup/region",
+      "media-type": "application/alto-propmap+json",
+      "accepts": "application/alto-propmapparams+json",
+      "uses" : [ "default-network-map", "alt-network-map" ],
+      "capabilities": {
+        "mappings": {
+          "default-network-map.pid": [ ".region" ],
+          "alt-network-map.pid": [ ".ASN" ]
+        }
+      }
+    },
+    "ip-pid-property-map" : {
+      "uri" : "http://alto.example.com/propmap/lookup/pid",
+      "media-type" : "application/alto-propmap+json",
+      "accepts" : "application/alto-propmapparams+json",
+      "uses" : [ "default-network-map", "alt-network-map" ],
+      "capabilities" : {
+        "mappings": {
+          "ipv4": [ "default-network-map.pid",
+                    "alt-network-map.pid" ],
+          "ipv6": [ "default-network-map.pid",
+                    "alt-network-map.pid" ]
+        }
+      }
+    },
+    "legacy-endpoint-property" : {
+      "uri" : "http://alto.example.com/legacy/eps-pid",
+      "media-type" : "application/alto-endpointprop+json",
+      "accepts" : "application/alto-endpointpropparams+json",
+      "capabilities" : {
+        "properties" : [ "default-network-map.pid",
+                         "alt-network-map.pid" ]
+      }
+    },
+    "ane-dc-property-map": {
+      "uri" : "http://alto.example.com/propmap/lookup/ane-dc",
+      "media-type" : "application/alto-propmap+json",
+      "accepts": "application/alto-propmapparams+json",
+      "capabilities": {
+        "mappings": {
+          ".ane" : [ "storage-capacity", "ram", "cpu" ]
+        }
+      }
+    }
+  }
+}
+]]></artwork>
+        </figure>
+        <t>
+
+        </t>
+      </section>
+      <section anchor="prop-map-example" numbered="true" toc="default">
+        <name>Full Property Map Example</name>
+        <t>
+      The following example uses the properties and IRD defined above
+      in <xref target="ird-example" format="default"/> to
+      retrieve a Property Map for entities with the
+      "ISP" and "ASN" properties.
+        </t>
+        <t>
+      Note that, to be compact, the response does not include the entity
+      "ipv4:192.0.2.0", because values of all those
+      properties for this entity are inherited from other entities.
+        </t>
+        <t>
+      Also note that the entities "ipv4:192.0.2.0/28"
+      and "ipv4:192.0.2.16/28" are merged into
+      "ipv4:192.0.2.0/27", because they have the same
+      value of the "ASN" property. The same rule
+      applies to the entities "ipv4:192.0.3.0/28" and
+      "ipv4:192.0.3.0/28". Both of
+      "ipv4:192.0.2.0/27" and
+      "ipv4:192.0.3.0/27" omit the value for the
+      "ISP" property, because it is inherited from
+      "ipv4:192.0.2.0/23".
+        </t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+GET /propmap/full/inet-ia HTTP/1.1
+Host: alto.example.com
+Accept: application/alto-propmap+json,application/alto-error+json
+]]></artwork>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+HTTP/1.1 200 OK
+Content-Length: 418
+Content-Type: application/alto-propmap+json
+
+{
+  "meta": {
+    "dependent-vtags": [
+      {"resource-id": "default-network-map",
+       "tag": "3ee2cb7e8d63d9fab71b9b34cbf764436315542e"},
+      {"resource-id": "alt-network-map",
+       "tag": "c0ce023b8678a7b9ec00324673b98e54656d1f6d"}
+    ]
+  },
+  "property-map": {
+    "ipv4:192.0.2.0/23":   {".ISP": "BitsRus"},
+    "ipv4:192.0.2.0/27":   {".ASN": "12345"},
+    "ipv4:192.0.3.0/27":   {".ASN": "12346"}
+  }
+}
+]]></artwork>
+      </section>
+      <section anchor="filt-prop-map-example-1" numbered="true" toc="default">
+        <name>Filtered Property Map Example #1</name>
+        <t>
+      The following example uses the filtered property map resource to
+      request the "ISP", "ASN" and
+      "state" properties for several IPv4 addresses.
+        </t>
+        <t>
+      Note that the value of "state" for
+      "ipv4:192.0.2.0" is the only explicitly defined
+      property; the other values are all derived by the inheritance
+      rules for Internet address entities.
+        </t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+POST /propmap/lookup/inet-iacs HTTP/1.1
+Host: alto.example.com
+Accept: application/alto-propmap+json,application/alto-error+json
+Content-Length: 158
+Content-Type: application/alto-propmapparams+json
+
+{
+  "entities" : [ "ipv4:192.0.2.0",
+                 "ipv4:192.0.2.1",
+                 "ipv4:192.0.2.17" ],
+  "properties" : [ ".ISP", ".ASN", ".state" ]
+}
+]]></artwork>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+HTTP/1.1 200 OK
+Content-Length: 540
+Content-Type: application/alto-propmap+json
+
+{
+  "meta": {
+    "dependent-vtags": [
+      {"resource-id": "default-network-map",
+       "tag": "3ee2cb7e8d63d9fab71b9b34cbf764436315542e"},
+      {"resource-id": "alt-network-map",
+       "tag": "c0ce023b8678a7b9ec00324673b98e54656d1f6d"}
+    ]
+  },
+  "property-map": {
+    "ipv4:192.0.2.0":
+           {".ISP": "BitsRus", ".ASN": "12345", ".state": "PA"},
+    "ipv4:192.0.2.1":
+           {".ISP": "BitsRus", ".ASN": "12345", ".state": "NJ"},
+    "ipv4:192.0.2.17":
+           {".ISP": "BitsRus", ".ASN": "12345", ".state": "CT"}
+  }
+}
+]]></artwork>
+      </section>
+      <section anchor="filt-prop-map-example-2" numbered="true" toc="default">
+        <name>Filtered Property Map Example #2</name>
+        <t>
+      The following example uses the filtered property map resource to
+      request the "ASN", "country" and
+      "state" properties for several IPv4 prefixes.
+        </t>
+        <t>
+      Note that the property values for both entities
+      "ipv4:192.0.2.0/26" and
+      "ipv4:192.0.3.0/26" are not explicitly defined.
+      They are inherited from the entity
+      "ipv4:192.0.2.0/23".
+        </t>
+        <t>
+      Also note that some entities like
+      "ipv4:192.0.2.0/28" and
+      "ipv4:192.0.2.16/28" in the response are not
+      explicitly listed in the request.
+      The response includes them
+      because they are refinements of the requested entities and have
+      different values for the requested properties.
+        </t>
+        <t>
+      The entity "ipv4:192.0.4.0/26" is not included in
+      the response, because there are neither entities which it is
+      inherited from, nor entities inherited from it.
+        </t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+POST /propmap/lookup/inet-iacs HTTP/1.1
+Host: alto.example.com
+Accept: application/alto-propmap+json,application/alto-error+json
+Content-Length: 170
+Content-Type: application/alto-propmapparams+json
+
+{
+  "entities" : [ "ipv4:192.0.2.0/26",
+                 "ipv4:192.0.3.0/26",
+                 "ipv4:192.0.4.0/26" ],
+  "properties" : [ ".ASN", ".country", ".state" ]
+}
+]]></artwork>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+HTTP/1.1 200 OK
+Content-Length: 766
+Content-Type: application/alto-propmap+json
+
+{
+  "meta": {
+    "dependent-vtags": [
+      {"resource-id": "default-network-map",
+       "tag": "3ee2cb7e8d63d9fab71b9b34cbf764436315542e"},
+      {"resource-id": "alt-network-map",
+       "tag": "c0ce023b8678a7b9ec00324673b98e54656d1f6d"}
+    ]
+  },
+  "property-map": {
+    "ipv4:192.0.2.0/26":  {".country": "us"},
+    "ipv4:192.0.2.0/28":  {".ASN": "12345",
+                           ".state": "NJ"},
+    "ipv4:192.0.2.16/28": {".ASN": "12345",
+                           ".state": "CT"},
+    "ipv4:192.0.2.0":     {".state": "PA"},
+    "ipv4:192.0.3.0/26":  {".country": "us"},
+    "ipv4:192.0.3.0/28":  {".ASN": "12345",
+                           ".state": "TX"},
+    "ipv4:192.0.3.16/28": {".ASN": "12345",
+                           ".state": "MN"}
+  }
+}
+]]></artwork>
+      </section>
+      <section anchor="filt-prop-map-example-3" numbered="true" toc="default">
+        <name>Filtered Property Map Example #3</name>
+        <t>
+      The following example uses the filtered property map resource to
+      request the "default-network-map.pid" property
+      and the "alt-network-map.pid" property for a set
+      of IPv4 addresses and prefixes.
+        </t>
+        <t>
+      Note that the entity "ipv4:192.0.3.0/27" is
+      decomposed into two entities "ipv4:192.0.3.0/28"
+      and "ipv4:192.0.3.16/28", as they have different
+      "default-network-map.pid" property values.
+        </t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+POST /propmap/lookup/pid HTTP/1.1
+Host: alto.example.com
+Accept: application/alto-propmap+json,application/alto-error+json
+Content-Length: 221
+Content-Type: application/alto-propmapparams+json
+
+{
+  "entities" : [
+                "ipv4:192.0.2.128",
+                "ipv4:192.0.2.0/27",
+                "ipv4:192.0.3.0/27" ],
+  "properties" : [ "default-network-map.pid",
+                   "alt-network-map.pid ]
+}
+]]></artwork>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+HTTP/1.1 200 OK
+Content-Length: 774
+Content-Type: application/alto-propmap+json
+
+{
+  "meta": {
+    "dependent-vtags": [
+      {"resource-id": "default-network-map",
+       "tag": "3ee2cb7e8d63d9fab71b9b34cbf764436315542e"},
+      {"resource-id": "alt-network-map",
+       "tag": "c0ce023b8678a7b9ec00324673b98e54656d1f6d"}
+    ]
+  },
+  "property-map": {
+    "ipv4:192.0.2.128":   {"default-network-map.pid": "defaultpid",
+                           "alt-network-map.pid": "defaultpid"},
+    "ipv4:192.0.2.0/27":  {"default-network-map.pid": "pid2",
+                           "alt-network-map.pid": "pid1"},
+    "ipv4:192.0.3.0/28":  {"default-network-map.pid": "pid3",
+                           "alt-network-map.pid": "pid2"},
+    "ipv4:192.0.3.16/28": {"default-network-map.pid": "pid4",
+                           "alt-network-map.pid": "pid2"}
+  }
+}
+]]></artwork>
+      </section>
+      <section anchor="filt-prop-map-example-4" numbered="true" toc="default">
+        <name>Filtered Property Map Example #4</name>
+        <t>
+    <!-- commented text
+      The following example uses the filtered property map resource to
+      request the "region" property for several PIDs
+      defined in "default-network-map".
+
+      The value of
+      the "region" property for each PID is not defined
+      by "default-network-map", but the reason why the
+      PID is defined by the network operator.-->
+      Here is an example of using the filtered property map to query the regions for several PIDs
+      in "default-network-map". The "region" property is specified as a "self-defined"
+      property, i.e., the values of this property are defined by this property map resource.
+        </t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+POST /propmap/lookup/region HTTP/1.1
+Host: alto.example.com
+Accept: application/alto-propmap+json,application/alto-error+json
+Content-Length: 132
+Content-Type: application/alto-propmapparams+json
+
+{
+  "entities" : ["default-network-map.pid:pid1",
+                "default-network-map.pid:pid2"],
+  "properties" : [ ".region" ]
+}
+]]></artwork>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+HTTP/1.1 200 OK
+Content-Length: 326
+Content-Type: application/alto-propmap+json
+
+{
+  "meta" : {
+    "dependent-vtags" : [
+       {"resource-id": "default-network-map",
+        "tag": "7915dc0290c2705481c491a2b4ffbec482b3cf62"}
+    ]
+  },
+  "property-map": {
+    "default-network-map.pid:pid1": {
+      ".region": "us-west"
+    },
+    "default-network-map.pid:pid2": {
+      ".region": "us-east"
+    }
+  }
+}
+]]></artwork>
+      </section>
+      <section anchor="ane-example" numbered="true" toc="default">
+        <name>Filtered Property Map for ANEs Example #5</name>
+        <t>
+      The following example uses the filtered property map resource
+      "ane-dc-property-map" to request properties "storage-capacity" and "cpu" on several
+      ANEs defined in this property map.
+        </t>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+
+POST /propmap/lookup/ane-dc HTTP/1.1
+Host: alto.example.com
+Accept: application/alto-propmap+json,application/alto-error+json
+Content-Length: 155
+Content-Type: application/alto-propmapparams+json
+
+{
+  "entities" : [".ane:dc21",
+                ".ane:dc45.srv9",
+                ".ane:dc6.srv-cluster8"],
+  "properties" : [ "storage-capacity", "cpu"]
+}
+]]></artwork>
+        <artwork name="" type="" align="left" alt=""><![CDATA[
+
+HTTP/1.1 200 OK
+Content-Length: 295
+Content-Type: application/alto-propmap+json
+
+{
+  "meta" : {
+  },
+  "property-map": {
+    ".ane:dc21":
+      {"storage-capacity" : 40000 Gbytes, "cpu" : 500 Cores},
+    ".ane:dc45.srv9":
+      {"storage-capacity" : 100 Gbytes, "cpu" : 20 Cores},
+    ".ane:dc6.srv-cluster8":
+      {"storage-capacity" : 6000 Gbytes, "cpu" : 100 Cores}
+  }
+}
+]]></artwork>
+      </section>
+    </section>
+    <!-- This document was prepared using Pandoc2rfc, https://github.com/miekg/pandoc2rfc -->
+
+
+<section anchor="SecSC" numbered="true" toc="default">
+      <name>Security Considerations</name>
+      <t>
+    Both Property Map and Filtered Property Map defined in this document
+    fit into the architecture of the ALTO base protocol, and hence the
+    Security Considerations (Section 15 of
+    <xref target="RFC7285" format="default"/>) of the base protocol fully apply:
+    authenticity and integrity of ALTO information (i.e., authenticity
+    and integrity of Property Maps), potential undesirable guidance from
+    authenticated ALTO information (e.g., potentially imprecise or even
+    wrong value of a property such as geo-location), confidentiality of
+    ALTO information (e.g., exposure of a potentially sensitive entity
+    property such as geo-location), privacy for ALTO users, and
+    availability of ALTO services should all be considered.
+      </t>
+      <t>
+    A particular fundamental security consideration when an ALTO server
+    provides a Property Map is to define precisely the policies on who
+    can access what properties for which entities. Security mechanisms
+    such as authentication and confidentiality mechanisms should then be
+    applied to enforce the policy. For example, a policy can be that a
+    property P can be accessed only by its owner (e.g., the customer who
+    is allocated a given IP address). Then, the ALTO server will need to
+    deploy corresponding mechanisms to realize the policy. The policy
+    may allow non-owners to access a coarse-grained value of the
+    property P. In such a case, the ALTO server may provide a different
+    URI to provide the information.
+      </t>
+    </section>
+    <section anchor="iana-considerations" numbered="true" toc="default">
+      <name>IANA Considerations</name>
+      <t>
+    This document defines additional application/alto-* media types.
+    It defines an ALTO Entity Domain Type Registry
+    that extends the ALTO Address Type Registry defined in <xref target="RFC7285" format="default"/>.
+    It also defines an ALTO Entity Property Type Registry that extends
+    the ALTO endpoint property registry defined in <xref target="RFC7285" format="default"/>.
+      </t>
+      <section anchor="applicationalto--media-types" numbered="true" toc="default">
+        <name>application/alto-* Media Types</name>
+        <t>
+      This document registers two additional ALTO media types, listed in
+      <xref target="TableMediaTypes" format="default"/>.
+        </t>
+        <table anchor="TableMediaTypes" align="center">
+          <name>Additional ALTO Media Types.</name>
+          <thead>
+            <tr>
+              <th align="left">
+              Type
+            </th>
+              <th align="left">
+              Subtype
+            </th>
+              <th align="left">
+              Specification
+            </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">
+              application
+            </td>
+              <td align="left">
+              alto-propmap+json
+            </td>
+              <td align="left">
+                <xref target="FullPropMapMediaType" format="default"/>
+              </td>
+            </tr>
+            <tr>
+              <td align="left">
+              application
+            </td>
+              <td align="left">
+              alto-propmapparams+json
+            </td>
+              <td align="left">
+                <xref target="filter-prop-map-params" format="default"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <t>
+
+        </t>
+        <dl newline="true" spacing="normal">
+          <dt>Type name:</dt>
+          <dd>
+            application
+        </dd>
+          <dt>Subtype name:</dt>
+          <dd>
+            This document registers multiple subtypes, as listed in
+            <xref target="TableMediaTypes" format="default"/>.
+        </dd>
+          <dt>Required parameters:</dt>
+          <dd>
+            n/a
+        </dd>
+          <dt>Optional parameters:</dt>
+          <dd>
+            n/a
+        </dd>
+          <dt>Encoding considerations:</dt>
+          <dd>
+            Encoding considerations are identical to those specified for
+            the "application/json" media type. See
+            <xref target="RFC8259" format="default"/>.
+        </dd>
+          <dt>Security considerations:</dt>
+          <dd>
+            Security considerations related to the generation and
+            consumption of ALTO Protocol messages are discussed in
+            Section 15 of <xref target="RFC7285" format="default"/>.
+        </dd>
+          <dt>Interoperability considerations:</dt>
+          <dd>
+            This document specifies formats of conforming messages and
+            the interpretation thereof.
+        </dd>
+          <dt>Published specification:</dt>
+          <dd>
+            This document is the specification for these media types;
+            see <xref target="TableMediaTypes" format="default"/> for the section
+            documenting each media type.
+        </dd>
+          <dt>Applications that use this media type:</dt>
+          <dd>
+            ALTO servers and ALTO clients either stand alone or are
+            embedded within other applications.
+        </dd>
+          <dt>Additional information:</dt>
+          <dd>
+            <dl newline="false" spacing="normal">
+              <dt>Magic number(s):</dt>
+              <dd>
+                  n/a
+              </dd>
+              <dt>File extension(s):</dt>
+              <dd>
+                  This document uses the mime type to refer to protocol
+                  messages and thus does not require a file extension.
+              </dd>
+              <dt>Macintosh file type code(s):</dt>
+              <dd>
+                  n/a
+              </dd>
+            </dl>
+          </dd>
+          <dt>Person &amp; email address to contact for further information:</dt>
+          <dd>
+            See Authors' Addresses section.
+        </dd>
+          <dt>Intended usage:</dt>
+          <dd>
+            COMMON
+        </dd>
+          <dt>Restrictions on usage:</dt>
+          <dd>
+            n/a
+        </dd>
+          <dt>Author:</dt>
+          <dd>
+            See Authors' Addresses section.
+        </dd>
+          <dt>Change controller:</dt>
+          <dd>
+            Internet Engineering Task Force (mailto:iesg@ietf.org).
+        </dd>
+        </dl>
+      </section>
+      <section anchor="IANADomain" numbered="true" toc="default">
+        <name>ALTO Entity Domain Type Registry</name>
+        <t>
+      This document requests IANA to create and maintain the
+      "ALTO Entity Domain Type Registry", listed in
+      <xref target="TableEntityDomainNames" format="default"/>.
+        </t>
+        <table anchor="TableEntityDomainNames" align="center">
+          <name>ALTO Entity Domain Types</name>
+          <thead>
+            <tr>
+              <th align="left">
+              Identifier
+            </th>
+              <th align="left">
+              Entity Identifier Encoding
+            </th>
+              <th align="left">
+              Hierarchy &amp; Inheritance
+            </th>
+              <th align="left">
+              Media Type of Defining Resource
+            </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">
+              ipv4
+            </td>
+              <td align="left">
+              See <xref target="ipv4-domain" format="default"/>
+              </td>
+              <td align="left">
+              See <xref target="inet-inheritance" format="default"/>
+              </td>
+              <td align="left">
+              application/alto-networkmap+json
+            </td>
+            </tr>
+            <tr>
+              <td align="left">
+              ipv6
+            </td>
+              <td align="left">
+              See <xref target="ipv6-domain" format="default"/>
+              </td>
+              <td align="left">
+              See <xref target="inet-inheritance" format="default"/>
+              </td>
+              <td align="left">
+              application/alto-networkmap+json
+            </td>
+            </tr>
+            <tr>
+              <td align="left">
+              pid
+            </td>
+              <td align="left">
+              See <xref target="pid-domain" format="default"/>
+              </td>
+              <td align="left">
+              None
+            </td>
+              <td align="left">
+              application/alto-networkmap+json
+            </td>
+            </tr>
+          </tbody>
+        </table>
+        <t>
+
+        </t>
+        <t>
+      This registry serves two purposes. First, it ensures uniqueness of
+      identifiers referring to ALTO entity domain types. Second, it states
+      the requirements for allocated entity domain types.
+        </t>
+        <section anchor="consistency-procedure" numbered="true" toc="default">
+          <name>Consistency Procedure between ALTO Address Type Registry and ALTO Entity Domain Type Registry</name>
+          <t>
+        One potential issue of introducing the
+        "ALTO Entity Domain Type Registry" is its
+        relationship with the
+        "ALTO Address Types Registry" already defined
+        in Section 14.4 of <xref target="RFC7285" format="default"/>. In
+        particular, the entity identifier of a type of an entity domain
+        registered in the
+        "ALTO Entity Domain Type Registry" MAY match an
+        address type defined in
+        "ALTO Address Type Registry". It is necessary
+        to precisely define and guarantee the consistency between
+        "ALTO Address Type Registry" and
+        "ALTO Entity Domain Registry".
+          </t>
+          <t>
+        We define that the ALTO Entity Domain Type Registry is
+        consistent with ALTO Address Type Registry if two conditions are
+        satisfied:
+          </t>
+          <ul spacing="normal">
+            <li>
+            When an address type is already or able to be registered in
+            the ALTO Address Type Registry
+            <xref target="RFC7285" format="default"/>, the same identifier MUST be
+            used when a corresponding entity domain type is registered
+            in the ALTO Entity Domain Type Registry.
+        </li>
+            <li>
+            If an ALTO entity domain type has the same identifier as an
+            ALTO address type, their addresses encoding MUST be
+            compatible.
+        </li>
+          </ul>
+          <t>
+        To achieve this consistency, the following items MUST be checked
+        before registering a new ALTO entity domain type in a future
+        document:
+          </t>
+          <ul spacing="normal">
+            <li>
+            Whether the ALTO Address Type Registry contains an address
+            type that can be used as an identifier for the
+            candidate entity domain type identifier. This has been done for the
+            identifiers "ipv4" and "ipv6" of
+            <xref target="TableEntityDomainNames" format="default"/>.
+        </li>
+            <li>
+            Whether the candidate entity domain type identifier
+            can potentially be an endpoint address type, as defined
+            in Sections 2.1 and 2.2 of <xref target="RFC7285" format="default"/>.
+        </li>
+          </ul>
+          <t>
+        When a new ALTO entity domain type is registered, the
+        consistency with the ALTO Address Type Registry MUST be ensured
+        by the following procedure:
+          </t>
+          <ul spacing="normal">
+            <li>
+            Test: Do corresponding entity domain type identifiers match a known
+            "network" address type?
+        </li>
+            <li>
+              <ul spacing="normal">
+                <li>
+                If yes (e.g., cell, MAC or socket addresses):
+            </li>
+                <li>
+                  <ul spacing="normal">
+                    <li>
+                    Test: Is such an address type present in the ALTO
+                    Address Type Registry?
+                </li>
+                    <li>
+                      <ul spacing="normal">
+                        <li>
+                        If yes: Set the new ALTO entity domain type
+                        identifier to be the found ALTO address type
+                        identifier.
+                    </li>
+                        <li>
+                        If no: Define a new ALTO entity domain type
+                        identifier and use it to register a new address
+                        type in the ALTO Address Type Registry following
+                        Section 14.4 of <xref target="RFC7285" format="default"/>.
+                    </li>
+                      </ul>
+                    </li>
+                    <li>
+                    Use the new ALTO entity domain type identifier to
+                    register a new ALTO entity domain type in the ALTO
+                    Entity Domain Type Registry following
+                    <xref target="dom-reg-process" format="default"/> of this
+                    document.
+                </li>
+                  </ul>
+                </li>
+                <li>
+                If no (e.g., pid name, ane name or country code):
+                Proceed with the ALTO Entity Domain Type registration as
+                described in <xref target="dom-reg-process" format="default"/>.
+            </li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section anchor="dom-reg-process" numbered="true" toc="default">
+          <name>ALTO Entity Domain Type Registration Process</name>
+          <t>
+        New ALTO entity domain types are assigned after IETF Review
+        <xref target="RFC8126" format="default"/> to ensure that proper
+        documentation regarding the new ALTO entity domain types and
+        their security considerations has been provided. RFCs defining
+        new entity domain types SHOULD indicate how an entity in a
+        registered type of domain is encoded as an EntityID, and, if
+        applicable, the rules defining the entity hierarchy and property
+        inheritance. Updates and deletions of ALTO entity domains types follow
+        the same procedure.
+          </t>
+          <t>
+        Registered ALTO entity domain type identifiers MUST conform to
+        the syntactical requirements specified in
+        <xref target="domain-names" format="default"/>. Identifiers are to be
+        recorded and displayed as strings.
+          </t>
+          <t>
+        Requests to the IANA to add a new value to the Entity Domain Type registry MUST
+        include the following information:
+          </t>
+          <ul spacing="normal">
+            <li>
+            Identifier: The name of the desired ALTO entity domain type.
+        </li>
+            <li>
+            Entity Identifier Encoding: The procedure for encoding the
+            identifier of an entity of the registered domain type as an
+            EntityID (see <xref target="entity-addrs" format="default"/>). If
+            corresponding entity identifiers of an entity domain type match a
+            known "network" address type, the Entity
+            Identifier Encoding of this domain identifier MUST include
+            both Address Encoding and Prefix Encoding of the same
+            identifier registered in the ALTO Address Type Registry
+            <xref target="RFC7285" format="default"/>. To define
+            properties, an individual entity identifier and the
+            corresponding full-length prefix MUST be considered aliases
+            for the same entity.
+        </li>
+            <li>
+            Hierarchy: If the entities form a hierarchy, the procedure
+            for determining that hierarchy.
+        </li>
+            <li>
+            Inheritance: If entities can inherit property values from
+            other entities, the procedure for determining that
+            inheritance.
+        </li>
+            <li>
+         Media type of defining information resource: some entity domain types
+         allow an entity domain name to be combined with an
+         information resource name to define a resource-specific
+         entity domain.
+         Such an information resource is called "defining information resource".
+         In this case, the authorized media type of the defining
+         information resources MUST be specified in the document defining the entity domain type.
+         When an entity domain type allows combinations with defining resources, this must
+         be indicated and the conditions fully specified in the document.
+
+          The defining information resource for an entity domain type is the one that:
+        </li>
+            <li>
+              <ul spacing="normal">
+                <li>has an entry in the IRD,</li>
+                <li>defines these entities,</li>
+                <li>does not use another information resource that defines these entities, </li>
+                <li>defines and exposes entity identifiers that are all persistent.</li>
+                <li>has a unique media type equal to the one specified in the document defining
+    the entity domain type.</li>
+              </ul>
+            </li>
+            <li>
+    Knowing the media type of the defining information resource
+    is useful when Servers indicate resource specific entity domains
+    in the property map capabilities. Clients need to know if the combination
+    of information resource type and entity domain type is allowed.
+
+       See also, <xref target="defining-information-resource" format="default"/>
+       and <xref target="def-domain" format="default"/> for more information.
+        </li>
+            <li>
+            Mapping to ALTO Address Type: A boolean value to indicate if
+            the entity domain type can be mapped to the ALTO address
+            type with the same identifier.
+        </li>
+            <li>
+            Security Considerations: In some usage scenarios, entity
+            identifiers carried in ALTO Protocol messages may reveal
+            information about an ALTO client or an ALTO service
+            provider. Applications and ALTO service providers using
+            addresses of the registered type should be cognizant of how
+            (or if) the addressing scheme relates to private information
+            and network proximity.
+        </li>
+          </ul>
+          <t>
+        This specification requests registration of the identifiers
+        "ipv4", "ipv6" and
+        "pid", as shown in
+        <xref target="TableEntityDomainNames" format="default"/>.
+          </t>
+        </section>
+      </section>
+      <section anchor="IANAEntityProp" numbered="true" toc="default">
+        <name>ALTO Entity Property Type Registry</name>
+        <t>
+      This document requests IANA to create and maintain the
+      "ALTO Entity Property Type Registry", listed in
+      <xref target="TablePropertyTypes" format="default"/>.
+        </t>
+        <t>
+      This registry extends the "ALTO Endpoint Property Type Registry", defined in
+      <xref target="RFC7285" format="default"/>, in that a property type is defined on one or more entity domains,
+      rather than just on IPv4 and IPv6 Internet address domains.
+      An entry in this registry is an ALTO entity property type defined in
+      <xref target="def-property-type" format="default"/>. Thus, a registered ALTO
+      entity property type identifier MUST conform to the syntactical
+      requirements specified in that section.
+        </t>
+        <!-- <t>
+      The initial registered ALTO entity property types are listed in  xref target="TablePropertyTypes"/>.
+    </t>-->
+
+    <table anchor="TablePropertyTypes" align="center">
+          <name>ALTO Entity Property Types.</name>
+          <thead>
+            <tr>
+              <th align="left">
+              Identifier
+            </th>
+              <th align="left">
+              Intended Semantics
+            </th>
+              <th align="left">
+              Media Type of Defining Resource
+            </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="left">
+              pid
+            </td>
+              <td align="left">
+              See Section 7.1.1 of <xref target="RFC7285" format="default"/>
+              </td>
+              <td align="left">
+              application/alto-networkmap+json
+            </td>
+            </tr>
+          </tbody>
+        </table>
+        <t/>
+        <t>
+      Requests to the IANA to add a new value to the registry MUST
+      include the following information:
+        </t>
+        <ul spacing="normal">
+          <li>
+          Identifier: The unique id for the desired ALTO entity property
+          type. The format MUST be as defined in
+          <xref target="def-property-type" format="default"/> of this document. It
+          includes the information of the applied ALTO entity domain and
+          the property name.
+      </li>
+          <li>
+          Intended Semantics: ALTO entity properties carry with them
+          semantics to guide their usage by ALTO clients. Hence, a
+          document defining a new type SHOULD provide guidance to both
+          ALTO service providers and applications utilizing ALTO clients
+          as to how values of the registered ALTO entity property should
+          be interpreted.
+      </li>
+          <li>
+        Media type of defining information resource:
+        when the property type allows values to be defined relatively
+        to a given information resource, the latter is referred to as the "defining
+        information resource",
+        see also description in <xref target="type-of-specific-ir-for-ir-specific-property-value" format="default"/>.
+        The media type of the possibly used defining information
+        resource MUST be indicated.
+      </li>
+          <li>Security Considerations: ALTO entity properties expose
+information to ALTO clients. ALTO service providers should be
+cognizant of the security ramifications related to the exposure
+of an entity property.
+      </li>
+        </ul>
+        <t>In security considerations, the request should also discuss the sensitivity of the
+    information, and why it is required for ALTO-based
+    operations. Regarding this discussion, the request SHOULD follow the recommendations
+    of Section 14.3. ALTO Endpoint Property Type Registry
+    in <xref target="RFC7285" format="default"/>.</t>
+        <t>
+      This document requests registration of the identifier "pid", listed in
+      <xref target="TablePropertyTypes" format="default"/>. Semantics for this property are documented
+      in Section 7.1.1 of <xref target="RFC7285" format="default"/>. No security issues related to
+      the exposure of a "pid" identifier are considered, as it is exposed
+      with the Network Map Service defined and mandated in <xref target="RFC7285" format="default"/>.
+      <!-- commented text
+      and security considerations are documented in Section TODO:ref. -->
+        </t>
+      </section>
+      <!-- commented-text
+  <section title="ALTO Resource-Specific Entity Domain Registries" anchor="IANAResourceEDE">
+
+    <section title="Network Map" anchor="network-map">
+      <t>
+        Media-type: application/alto-networkmap+json
+      </t>
+      <texttable anchor="TableNetMapEDE" align="center" title="ALTO Network Map Resource-Specific Entity Domain.">
+
+              <ttcol align="left" width="26%">
+                Entity Domain Type
+              </ttcol>
+              <ttcol align="left" width="27%">
+                Intended Semantics
+              </ttcol>
+
+              <c>
+                ipv4
+              </c>
+              <c>
+                See <xref target="netmap-ede"/>
+              </c>
+
+              <c>
+                ipv6
+              </c>
+              <c>
+                See <xref target="netmap-ede"/>
+              </c>
+
+
+              <c>
+                pid
+              </c>
+              <c>
+                See <xref target="netmap-ede"/>
+              </c>
+
+      </texttable>
+      <t>
+
+      </t>
+    </section>
+
+    <section title="Endpoint Property" anchor="endpoint-property">
+      <t>
+        Media-type: application/alto-endpointprop+json
+      </t>
+      <texttable anchor="TableEndpointPropEDE" align="center" title="ALTO Endpoint Property Resource-Specific Entity Domain.">
+
+              <ttcol align="left" width="26%">
+                Entity Domain Type
+              </ttcol>
+              <ttcol align="left" width="27%">
+                Intended Semantics
+              </ttcol>
+
+              <c>
+                ipv4
+              </c>
+              <c>
+                See <xref target="ep-ede"/>
+              </c>
+
+              <c>
+                ipv6
+              </c>
+              <c>
+                See <xref target="ep-ede"/>
+              </c>
+
+      </texttable>
+      <t>
+      </t>
+    </section>
+
+  </section>
+ -->
+
+<!-- commented-text
+  <section title="ALTO Resource Entity Property Mapping Registries" anchor="IANAResourceEPT">
+
+    <section title="Network Map" anchor="network-map-1">
+      <t>
+        Media-type: application/alto-networkmap+json
+      </t>
+      <texttable anchor="TableNetMapEPT" align="center" title="ALTO Network Map Entity Property Mapping.">
+
+              <ttcol align="left" width="26%">
+                Mapping Descriptor
+              </ttcol>
+              <ttcol align="left" width="26%">
+                Entity Domain Type
+              </ttcol>
+              <ttcol align="left" width="19%">
+                Property Type
+              </ttcol>
+              <ttcol align="left" width="27%">
+                Intended Semantics
+              </ttcol>
+
+              <c>
+                ipv4 -&gt; pid
+              </c>
+              <c>
+                ipv4
+              </c>
+              <c>
+                pid
+              </c>
+              <c>
+                See <xref target="netmap-ept"/>
+              </c>
+
+
+              <c>
+                ipv6 -&gt; pid
+              </c>
+              <c>
+                ipv6
+              </c>
+              <c>
+                pid
+              </c>
+              <c>
+                See <xref target="netmap-ept"/>
+              </c>
+
+      </texttable>
+      <t>
+
+      </t>
+    </section>
+  </section>
+ -->
+
+</section>
+    <section anchor="ack" numbered="true" toc="default">
+      <name>Acknowledgments</name>
+      <t>
+    The authors would like to thank Dawn Chen (Tongji University), and Shenshen Chen
+    (Tongji/Yale University) for their contributions to earlier drafts.
+    Thank you also to Qiao Xiang (Yale University), Shawn Lin, Xin Wang and Vijay Gurbani (Vail systems)
+    for fruitful discussions.
+    Last, big thanks to Danny Perez (University of Campinas) and
+    Luis Contreras (Telefonica) for their substantial
+    review feedback and suggestions to improve this document.
+      </t>
+    </section>
+  </middle>
+  <back>
+  <references>
+    <name>References</name>
+    <!-- Normative references -->
+    <references>
+      <name>Normative References</name>
+      <reference anchor="ISO3166-1">
+        <front>
+          <title>Codes
+for the representation of names of countries and their
+subdivisions -- Part 1: Country codes, ISO 3166-1:2013 </title>
+          <author fullname="" initials="" surname="The International Organization for Standardization" />
+          <date day="" month="" year="2013" />
+        </front>
+      </reference>
+      &RFC2119;
+      &RFC3986;
+      &RFC4632;
+      &RFC5952;
+      &RFC7285;
+      &RFC8126;
+      &RFC8174;
+      &RFC8259;
+    </references>
+    <!-- Informative references -->
+    <references>
+      <name>Informative References</name>
+      &RFC7011;
+      &RFC7921;
+      &I-D.gao-alto-fcs;
+      &I-D.ietf-alto-cdni-request-routing-alto;
+      &I-D.ietf-alto-path-vector;
+    </references>
+  </references>
+<!-- This document was prepared using Pandoc2rfc, https://github.com/miekg/pandoc2rfc -->
+
+<!-- commented text Annex A removed -->
+<!-- commented text annex A removed -->
+<section anchor="features-introduced-with-epm-extension" numbered="true" toc="default">
+      <name>Features introduced with the Entity Property Maps extension</name>
+      <t>The Entity Property Maps extension described in this document introduces
+a number of features that are summarized in table
+<!-- commented text annex A removed
+<xref target="TableUPFeatures"/> -->
+below.
+The first column provides the name of the feature.
+The second column provides the section number of this document
+that gives a high level description of the feature.
+The third column provides the section number of this document that
+gives a normative description relating to the feature, when applicable.
+</t>
+      <table anchor="TableUPFeatures" align="center">
+        <name>Features introduced with ALTO Entity Property Maps</name>
+        <thead>
+          <tr>
+            <th align="left">
+         Feature
+  </th>
+            <th align="left">
+         High-level description
+   </th>
+            <th align="left">
+         Related normative description
+   </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="left">
+   Entity
+   </td>
+            <td align="left">
+              <xref target="con-entity" format="default"/>
+            </td>
+            <td align="left">
+              <xref target="entity-addrs" format="default"/>
+            </td>
+          </tr>
+          <tr>
+            <td align="left">
+   Entity domain (ED)
+   </td>
+            <td align="left">
+              <xref target="con-entity-domain" format="default"/>
+            </td>
+            <td align="left">
+
+   </td>
+          </tr>
+          <tr>
+            <td align="left">
+   Entity domain type
+   </td>
+            <td align="left">
+              <xref target="con-entity-domain-type" format="default"/>
+            </td>
+            <td align="left">
+              <xref target="domain-types" format="default"/>
+            </td>
+          </tr>
+          <tr>
+            <td align="left">
+   Entity domain name
+   </td>
+            <td align="left">
+              <xref target="con-entity-domain-name" format="default"/>
+            </td>
+            <td align="left">
+              <xref target="domain-names" format="default"/>
+            </td>
+          </tr>
+          <tr>
+            <td align="left">
+   Entity property (EP) type
+   </td>
+            <td align="left">
+              <xref target="con-property" format="default"/>
+            </td>
+            <td align="left">
+              <xref target="def-property" format="default"/>, <xref target="def-property-type" format="default"/>,
+   <xref target="entity-property-name" format="default"/>, <xref target="format-entity-property-value" format="default"/>
+            </td>
+          </tr>
+          <tr>
+            <td align="left">
+   Entity property map
+   </td>
+            <td align="left">
+              <xref target="con-propmap" format="default"/>
+            </td>
+            <td align="left">
+              <xref target="prop-map" format="default"/>, <xref target="filter-prop-map" format="default"/>
+            </td>
+          </tr>
+          <tr>
+            <td align="left">
+   Resource-specific ED name
+   </td>
+            <td align="left">
+              <xref target="resource-specific-entity-domain-name" format="default"/>
+            </td>
+            <td align="left">
+              <xref target="domain-names" format="default"/>, <xref target="resource-specific-ED" format="default"/>
+            </td>
+          </tr>
+          <tr>
+            <td align="left">
+   Resource-specific EP value
+   </td>
+            <td align="left">
+              <xref target="resource-specific-entity-property" format="default"/>
+            </td>
+            <td align="left">
+              <xref target="format-entity-property-value" format="default"/>
+            </td>
+          </tr>
+          <tr>
+            <td align="left">
+   Entity Hierarchy and property inheritance
+   </td>
+            <td align="left">
+              <xref target="con-hierarchy-and-inheritance" format="default"/>
+            </td>
+            <td align="left">
+              <xref target="def-hierarchy-and-inheritance" format="default"/>
+            </td>
+          </tr>
+          <tr>
+            <td align="left">
+   Defining information resource
+   </td>
+            <td align="left">
+              <xref target="defining-information-resource" format="default"/>,
+   <xref target="type-of-specific-ir-for-ir-specific-property-value" format="default"/>
+            </td>
+            <td align="left">
+              <xref target="dom-reg-process" format="default"/>, <xref target="IANAEntityProp" format="default"/>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <t/>
+    </section>
+  </back>
+</rfc>

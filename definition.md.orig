@@ -1,0 +1,353 @@
+# Definitions and Concepts
+
+<!-- FIXME:
+Please add some text on the concepts and their motivation before diving into
+technical specifications. Even if the Introduction has some, the goal is to
+explain to implementors when and why this extension is useful. See
+suggestions in the text and attached txt file.
+-->
+
+## Entity
+
+<!-- FIXME:
+This section introduces a new concept and deserves more explanations before
+diving in the technical "how to handle".
+For instance:
+- what kind of object other than an addressable ALTO endpoint is eligible to be
+  an ALTO entity?
+- an entity must be related to network address(es) e.g. entity such as PID, ASN
+  nb, Country code have a defined mapping to IP or cellular addresses.
+-->
+
+The entity concept generalizes the concept of the endpoint defined in Section 2.1 of
+[](#RFC7285). An entity is an object that can be an endpoint and is identified
+by its network address, but can also be an object that has a defined mapping to
+a set of one or more network addresses or is even not related to any network
+address.
+
+Examples of eligible entities are:
+
+- a PID, defined in [](#RFC7285), that has a provider defined human readable
+  abstract identifier and maps to a set of ipv4 and ipv6 addresses;
+- an autonomous system (AS), that has an AS number (ASN) as its identifier 
+  and maps to a set of ipv4 and ipv6 addresses;
+- a region representing a country, that is identified by its country code defined 
+  by ISO 3166, maps to a set of cellular addresses, and is an example that all endpoints 
+  are entities while not all entities are endpoints;
+- a TCP/IP network flow, that has a server defined identifier consisting of the 
+  defining TCP/IP 5-Tuple;
+- a routing element, that is specified in [](#RFC7921) and includes routing
+  capability information;
+- an abstract network element, that has a server defined identifier and
+  represents a network node, link or their aggregation.
+
+<!--
+An entity is an object with a (possibly empty) set of properties.
+It MAY or MAY NOT be related to a network address. There are a lot of examples
+of entities, such as applications or end-hosts in a communication network, cells
+in a wireless network, network flows, network functions, routing elements in a
+routing system or even general network elements.
+-->
+
+<!-- TODO: Examples of entities -->
+
+<!--
+Each entity MUST be in one and only one domain, such as the IPv4 domain, the
+IPv6 domain or PID domain (defined in this document), and has a unique identifier.
+-->
+
+## Entity Domain
+
+Each entity MUST be in one and only one entity domain, where an entity domain is defined as a set
+of entities. This document defines two entity domains for the Internet address domains (see
+[](#inet-addr-domain)) and one entity domain for the PID domain (see [](#pid-domain)). Future
+documents can define additional entity domains to satisfy their additional requirements
+such as cellular network information and routing capability exposure. But they
+are not in the scope of this document.
+
+<!-- This document will define the domains precisely below. -->
+<!-- An additional example is the proposed domain of Abstract Network Elements
+associated with topology and routing, as suggested by
+[](#I-D.ietf-alto-path-vector). -->
+
+## Entity Domain Name {#domain-names}
+
+Each entity domain MUST has a unique entity domain name, which MUST be no more than 32
+characters, and MUST NOT contain characters other than US-ASCII alphanumeric
+characters (U+0030-U+0039, U+0041-U+005A, and U+0061-U+007A), hyphen ('-',
+U+002D), and low line ('\_', U+005F). For example, the names `ipv4` and `ipv6`
+identify two Internet address entity domains (see [](#inet-addr-domain)). When there is no
+confusion with the term domain names in domain systems (FIXME: add DNS reference), we use
+the shorter domain name instead of the longer entity domain name.
+
+The type EntityDomainName is used in this document to denote a JSON string confirming to the 
+preceding requirement.
+
+Each Entity Domain name MUST be registered with the IANA. The format of the entity
+addresses (see [](#entity-addrs)) in that entity domain, as well as any
+hierarchical or inheritance rules (see [](#def-hierarchy-and-inheritance)) for
+those entities, MUST be specified at the same time.
+
+## Entity Address {#entity-addrs}
+
+<!-- FIXME: The entity identifier is not global unique. -->
+
+FIXME: Entity Identifier => Entity Address DomainEntityAddr to be the same as 7285
+
+revise to use the same notation, Type attr. Currently mixed up. EntityID defines
+the type; Later entity identifier defines a set of entities (or inheritance?)
+
+Following the same format as TypedEndpointAddr defined in 7285, 
+
+Each entity has an entity identifier (EntityId) of the format:
+
+<!-- TODO: Replace all entity address to entity identifier -->
+
+``` text
+    EntityId ::= EntityDomainName : DomainSpecificEntityId
+```
+
+An entity identifier uniquely identifies a particular entity within an ALTO
+property map resource (see [](#prop-map)). FIXME, wrong
+
+Examples from the Internet address entity domains include individual IP addresses such as
+`ipv4:192.0.2.14` and `ipv6:2001:db8::12`, as well as address blocks such as
+`ipv4:192.0.2.0/26` and `ipv6:2001:db8::1/48`.
+
+The format of the second part of an entity identifier depends on the entity
+domain, and MUST be specified when registering a new entity domain. Identifiers
+MAY be hierarchical, and properties MAY be inherited based on that hierarchy.
+Again, the rules defining any hierarchy or inheritance MUST be defined when the
+entity domain is registered.
+
+The type EntityId is used in this document to denote a JSON string representing an
+entity identifier in this format.
+
+Note that two entity identifiers with different textual representations may refer to the
+same entity, for a given entity domain. For example, the strings `ipv6:2001:db8::1` and
+`ipv6:2001:db8:0:0:0:0:0:1` refer to the same entity in the 'ipv6' entity domain.
+
+## Property Type and Property Name {#def-property-type}
+
+<!-- FIXME: Section needs be reorganized to first motivate the attachment of
+address to address domain before setting rules. -->
+
+Every entity in an entity domain MAY have one or more properties. Every property
+is identified by a Property Type and is specific to the entity domain. Every property
+MUST have a unique Property Type. FIXME: not MAY, mixed up name and type
+
+<!-- OLD-0 -->
+<!--
+This document defines property types in the domain-specific semantics. This
+design is to enforce that each property type MUST be registered for a single
+specific entity domain. But multiple property types with the similar semantics
+MAY share the same Property Name in different entity domains. This design
+decision is adopted because of the following considerations:
+-->
+
+<!-- NEW-0 -->
+This document defines property types in the domain-specific semantics. Multiple
+property types with similar semantics MAY share the same Property Name in
+different entity domains. But each property type MUST be registered for a single
+specific entity domain for the following reasons: FIXME: bad wording
+
+- Some properties may only be applicable for particular entity domains, not
+  all. For example, the `pid` property is not applicable to entities in the
+  `pid` domain, but is applicable to  entities in the `ipv4` or
+  `ipv6` domains.
+- The interpretation of the value of a property may depend on the entity domain.
+  For different entity domains, not only the intended semantics but also the
+  dependent FIXME resource types may be totally different. For example, suppose that
+  the `geo-location` property is defined as the coordinatesof a point, encoded
+  as (say) "latitude longitude [altitude]." When applied to an entity that
+  represents a specific host computer, identified by an address in the ipv4 or
+  ipv6 domain, the property defines the host's location and has no required
+  dependency. However, when applied to an entity in the `pid` domain, the
+  property would indicate the location of the center of all hosts in this `pid`
+  entity and depend on the Network Map defining this `pid` entity.
+
+Therefore, each property type has a unique identifier encoded with the
+following format: FIXME type vs name vs property
+
+``` text
+PropertyType ::= EntityDomainName : PropertyName
+```
+
+- The `EntityDomainName` indicates which entity domain the property type applies
+  to.
+- The `PropertyName` SHOULD relate to the semantics of this property type. It
+  does not have to be globally unique. In other words, different property types
+  could have the same property name applied to different entity domains, if
+  they have the similar semantics. For example, the property types `ipv4:pid`
+  and `ipv6:pid` have the same property name `pid` applied to both `ipv4` and
+  `ipv6` domains.
+
+Property types MUST be registered with the IANA, and the intended semantics, as
+well as the media types of dependent resources and the interpretation, MUST be
+specified at the same time.
+
+<!-- ## Property Name ## -->
+
+<!-- FIXME: This is not correct. Because the ALTO entity domain is not a strict
+superset of the ALTO address type. Revise it! -->
+
+<!--
+The space of entity property names associated with entities defined by this
+document is a superset of the endpoint property names defined by [](#RFC7285).
+Thus endpoint property names registered with the `ALTO Endpoint Property Type
+Registry` MUST be defined in [](#IANAEndpointProp) of this document. The type
+PropertyName denotes a JSON string with a property name in this format.
+-->
+
+<!-- FIXED: Change the single name space design to the domain-specific design -->
+
+CHANGE BACK below:
+<!--
+This document defines uniform property names specified in a single property
+name space rather than being scoped by a specific entity domain, although some
+properties may only be applicable for particular entity domains. This design
+decision is to enforce a design so that similar properties are named similarly.
+The interpretation of the value of a property, however, may depend on the
+entity domain. (FIXME: This design decision will mess up the dependency
+declaration.) For example, suppose that the `geo-location` property is defined
+as the coordinates of a point, encoded as (say) "latitude longitude
+[altitude]." When applied to an entity that represents a specific host
+computer, such as an Internet address, the property defines the host's
+location.  When applied to an entity that represents a set of computers, such
+as a CIDR, the property would be the location of the center of that set.  If it
+is necessary to represent the bounding box of a set of hosts, another property,
+such as `geo-region`, should be defined.
+-->
+
+## Hierarchy and Inheritance {#def-hierarchy-and-inheritance}
+
+Entities in a given domain MAY form a hierarchy based on entity identifiers, and
+introducing hierarchy allows the introduction of inheritance. Each entity domain
+MUST define its own hierarchy and inheritance rules when registered. The
+hierarchy and inheritance rule makes it possible for an entity to inherit a
+property value from another entity in the same domain.
+<!--If and only
+if the property of an entity is undefined, the hierarchy and inheritance rules
+are applied. [YRY: Do we need this?] [Jensen: I think this feature is for reducing the response size.] -->
+
+## Relationship with Other ALTO Resources {#def-relationship-to-other-resources}
+
+<!-- FIXME: very hard to grab the new rationale, needs re-phrasing. Pls see in
+text. For instance, some confusion between relation between prop name and
+domain and prop value and resource. -->
+
+[](#RFC7285) recognizes that some properties for some entity domains MAY be
+specific to an ALTO resource, such as a network map. Accordingly Section 10.8.1
+of [](#RFC7285) defines the concept of `resource-specific endpoint properties`,
+and indicates that dependency by prefixing the property name with the ID of the
+resource on which it depends. That document defines one resource-specific
+property, namely the `pid` property, whose value is the name of the PID
+containing that endpoint in the associated network map.
+
+<!-- OLD-1 -->
+<!--
+This document takes a different approach. Instead of defining the dependency by
+qualifying the property name, this document attaches the dependency to the
+entity domains. Thus each resource-specific property of all entities in a
+specific domain depends on the same resources; the properties of entities in
+another domain may depend on another resource. For example, in a single property
+map, the `pid` property of all entities in an Internet address domain MUST
+depend on the same network map. Each property of all entities in the PID domain
+MUST also depend on a network map; but different properties may depend on
+different network maps.
+-->
+
+<!-- NEW-1 -->
+<!--
+Because a property may be associated to more than one information resources
+within an entity domain, this document takes a different approach as follows:
+-->
+<!--
+However, considering the unified properties, the approach of
+`resource-specific properties` has issues for several reasons:
+-->
+
+However, A property may be associated to more than one information resources
+within an entity domain. For example, the fictitious property
+`pid:cdni-fci-capabilities` indicates CDNI capabilities (see [](#RFC8008)) of a
+set of `ipv4` or `ipv6` typed CDNI footprints included by some entities in PID
+domain. It depends on two resources:
+
+- the network map in which the input PID entities have been defined,
+- the fictitious CDNI FCI map in which the CDNI footprints and capabilities
+  advertisement objects (see [](#RFC8008)) are included.
+
+A `resource-specific property` can only indicate one of them. Thus, using
+`resource-specific properties` cannot handle multiple dependencies very well.
+
+<!--
+- Mixing properties depending on different resources is unnecessary.
+- [](#RFC7285) already proposes the `uses` attribute to indicate resource dependencies.
+-->
+
+To address this issue, this document takes a different approach as follows:
+
+- Firstly, instead of defining the dependency by prefixing the property name
+  with a specific dependent resource identifier, this document introduces a
+  Property Type that appends a property name to an entity domain name, and
+  registers the dependency types for this Property Type. This gives a hint on
+  the types of dependent resources. For example, the fictitious property
+  `pid:region` applying to entities in the PID domain depends on the network map
+  in which the input PID entities have been defined; but the fictitious property
+  `ipv4:region` applying to entities in IPv4 domain does not depend on any
+  information resource.
+- Secondly, it sets a rule saying that in a property map, all provided property
+  types MUST have the same media types of dependent information resources
+  (denoted as "dependency types" in short). For example, the fictitious
+  property types `pid:region` and `ipv4:region` cannot be provided in the same
+  property map, as they have different dependency types.
+- Finally, it identifies, in the IRD and Server responses, the sequence of
+  information resources associated to all provided properties of entities in a
+  particular property map. In other words, the ALTO server MUST NOT mix
+  properties depending on different resources into the same resources, even if
+  they have the same dependency types. There are two kinds of examples:
+
+  - Assume there are a set of entities in IPv4 and IPv6 domain, and all of them
+    have the property `pid`. The `pid` properties of entities in IPv4 domain
+    depend on the network map `net1`, but the `pid` properties of entities in
+    IPv6 domain depend on another network map `net2`. Although the property
+    types `ipv4:pid` and `ipv6:pid` have the same dependency type sequence
+    `["application/alto-networkmap+json"]`, the ALTO server cannot put them into
+    the same property map.
+  - Assume there are a set of entities in IPv4 domain, and each of them have two
+    `pid` properties. One `pid` property depends on the network map `net1`, the
+    other `pid` property depends on another network map `net2`. To distinguish
+    them, the ALTO server can provide two `resource-specific endpoint
+    properties` called `pid.net1` and `pid.net2` for each IPv4 entities in the
+    same endpoint property map. But using the property map service defined in
+    this document, the ALTO server has to define two individual property maps.
+    Both property maps provide the property type `ipv4:pid`, but one depends on
+    `net1` and the other one depends on `net2`.
+
+<!--
+This document takes a different approach. Instead of defining the dependency by
+qualifying the property name, this document attaches the dependency to the
+entity domains. Thus all properties of a specific entity domain depend on the
+same resources (see below); the properties of another entity domain may depend on another
+resource. For example, entities in the PID domain depend on a network map.
+-->
+
+<!-- OLD-2 -->
+<!--
+Specifically, this document uses the `uses` and `dependent-vtags` fields defined
+in Sections 9.1.5 and 11.1 of [](#RFC7285), respectively, to specify the
+preceding dependency: the `uses` field of an IRD entry providing entity domain
+related resources (see Property Map and Filtered Property Map resources below)
+specifies the dependent resources, and the `dependent-vtags` field specifies
+dependency in message responses.
+-->
+
+<!-- NEW-2 -->
+To specify the aforementionned dependencies, this document uses the "uses" and
+"dependent-vtags" fields defined respectively in Sections 9.1.5 and 11.1 of
+[RFC7285].
+
+- the "uses" field is included in the IRD entry of a resources-dependent
+  information resource and specifies the dependent IRD resource.
+- the "dependent-vtags" member is used in a Server response message to specify
+  the dependent resource.
