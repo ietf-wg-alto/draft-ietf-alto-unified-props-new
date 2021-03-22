@@ -1,5 +1,6 @@
 *.bak
 *.gen
+.targets.mk
 tracker.log
 
 # Do not upload the generated file
