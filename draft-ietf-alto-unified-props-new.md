@@ -80,14 +80,17 @@ normative:
   RFC2119:
   RFC3986:
   RFC4632:
+  RFC5246:
   RFC5952:
   RFC7285:
   RFC8126:
   RFC8174:
   RFC8259:
+  RFC8446:
 informative:
   RFC7011:
   RFC7921:
+  RFC8896:
   I-D.gao-alto-fcs:
   I-D.ietf-alto-cdni-request-routing-alto:
   I-D.ietf-alto-path-vector:

@@ -12,16 +12,72 @@ information (e.g., exposure of a potentially sensitive entity property such
 as geo-location), privacy for ALTO users, and availability of ALTO services
 should all be considered.
 
-A particular fundamental security consideration when an ALTO server provides
-a Property Map is to define precisely the policies on who can access what
-properties for which entities. Security mechanisms such as authentication and
-confidentiality mechanisms should then be applied to enforce the policy. For
-example, a policy can be that a property P can be accessed only by its owner
-(e.g., the customer who is allocated a given IP address). Then, the ALTO
-server will need to deploy corresponding mechanisms to realize the policy.
-The policy may allow non-owners to access a coarse-grained value of the
-property P. In such a case, the ALTO server may provide a different URI to
-provide the information.
+ALTO Clients using this extension should in addition be aware that the entity
+properties they require may convey more details than the endpoint properties
+conveyed by using RFC7285. Client requests may reveal details on their
+activity or plans thereof, that a malicious usage may monetize or use for
+attacks or undesired surveillance. Likewise, ALTO Servers expose entities and
+properties related to specific parts of the infrastructure that reveal
+details on capabilities, locations, or resource availability. These details
+may be maliciously used for competition purposes, or to cause resources
+shortage or undesired publication.
+
+To address these concerns, the Property Maps provided by this extension
+require additional attention on two security considerations discussed in
+{{RFC7285}}: potential undesirable guidance to Clients (Section 15.2 of
+{{RFC7285}}), confidentiality of ALTO information (Section 15.3 of {{RFC7285}}).
+Threats to the availability of the ALTO Service caused by highly demanding
+queries should be addressed as specified in Section 15.5 of {{RFC7285}}.
+
+- *Potential undesirable guidance to Clients:* It can be caused by Property
+  values that change over time and thus lead to performance degradation or
+  system rejection of application requests.
+
+    To avoid these consequences, a more robust ALTO Client should adapt and
+    extend protection strategies specified in Section 15.2 of {{RFC7285}}.
+    For example, to be notified immediately when a particular ALTO value that
+    the Client depends on changes, it is RECOMMENDED that both the ALTO
+    Client and ALTO Server using this extension support "Application-Layer
+    Traffic Optimization (ALTO) Incremental Updates Using Server-Sent Events
+    (SSE)" {{RFC8895}}.
+
+- *Confidentiality of ALTO information:* As discussed in Section 15 of
+  {{RFC7285}}, properties may have sensitive customer-specific information.
+  If this is the case, an ALTO Server may limit access to those properties by
+  providing several different property maps. For non-sensitive properties,
+  the ALTO Server would provide a URI which accepts requests from any client.
+  Sensitive properties, on the other hand, would only be available via a
+  secure URI which would require client authentication. Another way is to
+  expose highly abstracted coarse grain property values to all Clients while
+  restricting access to URIs exposing finer grain values to authorized
+  Clients. Restricted access URIs may be gathered in delegate IRDs as
+  specified in Section 9.2.4 of {{RFC7285}}.
+
+    Also, while technically this document does not introduce any security
+    risks not inherent in the Endpoint Property Service defined by {{RFC7285}},
+    the GET-mode property map resource defined in this document does make it
+    easier for a client to download large numbers of property values.
+    Accordingly, an ALTO Server should limit GET-mode property maps to
+    properties that do not contain sensitive data.
+
+    In Section 12 on IANA considerations of this document, the ALTO service
+    provider MUST be aware of the potential sensitiveness of exposed entity
+    domains and properties. Section 12.2.2. (ALTO Entity Domain Type
+    Registration Process) of this document specifies that when the
+    registration of an entity domain type is requested at the IANA, the
+    request MUST include security considerations that show awareness of how
+    the exposed entity addresses may be related to private information about
+    an ALTO client or an infrastructure service provider. Likewise, Section
+    12.3. (ALTO Entity Property Type Registry) of this document specifies
+    that when the registration of a property type is requested at the IANA,
+    the request MUST include security considerations that explain why this
+    property type is required for ALTO-based operations.
+
+    The risk of ALTO information being leaked to malicious Clients or third
+    parties is addressed similarly to in Section 7 of {{RFC8896}}. ALTO
+    Clients and Servers SHOULD support both TLS 1.3 {{RFC8446}} and TLS 1.2
+    {{RFC5246}} and MAY support and use newer versions of TLS as long as the
+    negotiation process succeeds.
 
 # IANA Considerations
 
