@@ -14,7 +14,7 @@ should all be considered.
 
 ALTO Clients using this extension should in addition be aware that the entity
 properties they require may convey more details than the endpoint properties
-conveyed by using RFC7285. Client requests may reveal details on their
+conveyed by using {{RFC7285}}. Client requests may reveal details on their
 activity or plans thereof, that a malicious usage may monetize or use for
 attacks or undesired surveillance. Likewise, ALTO Servers expose entities and
 properties related to specific parts of the infrastructure that reveal

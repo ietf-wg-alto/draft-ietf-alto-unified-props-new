@@ -90,6 +90,7 @@ normative:
 informative:
   RFC7011:
   RFC7921:
+  RFC8895:
   RFC8896:
   I-D.gao-alto-fcs:
   I-D.ietf-alto-cdni-request-routing-alto:
