@@ -537,5 +537,6 @@ entity property types and their media type.
 
 * The media type of the specific resource for property type "pid" is
   "application/alto-networkmap+json".
-* the media type of the specific resource for property type
-  "cdni-capabilities" is "application/alto-cdnifci+json".
+* The media type of the specific resource for property type
+  "cdni-capabilities" defined in {{I-D.ietf-alto-cdni-request-routing-alto}}
+  is "application/alto-cdni+json".
