@@ -420,7 +420,7 @@ useful for resource-specific entity domains constructed from
 resource-agnostic domain types, such as network map specific domains of local
 IPv4 addresses.
 
-The defining information resource of an entity domain D is unique has the
+The defining information resource of an entity domain D is unique and has the
 following specificities:
 
 * it has an entry in the IRD,
@@ -535,8 +535,8 @@ Here are some examples of specific information resources types associated to
 entity property types and their media type.
 -->
 
-* The media type of the specific resource for property type "pid" is
-  "application/alto-networkmap+json".
-* The media type of the specific resource for property type
+* The media type of the defining information resource for property type "pid"
+  is "application/alto-networkmap+json".
+* The media type of the defining information resource for property type
   "cdni-capabilities" defined in {{I-D.ietf-alto-cdni-request-routing-alto}}
   is "application/alto-cdni+json".

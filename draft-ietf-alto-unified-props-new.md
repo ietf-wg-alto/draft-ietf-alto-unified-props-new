@@ -24,7 +24,8 @@ author:
   -
     ins: W. Roome
     name: Wendy Roome
-    org: Nokia Bell Labs
+    org: Nokia Bell Labs (Retired)
+    abbrev: Nokia Bell Labs
     street: 124 Burlington Rd
     city: Murray Hill
     region: NJ
