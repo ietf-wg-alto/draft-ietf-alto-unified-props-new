@@ -2201,18 +2201,12 @@ Table of Contents
       within other applications.
 
    Additional information:
+      Magic number(s):  n/a
 
-   : 
+      File extension(s):  This document uses the mime type to refer to
+         protocol messages and thus does not require a file extension.
 
-   Magic number(s):
-      n/a
-
-   File extension(s):
-      This document uses the mime type to refer to protocol messages and
-      thus does not require a file extension.
-
-   Macintosh file type code(s):
-      n/a
+      Macintosh file type code(s):  n/a
 
    Person & email address to contact for further information:
       See Authors' Addresses section.
