@@ -409,7 +409,7 @@ Resource for the entity domain of type "pid" and this concept is explained in
 ### Defining Information Resource and its Media Type {#defining-information-resource-and-media-type}
 
 For the reasons explained in the previous section, this document introduces
-the concept of defining information resource and media type.
+the concept of "Defining Information Resource and its Media Type".
 
 A defining information resource for an entity domain D is the information
 resource where entities of D are defined. That is, all the information on the
@@ -420,8 +420,8 @@ useful for resource-specific entity domains constructed from
 resource-agnostic domain types, such as network map specific domains of local
 IPv4 addresses.
 
-The defining information resource of an entity domain D has the following
-specificities:
+The defining information resource of an entity domain D is unique has the
+following specificities:
 
 * it has an entry in the IRD,
 * it defines the entities of D,
@@ -436,8 +436,8 @@ type of its defining information resource. When an entity domain type allows
 associations with defining information resources, the document that defines
 this entity domain type specifies the media type of the potential defining
 information resource. Likewise, the IANA registration of an entity domain
-type also specifies the media type of potential defining information
-resources.
+type also specifies the media type of the potential defining information
+resource.
 
 When the Client wants to use a resource-specific entity domain, it needs to
 be cognizant of the media-type of its defining information resource. If the
@@ -445,6 +445,7 @@ Server exposes resources a resource specific entity domain with a
 non-compliant media type for the domain type, the Client can avoid
 transaction errors by ignoring them.
 
+<!--
 The same holds for property types whose values are defined relatively to an
 information resource. Similarly to resource specific entity domains, the
 Client needs to be cognizant of appropriate associations of information
@@ -452,14 +453,15 @@ resource and property types. Therefore, when specifying and registering a
 property type whose values are resource-specific, it is necessary to specify
 the media type of its defining information resource. For example: the
 defining information resource for property type "pid" is a network map; the
-defining information resource for property type "cdnifci- capab", defined in
+defining information resource for property type "cdnifci-capability", defined in
 {{I-D.ietf-alto-cdni-request-routing-alto}} is a "cdnifci-map" information
 resource, defined in that same document.
+-->
 
-### Examples of defining information resources media-types {#example-specific-ir-mediatype}
+### Examples of Defining Information Resources and Their Media Types {#example-specific-ir-mediatype}
 
-Here are some examples of specific information resource types associated to
-entity domain types and their media type.
+Here are examples of defining information resource types and their media
+types associated to different entity domain types.
 
 * For entity domain type "pid": the media type of the specific resource is
   "application/alto-networkmap+json", because PIDs are defined in network map
@@ -481,14 +483,20 @@ entity domain types and their media type.
   entities of domain type "ane" that have a persitent identifier, the media
   type of the specific information resource is
   "application/alto-propmap+json".
+* Last, the entity domain types "asn" and "countrycode" defined in
+  {{I-D.ietf-alto-cdni-request-routing-alto}} do not have a defining
+  information resource. Indeed, the entity identifiers in these two entity
+  domain types are already standardized in documents that the Client can use.
 
 ## Defining Information Resource for Resource-Specific Property Values {#def-ir-for-irsp}
 
 As explained in [](#rsep), a property type may
-take values that are resource specific. This is the case for property type
+take values that are resource-specific. This is the case for property type
 "pid", whose values are by essence defined relatively to a specific network
-map. The PID value returned for an IPv4 address is specific to the network
-map defining the PID and may differ from one network map to another one.
+map. That is, the PID value returned for an IPv4 address is specific to the network
+map defining this PID and may differ from one network map to another one.
+
+<!--
 Property values may be specific to different types of information resources.
 For example: the value for property "pid" is specific to a network map. The
 value for property type "cdnifci-capab" is specific to the information
@@ -496,20 +504,38 @@ resource "cdnifci-map", defined in
 {{I-D.ietf-alto-cdni-request-routing-alto}}, while network maps do not define
 property "fci-capability" for IPv4 addresses and a cdnifci-map does not
 define "pid" values for IPv4 addresses.
+-->
 
+Another example is provided in {{I-D.ietf-alto-cdni-request-routing-alto}}
+that defines property type "cdni-capabilities". The value of this property is
+specific to a CDNI Advertisement resource, that provides a list of CDNI
+capabilities. The property is provided for entity domain types "ipv4",
+"ipv6", "asn" and "countrycode". A CDNI Advertisement resource does however
+not define PID values for IPv4 addresses while a network map does not define
+CDNI capabilities for IPv4 addresses.
+
+<!--
 Thus, similarly to resource specific entity domains, the Client needs to be
 cognizant of appropriate associations of information resource and property
 types.
+-->
+
+Similarly to resource-specific entity domains, the Client needs to be
+cognizant of appropriate associations of information resource and property
+types. Therefore, when specifying and registering a property type whose
+values are resource-specific, the media type of its defining information
+resource needs to be specified. For example:
 
 <!--
 ### Examples of defining resources media-types for properties {#example-specific-ir-mediatype-prop}
 -->
 
+<!--
 Here are some examples of specific information resources types associated to
 entity property types and their media type.
+-->
 
-* For property type "pid": the media type of the specific resource is
-  "application/alto-networkmap+json", because PIDs are defined in network map
-  resources.
-* For property type "cdni-fci-capability": the media type of the specific
-  resource is "application/alto-cdnifci+json".
+* The media type of the specific resource for property type "pid" is
+  "application/alto-networkmap+json".
+* the media type of the specific resource for property type
+  "cdni-capabilities" is "application/alto-cdnifci+json".

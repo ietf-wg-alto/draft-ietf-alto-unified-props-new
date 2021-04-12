@@ -24,16 +24,17 @@ shortage or undesired publication.
 
 To address these concerns, the Property Maps provided by this extension
 require additional attention on two security considerations discussed in
-{{RFC7285}}: potential undesirable guidance to Clients (Section 15.2 of
-{{RFC7285}}), confidentiality of ALTO information (Section 15.3 of {{RFC7285}}).
-Threats to the availability of the ALTO Service caused by highly demanding
-queries should be addressed as specified in Section 15.5 of {{RFC7285}}.
+{{RFC7285}}: "potential undesirable guidance from authenticated ALTO
+information" (Section 15.2 of {{RFC7285}}) and "confidentiality of ALTO
+information" (Section 15.3 of {{RFC7285}}). Threats to the availability of
+the ALTO Service caused by highly demanding queries should be addressed as
+specified in Section 15.5 of {{RFC7285}}.
 
-- *Potential undesirable guidance to Clients:* It can be caused by Property
-  values that change over time and thus lead to performance degradation or
-  system rejection of application requests.
+- Potential undesirable guidance from authenticated ALTO information: It can
+  be caused by Property values that change over time and thus lead to
+  performance degradation or system rejection of application requests.
 
-    To avoid these consequences, a more robust ALTO Client should adapt and
+    To avoid these consequences, a more robust ALTO Client should adopt and
     extend protection strategies specified in Section 15.2 of {{RFC7285}}.
     For example, to be notified immediately when a particular ALTO value that
     the Client depends on changes, it is RECOMMENDED that both the ALTO
@@ -41,7 +42,7 @@ queries should be addressed as specified in Section 15.5 of {{RFC7285}}.
     Traffic Optimization (ALTO) Incremental Updates Using Server-Sent Events
     (SSE)" {{RFC8895}}.
 
-- *Confidentiality of ALTO information:* As discussed in Section 15 of
+- Confidentiality of ALTO information: As discussed in Section 15 of
   {{RFC7285}}, properties may have sensitive customer-specific information.
   If this is the case, an ALTO Server may limit access to those properties by
   providing several different property maps. For non-sensitive properties,
@@ -100,6 +101,7 @@ This document registers two additional ALTO media types, listed in
 | application | alto-propmapparams+json | [](#filter-prop-map-params)
 {: #TableMediaTypes title="Additional ALTO Media Types."}
 
+{: newline="true"}
 Type name:
 : application
 
@@ -260,10 +262,10 @@ MUST include the following information:
   an entity domain name to be combined with an information resource name to
   define a resource-specific entity domain. Such an information resource is
   called "defining information resource". In this case, the authorized media
-  type of the defining information resources MUST be specified in the
-  document defining the entity domain type. When an entity domain type allows
-  combinations with defining resources, this must be indicated and the
-  conditions fully specified in the document.
+  type of the defining information resources MUST be unique and MUST be
+  specified in the document defining the entity domain type. When an entity
+  domain type allows combinations with defining resources, this must be
+  indicated and the conditions fully specified in the document.
   The defining information resource for an entity domain type is the one
   that:
   * has an entry in the IRD,
@@ -323,8 +325,8 @@ following information:
 * Media type of defining information resource: when the property type allows
   values to be defined relatively to a given information resource, the latter
   is referred to as the "defining information resource", see also description
-  in [](#def-ir-for-irsp). The media type
-  of the possibly used defining information resource MUST be indicated.
+  in [](#def-ir-for-irsp). The media type of the possibly used defining
+  information resource MUST be unique and MUST be specified.
 * Security Considerations: ALTO entity properties expose information to ALTO
   clients. ALTO service providers should be cognizant of the security
   ramifications related to the exposure of an entity property.
