@@ -742,8 +742,8 @@ Table of Contents
    agnostic domain types, such as network map specific domains of local
    IPv4 addresses.
 
-   The defining information resource of an entity domain D is unique has
-   the following specificities:
+   The defining information resource of an entity domain D is unique and
+   has the following specificities:
 
    *  it has an entry in the IRD,
 
@@ -836,12 +836,13 @@ Table of Contents
    its defining information resource needs to be specified.  For
    example:
 
-   *  The media type of the specific resource for property type "pid" is
-      "application/alto-networkmap+json".
+   *  The media type of the defining information resource for property
+      type "pid" is "application/alto-networkmap+json".
 
-   *  The media type of the specific resource for property type "cdni-
-      capabilities" defined in [I-D.ietf-alto-cdni-request-routing-alto]
-      is "application/alto-cdni+json".
+   *  The media type of the defining information resource for property
+      type "cdni-capabilities" defined in
+      [I-D.ietf-alto-cdni-request-routing-alto] is "application/alto-
+      cdni+json".
 
 5.  Protocol Specification: Basic Data Types
 
@@ -2624,7 +2625,7 @@ Appendix A.  Features introduced with the Entity Property Maps extension
 Authors' Addresses
 
    Wendy Roome
-   Nokia Bell Labs
+   Nokia Bell Labs (Retired)
    124 Burlington Rd
    Murray Hill, NJ 07974
    United States of America
