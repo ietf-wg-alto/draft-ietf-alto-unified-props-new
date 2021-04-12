@@ -135,8 +135,7 @@ Applications that use this media type:
   applications.
 
 Additional information:
-:
-  Magic number(s):
+: Magic number(s):
   : n/a
 
   File extension(s):
