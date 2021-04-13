@@ -764,7 +764,7 @@ Table of Contents
    defines this entity domain type must specify the association between
    the entity domain type and the media type of the potential defining
    information resource in the "ALTO Entity Domain Type Registry"
-   Section 12.2 and request the addition to the IANA.
+   (Section 12.2) and request the addition to the IANA.
 
    When the Client wants to use a resource-specific entity domain, it
    needs to be cognizant of the media-type of its defining information
