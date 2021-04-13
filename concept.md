@@ -56,10 +56,10 @@ Examples of entities are:
 An entity domain defines a set of entities of the same semantic type. An
 entity domain is characterized by its type and identified by its name.
 
-In this document, an entity must be owned by exactly one entity domain name.
-An entity identifier must point to exactly one entity. If two entities in two
+In this document, an entity is owned by exactly one entity domain name.
+An entity identifier points to exactly one entity. If two entities in two
 different entity domains refer to the same physical or logical object, they
-are treated as different entities. For example, if an object has both an IPv4
+are treated as different entities. For example, if an end host has both an IPv4
 and an IPv6 address, these two addresses will be treated as two entities,
 defined respectively in the "ipv4" and "ipv6" entity domains.
 
@@ -86,13 +86,13 @@ example, a domain of type "ipv4" containing entities identified by a public
 IPv4 address can be named "ipv4" because its entities are uniquely identified
 by all the Server resources.
 
-In some cases, a domain type and domain name must be different. Indeed, for
-some domain types, entities are defined relative to a given information
-resource. This is the case for entities of domain type "pid". A PID is
-defined relative to a network map. For example: an entity "mypid10" of domain
-type "pid" may be defined in a given network map and be undefined in other
-network maps. Or "mypid10" may even be defined in two different network maps
-and map, in each of these network maps, to a different set of endpoint
+In some cases, an entity domain name is different from its entity domain
+type. Indeed, for some domain types, entities are defined relative to a given
+information resource. This is the case for entities of domain type "pid". A
+PID is defined relative to a network map. For example: an entity "mypid10" of
+domain type "pid" may be defined in a given network map and be undefined in
+other network maps. Or "mypid10" may even be defined in two different network
+maps and map, in each of these network maps, to a different set of endpoint
 addresses. In this case, naming an entity domain only by its type "pid" does
 not guarantee that its set of entities is owned by exactly one entity domain.
 
@@ -169,11 +169,11 @@ In {{RFC7285}}, an endpoint has an identifier that is explicitly associated
 with the "ipv4" or "ipv6" address domain. Examples are "ipv4:192.0.2.14" and
 "ipv6:2001:db8::12".
 
-In this document, an entity must be owned by exactly one entity domain name
-and an entity identifier must point to exactly one entity. To ensure this, an
-entity identifier is explicitly attached to the name of its entity domain and
-an entity domain type characterizes the semantics and identifier format of
-its entities.
+In this document, to ensure that an entity is owned by exactly one entity
+domain name and an entity identifier points to exactly one entity, an entity
+identifier is explicitly attached to the name of its entity domain and an
+entity domain type characterizes the semantics and identifier format of its
+entities.
 
 The encoding format of an entity identifier is further specified in
 [](#entity-addrs) of this document.
@@ -245,7 +245,7 @@ for this property will likely be a different value in "netmap1" and
 To support information resource dependent property values, this document uses
 the same approach as in Section 10.8.1 of {{RFC7285}} entitled
 "Resource-Specific Endpoint Properties". When a property value depends on a
-given information resource, the name of this property must be explicitly
+given information resource, the name of this property MUST be explicitly
 associated with the information resource that defines it.
 
 For example, the property "pid" queried on entity "ipv4:192.0.2.34" and
@@ -414,7 +414,7 @@ the concept of "Defining Information Resource and its Media Type".
 A defining information resource for an entity domain D is the information
 resource where entities of D are defined. That is, all the information on the
 entities of D can be retrieved in this resource. This concept applies to
-resource-specific domains. This is useful for entity domain types that are by
+resource-specific entity domains. This is useful for entity domain types that are by
 essence domain-specific, such as "pid" and "ane" domain types. It is also
 useful for resource-specific entity domains constructed from
 resource-agnostic domain types, such as network map specific domains of local
@@ -432,18 +432,17 @@ following specificities:
 
 A fundamental attribute of a defining information resource is its media type.
 There is a unique association between an entity domain type and the media
-type of its defining information resource. When an entity domain type allows
-associations with defining information resources, the document that defines
-this entity domain type specifies the media type of the potential defining
-information resource. Likewise, the IANA registration of an entity domain
-type also specifies the media type of the potential defining information
-resource.
+type of its defining information resource. If an entity domain type can be
+resource-specific, the document that defines this entity domain type must
+specify the association between the entity domain type and the media type of
+the potential defining information resource in the "ALTO Entity Domain Type
+Registry" [](#IANADomain) and request the addition to the IANA.
 
 When the Client wants to use a resource-specific entity domain, it needs to
 be cognizant of the media-type of its defining information resource. If the
-Server exposes resources a resource specific entity domain with a
-non-compliant media type for the domain type, the Client can avoid
-transaction errors by ignoring them.
+Server exposes resources a resource-specific entity domain with a
+non-compliant media type for the domain type, the Client can ignore the
+entities from that entity domain to avoid errors.
 
 <!--
 The same holds for property types whose values are defined relatively to an

@@ -179,7 +179,7 @@ This registry serves two purposes. First, it ensures uniqueness of
 identifiers referring to ALTO entity domain types. Second, it states the
 requirements for allocated entity domain types.
 
-### Consistency Procedure between ALTO Address Type Registry and ALTO Entity Domain Type Registry {#consistency-procedure}
+### Consistency between ALTO Address Type Registry and ALTO Entity Domain Type Registry {#consistency-procedure}
 
 One potential issue of introducing the "ALTO Entity Domain Type Registry" is
 its relationship with the "ALTO Address Types Registry" already defined in
@@ -265,7 +265,7 @@ MUST include the following information:
   specified in the document defining the entity domain type. When an entity
   domain type allows combinations with defining resources, this must be
   indicated and the conditions fully specified in the document.
-  The defining information resource for an entity domain type is the one
+  The defining information resource for a resource-specific entity domain is the one
   that:
   * has an entry in the IRD,
   * defines these entities,
