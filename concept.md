@@ -436,7 +436,7 @@ type of its defining information resource. If an entity domain type can be
 resource-specific, the document that defines this entity domain type must
 specify the association between the entity domain type and the media type of
 the potential defining information resource in the "ALTO Entity Domain Type
-Registry" [](#IANADomain) and request the addition to the IANA.
+Registry" ([](#IANADomain)) and request the addition to the IANA.
 
 When the Client wants to use a resource-specific entity domain, it needs to
 be cognizant of the media-type of its defining information resource. If the
